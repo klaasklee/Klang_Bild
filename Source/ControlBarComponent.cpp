@@ -78,19 +78,19 @@ ControlBarComponent::ControlBarComponent()
     
     bPlay.setButtonText("play");
     bPlay.setLookAndFeel(&LookAndFeel001);
-    bPlay.onClick = [this] { bPlayClicked(); }; // still needs to be initialized
+    bPlay.onClick = [this] { bPlayClicked(); };
     bPlay.setEnabled(true);
     addAndMakeVisible(bPlay);
 
     bPause.setButtonText("pause");
     bPause.setLookAndFeel(&LookAndFeel001);
-    bPause.onClick = [this] { ; }; // still needs to be initialized
+    bPause.onClick = [this] { bPauseClicked(); };
     bPause.setEnabled(false);
     addAndMakeVisible(bPause);
 
     bStop.setButtonText("stop");
     bStop.setLookAndFeel(&LookAndFeel001);
-    bStop.onClick = [this] { bStopClicked(); }; // still needs to be initialized
+    bStop.onClick = [this] { bStopClicked(); };
     bStop.setEnabled(false);
     bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bStop);
@@ -125,6 +125,12 @@ void ControlBarComponent::bStopClicked()
 {
     DBG("stop clicked");
     findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stopping);
+}
+
+void ControlBarComponent::bPauseClicked()
+{
+    DBG("stop clicked");
+    findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Pause);
 }
 
 void ControlBarComponent::paint (juce::Graphics& g)

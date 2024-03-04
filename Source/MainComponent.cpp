@@ -24,7 +24,7 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }
     
-    transport.addChangeListener(this);
+//    transport.addChangeListener(this);
     
 }
 
@@ -62,49 +62,68 @@ void MainComponent::transportStateChanged(TransportState newState)
                 transport.setPosition(0.0);
                 ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(false);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-
                 DBG("state = stopped");
                 break;
             case Playing:
                 ControlBar.bPlay.setEnabled(false);
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
-                break;
-            case Starting:
+                ControlBar.bPause.setEnabled(true);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                break;
+            case Starting:
                 ControlBar.bPlay.setEnabled(false);
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(true);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(true);
+                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 transport.start();
                 DBG("state = starting");
                 break;
             case Stopping:
                 ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(false);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
                 transport.stop();
                 DBG("state = stopping");
                 break;
+            case Pause:
+                ControlBar.bPlay.setEnabled(true);
+                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(false);
+                ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(true);
+                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                transport.stop();
+                DBG("state = pause");
+                break;
         }
     }
 }
 
-void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
-{
-    if (source == &transport)
-    {
-        if (transport.isPlaying())
-        {
-            transportStateChanged(Playing);
-        }
-        else
-        {
-            transportStateChanged(Stopped);
-        }
-    }
-}
+//void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
+//{
+//    if (source == &transport)
+//    {
+//        if (transport.isPlaying())
+//        {
+//            transportStateChanged(Playing);
+//        }
+//        else
+//        {
+//            transportStateChanged(Stopped);
+//        }
+//    }
+//}
 
 
 

@@ -111,6 +111,7 @@ private:
     
     void bPlayClicked();
     void bStopClicked();
+    void bPauseClicked();
     
     //items
     
