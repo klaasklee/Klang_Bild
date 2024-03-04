@@ -68,6 +68,31 @@ void LayerWaveComponent::openButtonClicked()
         {
             duration = (float) reader->lengthInSamples / reader->sampleRate;
             
+            // save audio to Audio buffer
+            int lengthInSamples = (int)reader->lengthInSamples;
+            fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
+            playBuffer.setSize((int)reader->numChannels, lengthInSamples);
+            reader->read(&fileBuffer,                                                    
+                0,                              //destination start sample                                 
+                (int)reader->lengthInSamples,   //numSamples                               
+                0,                              //reader start sample                                  
+                true,                           //use right channel                                
+                true);                          //use left channel     
+
+            auto numChannels = fileBuffer.getNumChannels();
+
+            //copy audio to playBuffer, with zero shift initially
+            for (int ch = 0; ch < numChannels; ch++) {
+                playBuffer.copyFrom(ch,            //  destination buffer channel index
+                    0,                             //  sample offset in output buffer
+                    fileBuffer,                    //  source buffer
+                    ch % numChannels,              //  channel of input buffer
+                    0,                             //  start copy position in input buffer
+                    lengthInSamples);              //  number of samples to copy
+            }
+
+
+
             //get file ready to play
             std::unique_ptr<juce::AudioFormatReaderSource> tempSource (new juce::AudioFormatReaderSource(reader, true));
             
@@ -79,7 +104,7 @@ void LayerWaveComponent::openButtonClicked()
     //        zB so:
             playSource.reset(tempSource.release());
             
-//            setAudioChannels (0, (int) reader->numChannels);
+ //          setAudioChannels (0, (int) reader->numChannels);
             
             DBG(reader->getFormatName());
         }

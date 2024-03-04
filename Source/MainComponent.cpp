@@ -137,6 +137,10 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // (to prevent the output of random noise)
     
     bufferToFill.clearActiveBufferRegion();
+
+    // todo: how to copy data from the respective audio play Buffers here? 
+   // LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer.
+
     
     transport.getNextAudioBlock(bufferToFill);
 }

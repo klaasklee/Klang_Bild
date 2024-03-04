@@ -42,4 +42,5 @@ void LayersContainerComponent::resized()
     }
    
     layersFB.performLayout(getLocalBounds());
+
 }

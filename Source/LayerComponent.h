@@ -25,9 +25,10 @@ public:
 
     void resized() override;
 
+    LayerControlComponent LayerControl;
+    LayerWaveComponent LayerWave;
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerComponent)
     
-    LayerControlComponent LayerControl;
-    LayerWaveComponent LayerWave;
 };
