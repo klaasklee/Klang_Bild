@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="bwVLQa" name="AudioLayers_v0.1" projectType="guiapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              defines="JUCE_MODAL_LOOPS_PERMITTED = 1">
+  <MAINGROUP id="GiE37m" name="AudioLayers_v0.1">
+    <GROUP id="{5CC477CE-9975-BE66-C1AE-3CBB979CD0E7}" name="Source">
+      <FILE id="pJvEq8" name="Globals.h" compile="0" resource="0" file="Source/Globals.h"/>
+      <FILE id="qehqv4" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="YdujAk" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="sUdWAx" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="KB8jyc" name="ControlBarComponent.h" compile="0" resource="0"
+            file="Source/ControlBarComponent.h"/>
+      <FILE id="t7rMzI" name="ControlBarComponent.cpp" compile="1" resource="0"
+            file="Source/ControlBarComponent.cpp"/>
+      <FILE id="s5tJgk" name="LayerViewPortComponent.h" compile="0" resource="0"
+            file="Source/LayerViewPortComponent.h"/>
+      <FILE id="OxanpO" name="LayerViewPortComponent.cpp" compile="1" resource="0"
+            file="Source/LayerViewPortComponent.cpp"/>
+      <FILE id="RYQ2hH" name="LayersContainerComponent.h" compile="0" resource="0"
+            file="Source/LayersContainerComponent.h"/>
+      <FILE id="I82qMB" name="LayersContainerComponent.cpp" compile="1" resource="0"
+            file="Source/LayersContainerComponent.cpp"/>
+      <FILE id="tETXoU" name="LayerComponent.h" compile="0" resource="0"
+            file="Source/LayerComponent.h"/>
+      <FILE id="TdQpuA" name="LayerComponent.cpp" compile="1" resource="0"
+            file="Source/LayerComponent.cpp"/>
+      <FILE id="VJeWUR" name="LayerControlComponent.h" compile="0" resource="0"
+            file="Source/LayerControlComponent.h"/>
+      <FILE id="yxVKqx" name="LayerControlComponent.cpp" compile="1" resource="0"
+            file="Source/LayerControlComponent.cpp"/>
+      <FILE id="puu3pg" name="LayerWaveComponent.h" compile="0" resource="0"
+            file="Source/LayerWaveComponent.h"/>
+      <FILE id="bkgFo3" name="LayerWaveComponent.cpp" compile="1" resource="0"
+            file="Source/LayerWaveComponent.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="AudioLayers_v0.1"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="AudioLayers_v0.1"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+</JUCERPROJECT>
