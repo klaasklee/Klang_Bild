@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="bwVLQa" name="AudioLayers_v0.1" projectType="guiapp" useAppConfig="0"
+<JUCERPROJECT id="bwVLQa" name="AudioLayers" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               defines="JUCE_MODAL_LOOPS_PERMITTED = 1">
-  <MAINGROUP id="GiE37m" name="AudioLayers_v0.1">
+  <MAINGROUP id="GiE37m" name="AudioLayers">
     <GROUP id="{5CC477CE-9975-BE66-C1AE-3CBB979CD0E7}" name="Source">
       <FILE id="pJvEq8" name="Globals.h" compile="0" resource="0" file="Source/Globals.h"/>
       <FILE id="qehqv4" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
