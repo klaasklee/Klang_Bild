@@ -1,8 +1,6 @@
 #include "MainComponent.h"
 #include "Globals.h"
 
-// this code sucks
-// 
 //==============================================================================
 MainComponent::MainComponent()
 {
