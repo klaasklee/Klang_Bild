@@ -10,7 +10,7 @@
     your controls and content.
 */
 class MainComponent  : public juce::AudioAppComponent
-//                        ,public juce::ChangeListener
+                        ,public juce::ChangeListener
 {
 public:
     //==============================================================================
@@ -50,7 +50,7 @@ private:
     //==============================================================================
     // Your private member variables go here...
     
-//    void changeListenerCallback(juce::ChangeBroadcaster *source) override;
+    void changeListenerCallback(juce::ChangeBroadcaster *source) override;
     
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;

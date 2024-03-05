@@ -24,7 +24,7 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }
     
-//    transport.addChangeListener(this);
+    transport.addChangeListener(this);
     
 }
 
@@ -110,20 +110,27 @@ void MainComponent::transportStateChanged(TransportState newState)
     }
 }
 
-//void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
-//{
-//    if (source == &transport)
-//    {
-//        if (transport.isPlaying())
-//        {
-//            transportStateChanged(Playing);
-//        }
-//        else
-//        {
-//            transportStateChanged(Stopped);
-//        }
-//    }
-//}
+void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
+{
+    if (source == &transport)
+    {
+        if (transport.isPlaying())
+        {
+            transportStateChanged(Playing);
+        }
+        else
+        {
+            if (state == Pause)
+            {
+                transportStateChanged(Pause);
+            }
+            else
+            {
+                transportStateChanged(Stopped);
+            }
+        }
+    }
+}
 
 
 
