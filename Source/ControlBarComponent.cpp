@@ -25,7 +25,7 @@ ControlBarComponent::ControlBarComponent()
     sVolumeDial.setValue(0.5);
     sVolumeDial.setNumDecimalPlacesToDisplay(2);
     sVolumeDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-//    sVolumeDial.setTextValueSuffix(" vol");
+//    sVolumeDial.setTextValueSuffix(" dB");
     sVolumeDial.addListener(this);
     sVolumeDial.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(sVolumeDial);

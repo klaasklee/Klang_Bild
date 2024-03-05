@@ -16,28 +16,55 @@
 //==============================================================================
 /*
 */
-class LayerControlComponent  : public juce::Component,
-                               public juce::ComboBox::Listener
+class LayerControlComponent  :  public juce::Component,
+                                public juce::Slider::Listener,
+                                public juce::ComboBox::Listener
 {
 public:
     LayerControlComponent();
     ~LayerControlComponent() override;
+    
+    //public variable of Layer Control
+    float gain;
+    float pan;
+    BlendModes selectedBlendMode;
+    
+    void sliderValueChanged (juce::Slider* slider) override
+    {
+        if (slider == &sGain)
+        {
+            gain = sGain.getValue();
+            std::cout << "gain: " << gain << std::endl;
+        }
+        else if (slider == &sPan)
+        {
+            pan = sPan.getValue();
+            std::cout << "pan: " << pan << std::endl;
+        }
+    }
 
     void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override
     {
         if (comboBoxThatHasChanged == &BlendModeDropdown)
         {
-            BlendModes selectedOption = static_cast<BlendModes>(BlendModeDropdown.getSelectedId() - 1);
+            selectedBlendMode = static_cast<BlendModes>(BlendModeDropdown.getSelectedId() - 1);
         }
     }
     
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    //Knobs
+    juce::Slider sGain;
+    juce::Slider sPan;
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerControlComponent)
     
     juce::ComboBox BlendModeDropdown;
+    
+    //styling - lookAndFeel
+    LookAndFeel001 LookAndFeel001;
 
     juce::String getBlendModeName(BlendModes value)
     {
