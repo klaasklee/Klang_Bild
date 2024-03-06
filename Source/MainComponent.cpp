@@ -204,7 +204,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         //????
     
     //put it in the Buffer to fill
-    LayersViewPort.LayersContainer.Layers[1].LayerWave.transport.getNextAudioBlock(bufferToFill);
+    LayersViewPort.LayersContainer.Layers[0].LayerWave.transport.getNextAudioBlock(bufferToFill);
 }
 
 void MainComponent::releaseResources()
