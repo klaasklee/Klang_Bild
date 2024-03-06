@@ -43,14 +43,17 @@ public:
     TransportState state;
     
     
-    void transportStateChanged(TransportState nweState);
-    juce::AudioTransportSource transport;
+    void transportStateChanged(TransportState newState);
     
 private:
     //==============================================================================
     // Your private member variables go here...
     
     void changeListenerCallback(juce::ChangeBroadcaster *source) override;
+    
+    void setTransportsPos(float pos);
+    void setTransportsStart();
+    void setTransportsStop();
     
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;

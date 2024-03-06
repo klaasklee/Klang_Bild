@@ -96,7 +96,8 @@ void LayerWaveComponent::openButtonClicked()
             //get file ready to play
             std::unique_ptr<juce::AudioFormatReaderSource> tempSource (new juce::AudioFormatReaderSource(reader, true));
             
-            findParentComponentOfClass<MainComponent>()->transport.setSource(tempSource.get());
+//            findParentComponentOfClass<MainComponent>()->transport.setSource(tempSource.get());
+            transport.setSource(tempSource.get());
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stopped);
             
     //        erst wenn die datei geladen ist wird die information an den play Pionter weitergegeben um das Hörerlebnis nicht zu stören

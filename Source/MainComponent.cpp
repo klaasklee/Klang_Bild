@@ -24,7 +24,10 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }
     
-    transport.addChangeListener(this);
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.addChangeListener(this);
+    }
     
 }
 
@@ -45,7 +48,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
     
-    transport.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    }
     
     transportStateChanged(Stopped);
     
@@ -59,7 +65,7 @@ void MainComponent::transportStateChanged(TransportState newState)
         
         switch (state) {
             case Stopped:
-                transport.setPosition(0.0);
+                setTransportsPos(0.0);
                 ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setEnabled(false);
@@ -83,7 +89,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                transport.start();
+                setTransportsStart();
                 DBG("state = starting");
                 break;
             case Stopping:
@@ -93,7 +99,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-                transport.stop();
+                setTransportsStop();
                 DBG("state = stopping");
                 break;
             case Pause:
@@ -103,7 +109,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                transport.stop();
+                setTransportsStop();
                 DBG("state = pause");
                 break;
         }
@@ -112,26 +118,52 @@ void MainComponent::transportStateChanged(TransportState newState)
 
 void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
 {
-    if (source == &transport)
+    for (int i = 0; i < numOfLayers; i++)
     {
-        if (transport.isPlaying())
+        if (source == &LayersViewPort.LayersContainer.Layers[i].LayerWave.transport)
         {
-            transportStateChanged(Playing);
-        }
-        else
-        {
-            if (state == Pause)
+            if (LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying())
             {
-                transportStateChanged(Pause);
+                transportStateChanged(Playing);
             }
             else
             {
-                transportStateChanged(Stopped);
+                if (state == Pause)
+                {
+                    transportStateChanged(Pause);
+                }
+                else
+                {
+                    transportStateChanged(Stopped);
+                }
             }
         }
     }
 }
 
+void MainComponent::setTransportsPos(float pos)
+{
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.setPosition(pos);
+    }
+}
+void MainComponent::setTransportsStart()
+{
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.start();
+        std::cout << "isPlaying Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying() << std::endl;
+    }
+}
+void MainComponent::setTransportsStop()
+{
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.stop();
+        std::cout << "isPlaying Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying() << std::endl;
+    }
+}
 
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -147,9 +179,22 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
     // todo: how to copy data from the respective audio play Buffers here? 
    // LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer.
-
     
-    transport.getNextAudioBlock(bufferToFill);
+    
+    //-------------------------------------------------
+    //with this method pausing/stopping all the transport sources is kinda laggy
+    
+    // get Buffers of all transport sources
+//    for (int i = 0; i < numOfLayers; i++)
+//    {
+//        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.getNextAudioBlock( ???? );
+//    }
+    
+    //do smth with it
+        //????
+    
+    //put it in the Buffer to fill
+    LayersViewPort.LayersContainer.Layers[1].LayerWave.transport.getNextAudioBlock(bufferToFill);
 }
 
 void MainComponent::releaseResources()

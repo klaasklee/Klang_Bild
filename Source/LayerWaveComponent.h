@@ -29,6 +29,8 @@ public:
     juce::AudioSampleBuffer playBuffer; // contains the portion of the original file after shifting etc
     // @klaas: eventuell ist es doch besser, wenn wir das mit dem shiften nicht mit den zwei Buffern lösen, sondern mit irgendwelchen integern, die dann die "startposition" angeben? Damit hat man weniger redundanz und ballert den Arbeitsspeicher nicht so voll
     // trotzdem mache ich das erstmal wie besprochen, weil das dann einfacher ist :) 
+    
+    juce::AudioTransportSource transport;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)
