@@ -38,12 +38,16 @@ public:
     juce::ToggleButton bPause;
     juce::ToggleButton bStop;
 
+    juce::ToggleButton bLoop;
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlBarComponent)
     
     void bPlayClicked();
     void bStopClicked();
     void bPauseClicked();
+    
+    void bLoopClicked();
     
     //items
 

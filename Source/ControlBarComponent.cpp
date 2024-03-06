@@ -95,6 +95,12 @@ ControlBarComponent::ControlBarComponent()
     bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bStop);
 
+    bLoop.setButtonText("loop");
+    bLoop.setLookAndFeel(&LookAndFeel001);
+    bLoop.onClick = [this] { bLoopClicked(); };
+    bLoop.setEnabled(false);
+    bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
+    addAndMakeVisible(bLoop);
     
     
     //Info
@@ -131,6 +137,12 @@ void ControlBarComponent::bPauseClicked()
 {
     DBG("stop clicked");
     findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Pause);
+}
+
+void ControlBarComponent::bLoopClicked()
+{
+    std::cout << "loop toggled: " << bLoop.getToggleState() << std::endl;
+    findParentComponentOfClass<MainComponent>()->setTransportsLoop(bLoop.getToggleState());
 }
 
 void ControlBarComponent::paint (juce::Graphics& g)
@@ -182,6 +194,7 @@ void ControlBarComponent::resized()
     mainControlsFB.items.add(juce::FlexItem(bPlay).withMinWidth(60).withMaxHeight(getHeight()/3));
     mainControlsFB.items.add(juce::FlexItem(bPause).withMinWidth(60).withMaxHeight(getHeight()/3));
     mainControlsFB.items.add(juce::FlexItem(bStop).withMinWidth(60).withMaxHeight(getHeight()/3));
+    mainControlsFB.items.add(juce::FlexItem(bLoop).withMinWidth(60).withMaxHeight(getHeight()/3));
     
     
     //Info FlexBox

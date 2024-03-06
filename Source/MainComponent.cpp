@@ -165,6 +165,16 @@ void MainComponent::setTransportsStop()
     }
 }
 
+// set Looping does somehow not work like this?
+void MainComponent::setTransportsLoop(bool b)
+{
+    DBG("does not work");
+//    for (int i = 0; i < numOfLayers; i++)
+//    {
+//        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.setLooping(true);
+//        std::cout << "Loop? Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isLooping() << std::endl;
+//    }
+}
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {

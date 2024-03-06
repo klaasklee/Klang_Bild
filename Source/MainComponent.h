@@ -45,6 +45,8 @@ public:
     
     void transportStateChanged(TransportState newState);
     
+    void setTransportsLoop(bool b);
+    
 private:
     //==============================================================================
     // Your private member variables go here...
@@ -54,6 +56,7 @@ private:
     void setTransportsPos(float pos);
     void setTransportsStart();
     void setTransportsStop();
+
     
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
