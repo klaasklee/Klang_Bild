@@ -192,7 +192,13 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     
     
     //-------------------------------------------------
-    //with this method pausing/stopping all the transport sources is kinda laggy
+    /*
+     with this method pausing/stopping all the transport sources is kinda laggy
+     
+     Maybe you can empty the bufferToFill first and then stop all transports.
+     Then the sound is stopped directly.
+     So that all transports start playing again at the same time, remember the time of the button click and then reset all transports to this time?
+    */
     
     // get Buffers of all transport sources
 //    for (int i = 0; i < numOfLayers; i++)
