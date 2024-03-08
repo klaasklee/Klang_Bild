@@ -47,9 +47,12 @@ public:
     
     void setTransportsLoop(bool b);
     
+
+
 private:
     //==============================================================================
     // Your private member variables go here...
+    
     
     void changeListenerCallback(juce::ChangeBroadcaster *source) override;
     
@@ -57,7 +60,21 @@ private:
     void setTransportsStart();
     void setTransportsStop();
 
-    void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
+    static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
+    static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
+
+    typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
+
+    static functionPointerType getBlendModeFct(BlendModes blendMode) {
+        switch (1) {
+        case BlendModes::Normal:
+            return &blendModeAdd;
+        case BlendModes::Multiply:
+            return &blendModeMult;
+        default:
+            return NULL;
+        }
+    }
 
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
