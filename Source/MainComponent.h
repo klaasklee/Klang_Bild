@@ -57,9 +57,13 @@ private:
     void setTransportsStart();
     void setTransportsStop();
 
-    
+    void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
+
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
+    juce::AudioSampleBuffer outBuffer;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
+
 };

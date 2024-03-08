@@ -47,13 +47,16 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // but be careful - it will be called on the audio thread, not the GUI thread.
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
-    
+    outBuffer.setSize(2, samplesPerBlockExpected);
+
     for (int i = 0; i < numOfLayers; i++)
     {
         LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.prepareToPlay(samplesPerBlockExpected, sampleRate);
     }
     
     transportStateChanged(Stopped);
+
+
     
 }
 
@@ -210,8 +213,57 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         //????
     
     //put it in the Buffer to fill
-    LayersViewPort.LayersContainer.Layers[0].LayerWave.transport.getNextAudioBlock(bufferToFill);
+    //LayersViewPort.LayersContainer.Layers[0].LayerWave.transport.getNextAudioBlock(bufferToFill);
+    auto numChannels = bufferToFill.buffer->getNumChannels();
+    auto lengthInSamples = bufferToFill.numSamples;
+
+    if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[1].LayerWave.fileLoaded) {
+        blendModeAdd(LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer, 
+            LayersViewPort.LayersContainer.Layers[1].LayerWave.playBuffer, 
+            outBuffer, 
+            lengthInSamples, LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos, 
+            LayersViewPort.LayersContainer.Layers[1].LayerWave.playPos);
+    }
+
+
+    if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded)
+    {
+        for (int ch = 0; ch < numChannels; ch++) {
+            bufferToFill.buffer->copyFrom(ch,                                       //  destination buffer channel index
+                0,                                                                  //  sample offset in output buffer
+                outBuffer,                                                          //  source buffer
+                ch % numChannels,                                                   //  channel of input buffer
+                0,                                                                  //  start copy position in input buffer
+                lengthInSamples);                                                   //  number of samples to copy
+        }
+    }
 }
+
+void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB)
+{
+    int numChannelsA = layerA.getNumChannels();
+    int numChannelsB = layerB.getNumChannels();
+
+    const float* readA; 
+    const float* readB; 
+    float* writeOut; 
+
+    jassert (numChannelsA == numChannelsB);
+
+    for (int ch = 0; ch < numChannelsA; ch++)
+    {
+        readA = layerA.getReadPointer(ch, playPosA);
+        readB = layerB.getReadPointer(ch, playPosB);
+        writeOut = outLayer.getWritePointer(ch);
+
+        for (int i = 0; i < numSamples; i++) {
+            *writeOut++ = *readA++ + *readB++;
+        }
+    }
+    playPosA += numSamples;
+    playPosB += numSamples; 
+}
+
 
 void MainComponent::releaseResources()
 {

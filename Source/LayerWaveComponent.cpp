@@ -15,6 +15,7 @@
 //==============================================================================
 LayerWaveComponent::LayerWaveComponent() : openButton("open file (WAV, MP3)")
 {
+    fileLoaded = false; 
     openButton.onClick = [this] { openButtonClicked(); };
     addAndMakeVisible(&openButton);
     
@@ -72,6 +73,8 @@ void LayerWaveComponent::openButtonClicked()
             int lengthInSamples = (int)reader->lengthInSamples;
             fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
+            playPos = 0;
+            // todo: resample to correct samplerate before loading to RAM 
             reader->read(&fileBuffer,                                                    
                 0,                              //destination start sample                                 
                 (int)reader->lengthInSamples,   //numSamples                               
@@ -90,6 +93,7 @@ void LayerWaveComponent::openButtonClicked()
                     0,                             //  start copy position in input buffer
                     lengthInSamples);              //  number of samples to copy
             }
+            fileLoaded = true; 
 
 
 
