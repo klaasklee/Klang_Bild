@@ -17,6 +17,10 @@
 const int numOfLayers = 5;
 const int layerHeight = 200;
 
+// if you add a Blendmode
+// add BlendModeName in LayerControlComponent.h
+// change last Blendmode in LayerControlComponent.cpp line 20
+
 enum BlendModes
 {
     Normal,
@@ -25,9 +29,6 @@ enum BlendModes
     Multiply,
     Duck
 };
-//BlendModes mode;
-
-
 
 
 //==============================================================================

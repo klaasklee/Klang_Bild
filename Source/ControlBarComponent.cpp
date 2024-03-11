@@ -16,9 +16,6 @@
 //==============================================================================
 ControlBarComponent::ControlBarComponent()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sVolumeDial.setRange(0.0, 1.0);
@@ -142,7 +139,7 @@ void ControlBarComponent::bPauseClicked()
 void ControlBarComponent::bLoopClicked()
 {
     std::cout << "loop toggled: " << bLoop.getToggleState() << std::endl;
-    findParentComponentOfClass<MainComponent>()->setTransportsLoop(bLoop.getToggleState());
+    findParentComponentOfClass<MainComponent>()->setTransportLoop(bLoop.getToggleState());
 }
 
 void ControlBarComponent::paint (juce::Graphics& g)

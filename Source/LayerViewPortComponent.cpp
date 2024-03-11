@@ -14,8 +14,6 @@
 //==============================================================================
 LayerViewPortComponent::LayerViewPortComponent()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
     addAndMakeVisible(LayerViewport);
 }
 
@@ -25,9 +23,6 @@ LayerViewPortComponent::~LayerViewPortComponent()
 
 void LayerViewPortComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
     LayersContainer.setBounds(0, 0, getLocalBounds().getWidth(), LayersContainer.getLayerContainerHeight());
 
     LayerViewport.setBounds(getLocalBounds());

@@ -15,9 +15,6 @@
 //==============================================================================
 LayersContainerComponent::LayersContainerComponent()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-    
     for (int i = 0; i < numOfLayers; i++) {
         addAndMakeVisible(Layers[i]);
     }
@@ -29,9 +26,6 @@ LayersContainerComponent::~LayersContainerComponent()
 
 void LayersContainerComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-    
     juce::FlexBox layersFB;
     layersFB.flexDirection = juce::FlexBox::Direction::row;
     layersFB.alignContent = juce::FlexBox::AlignContent::flexStart;

@@ -4,8 +4,6 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
-    // Make sure you set the size of the component after
-    // you add any child components.
     setSize (1200, 800);
     
     addAndMakeVisible(ControlBar);
@@ -23,11 +21,7 @@ MainComponent::MainComponent()
         // Specify the number of input and output channels that we want to open
         setAudioChannels (0, 2);
     }
-    
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.addChangeListener(this);
-    }
+
     
 }
 
@@ -40,24 +34,10 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
     outBuffer.setSize(2, samplesPerBlockExpected);
 
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    }
-    
     transportStateChanged(Stopped);
 
-
-    
 }
 
 void MainComponent::transportStateChanged(TransportState newState)
@@ -68,7 +48,7 @@ void MainComponent::transportStateChanged(TransportState newState)
         
         switch (state) {
             case Stopped:
-                setTransportsPos(0.0);
+                setTransportPos(0.0);
                 ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setEnabled(false);
@@ -92,7 +72,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                setTransportsStart();
+                setTransportStart();
                 DBG("state = starting");
                 break;
             case Stopping:
@@ -102,7 +82,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-                setTransportsStop();
+                setTransportStop();
                 DBG("state = stopping");
                 break;
             case Pause:
@@ -112,108 +92,34 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                setTransportsStop();
+                setTransportStop();
                 DBG("state = pause");
                 break;
         }
     }
 }
 
-void MainComponent::changeListenerCallback(juce::ChangeBroadcaster *source)
+void MainComponent::setTransportPos(float pos)
 {
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        if (source == &LayersViewPort.LayersContainer.Layers[i].LayerWave.transport)
-        {
-            if (LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying())
-            {
-                transportStateChanged(Playing);
-            }
-            else
-            {
-                if (state == Pause)
-                {
-                    transportStateChanged(Pause);
-                }
-                else
-                {
-                    transportStateChanged(Stopped);
-                }
-            }
-        }
-    }
+    
 }
-
-void MainComponent::setTransportsPos(float pos)
+void MainComponent::setTransportStart()
 {
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.setPosition(pos);
-    }
+    
 }
-void MainComponent::setTransportsStart()
+void MainComponent::setTransportStop()
 {
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.start();
-        std::cout << "isPlaying Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying() << std::endl;
-    }
+    
 }
-void MainComponent::setTransportsStop()
+void MainComponent::setTransportLoop(bool b)
 {
-    for (int i = 0; i < numOfLayers; i++)
-    {
-        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.stop();
-        std::cout << "isPlaying Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isPlaying() << std::endl;
-    }
-}
-
-// set Looping does somehow not work like this?
-void MainComponent::setTransportsLoop(bool b)
-{
-    DBG("does not work");
-//    for (int i = 0; i < numOfLayers; i++)
-//    {
-//        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.setLooping(true);
-//        std::cout << "Loop? Layer "<< i << ": " << LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.isLooping() << std::endl;
-//    }
+    
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    // Your audio-processing code goes here!
-    
-    // For more details, see the help for AudioProcessor::getNextAudioBlock()
-
-    // Right now we are not producing any data, in which case we need to clear the buffer
-    // (to prevent the output of random noise)
-    
     bufferToFill.clearActiveBufferRegion();
-
-    // todo: how to copy data from the respective audio play Buffers here? 
-   // LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer.
     
-    
-    //-------------------------------------------------
-    /*
-     with this method pausing/stopping all the transport sources is kinda laggy
-     
-     Maybe you can empty the bufferToFill first and then stop all transports.
-     Then the sound is stopped directly.
-     So that all transports start playing again at the same time, remember the time of the button click and then reset all transports to this time?
-    */
-    
-    // get Buffers of all transport sources
-//    for (int i = 0; i < numOfLayers; i++)
-//    {
-//        LayersViewPort.LayersContainer.Layers[i].LayerWave.transport.getNextAudioBlock( ???? );
-//    }
-    
-    //do smth with it
-        //????
-    
-    //put it in the Buffer to fill
-    //LayersViewPort.LayersContainer.Layers[0].LayerWave.transport.getNextAudioBlock(bufferToFill);
     auto numChannels = bufferToFill.buffer->getNumChannels();
     auto lengthInSamples = bufferToFill.numSamples;
     int nullInt = 0;
@@ -221,7 +127,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
         functionPointerType blendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[2].LayerControl.selectedBlendMode);
 
-        //todo: die smarte for schleife für alle Layer
+        //todo: die smarte for schleife fuer alle Layer
 
         // todo: besseres handling von verschiedenen layer längen (zB nicht Abstürzen des Programms.)
 
@@ -327,10 +233,6 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
-    
     ControlBar.setBounds(0, 0, getWidth(), getHeight()/5);
     LayersViewPort.setBounds(0, getHeight()/5, getWidth(), getHeight() -  getHeight()/5);
 }

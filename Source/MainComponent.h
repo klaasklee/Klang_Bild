@@ -10,7 +10,6 @@
     your controls and content.
 */
 class MainComponent  : public juce::AudioAppComponent
-                        ,public juce::ChangeListener
 {
 public:
     //==============================================================================
@@ -27,25 +26,19 @@ public:
     void resized() override;
 
     
-    
-    // if you add a Blendmode
-    // add BlendModeName in LayerControlComponent.h
-    // change last Blendmode in LayerControlComponent.cpp line 20
-
     enum TransportState
     {
         Stopped,
         Starting,
         Stopping,
         Playing,
-        Pause
+        Pause,
+        toggleLoop
     };
     TransportState state;
-    
-    
     void transportStateChanged(TransportState newState);
     
-    void setTransportsLoop(bool b);
+    void setTransportLoop(bool b);
     
 
 
@@ -53,12 +46,9 @@ private:
     //==============================================================================
     // Your private member variables go here...
     
-    
-    void changeListenerCallback(juce::ChangeBroadcaster *source) override;
-    
-    void setTransportsPos(float pos);
-    void setTransportsStart();
-    void setTransportsStop();
+    void setTransportPos(float pos);
+    void setTransportStart();
+    void setTransportStop();
 
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB);

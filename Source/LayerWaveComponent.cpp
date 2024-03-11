@@ -28,13 +28,6 @@ LayerWaveComponent::~LayerWaveComponent()
 
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -74,8 +67,10 @@ void LayerWaveComponent::openButtonClicked()
             fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playPos = 0;
-            // todo: resample to correct samplerate before loading to RAM 
-            reader->read(&fileBuffer,                                                    
+            
+            // todo: resample to correct samplerate before loading to RAM
+            
+            reader->read(&fileBuffer,
                 0,                              //destination start sample                                 
                 (int)reader->lengthInSamples,   //numSamples                               
                 0,                              //reader start sample                                  
@@ -96,18 +91,7 @@ void LayerWaveComponent::openButtonClicked()
             fileLoaded = true; 
 
 
-
-            //get file ready to play
-            std::unique_ptr<juce::AudioFormatReaderSource> tempSource (new juce::AudioFormatReaderSource(reader, true));
-            
-//            findParentComponentOfClass<MainComponent>()->transport.setSource(tempSource.get());
-            transport.setSource(tempSource.get());
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stopped);
-            
-    //        erst wenn die datei geladen ist wird die information an den play Pionter weitergegeben um das Hörerlebnis nicht zu stören
-    //        wenn jetzt zB schon vorher eine datei geladen wurde und gerade abspielt ist das wichtig
-    //        zB so:
-            playSource.reset(tempSource.release());
             
  //          setAudioChannels (0, (int) reader->numChannels);
             

@@ -15,9 +15,6 @@
 //==============================================================================
 LayerControlComponent::LayerControlComponent()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-    
     //Gain Knob
     sGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sGain.setRange(0.0, 1.0);
@@ -67,7 +64,5 @@ void LayerControlComponent::paint (juce::Graphics& g)
 
 void LayerControlComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
+    
 }

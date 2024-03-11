@@ -24,7 +24,7 @@ public:
     LayerControlComponent();
     ~LayerControlComponent() override;
     
-    //public variable of Layer Control
+    //public variables of Layer Control
     float gain;
     float pan;
     BlendModes selectedBlendMode;
