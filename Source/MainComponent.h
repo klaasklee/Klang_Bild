@@ -32,8 +32,7 @@ public:
         Starting,
         Stopping,
         Playing,
-        Pause,
-        toggleLoop
+        Pause
     };
     TransportState state;
     void transportStateChanged(TransportState newState);
