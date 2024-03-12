@@ -45,6 +45,7 @@ private:
     // Your private member variables go here...
 
     float globalVolume;
+    bool globalLoop;
 
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
@@ -52,7 +53,7 @@ private:
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
 
     static functionPointerType getBlendModeFct(BlendModes blendMode) {
-        switch (1) {
+        switch (blendMode) {
         case BlendModes::Normal:
             return &blendModeAdd;
         case BlendModes::Multiply:

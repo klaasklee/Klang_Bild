@@ -40,49 +40,6 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 }
 
-void MainComponent::transportStateChanged(TransportState newState)
-{
-    if (newState != state)
-    {
-        state = newState;
-        
-        switch (state) {
-            case Stop:
-                ControlBar.bPlay.setEnabled(true);
-                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(false);
-                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(false);
-                ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-                DBG("state = stopped");
-                break;
-            case Play:
-                ControlBar.bPlay.setEnabled(false);
-                ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(true);
-                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
-                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                break;
-            case Pause:
-                ControlBar.bPlay.setEnabled(true);
-                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(false);
-                ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
-                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-
-                DBG("state = pause");
-                break;
-        }
-    }
-}
-
-void MainComponent::setTransportLoop(bool b)
-{
-    
-}
-
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     if (state == Play) {
@@ -93,16 +50,17 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         auto lengthInSamples = bufferToFill.numSamples;
         int nullInt = 0;
         int numActiveLayers = 0;
-        int activeLayerIndexes[numOfLayers] = { -1, -1, -1, -1, -1 };
+        int activeLayerIndexes[numOfLayers];
+        for (int i = 0; i < numOfLayers; i++)
+        {
+            activeLayerIndexes[i] = -1;
+        }
         
         // find the last active layer, and the number of active layers
         for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
             if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
                 activeLayerIndexes[numActiveLayers] = layerCounter;
                 numActiveLayers += 1;
-                if (numActiveLayers > 1) {
-                    int a = 1;
-                }
             }
         }
         
@@ -118,17 +76,15 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
                                    lengthInSamples);                                                               //  number of samples to copy
             }
+            // maoves the playPosition one bufferlenght forward
             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
             
             
             // calculate blend modes, if there are at least two active layers
             // for only one active layer, the loop will be skipped
             for (int i = 1; i < numActiveLayers; i++) {
-                if (numActiveLayers == 3) {
-                    int a = 1;
-                }
                 functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
-                blendModeAdd(outBuffer,
+                calcBlendMode(outBuffer,
                              LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
                              outBuffer,
                              lengthInSamples,
@@ -158,6 +114,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
     }
+    
+    // if state = pause nothing hapens
 }
 
 #
@@ -258,10 +216,54 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSa
     playPosB += numSamples;
 }
 
+void MainComponent::transportStateChanged(TransportState newState)
+{
+    if (newState != state)
+    {
+        state = newState;
+        
+        switch (state) {
+            case Stop:
+                ControlBar.bPlay.setEnabled(true);
+                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(false);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(false);
+                ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
+                DBG("state = stop");
+                break;
+            case Play:
+                ControlBar.bPlay.setEnabled(false);
+                ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(true);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(true);
+                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                DBG("state = play");
+                break;
+            case Pause:
+                ControlBar.bPlay.setEnabled(true);
+                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(false);
+                ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(true);
+                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                DBG("state = pause");
+                break;
+        }
+    }
+}
+
 void MainComponent::setVolume(float volume)
 {
     globalVolume = volume;
 }
+
+void MainComponent::setTransportLoop(bool b)
+{
+    globalLoop = b;
+}
+
 
 void MainComponent::releaseResources()
 {
