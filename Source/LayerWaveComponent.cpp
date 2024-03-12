@@ -110,13 +110,11 @@ void LayerWaveComponent::openButtonClicked()
 void LayerWaveComponent::resampleBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
 {
     
-    
-    
-    // Initialisiere den ResamplingAudioSource
+    // initialise ResamplingAudioSource
 //    juce::ResamplingAudioSource resamplingSource = new juce::ResamplingAudioSource(&srcBuffer, false, srcBuffer.getNumChannels())
 //    resamplingSource.setResamplingRatio(double(destBuffer / srcSampleRate);
 
-    // Fülle den Ausgangspuffer mit resamplen Audio
+    // fill destBuffer with resampled audio
 //    resamplingSource.prepareToPlay(destBuffer.getNumSamples();
                                         
 //    resamplingSource.getNextAudioBlock(juce::AudioSourceChannelInfo(destBuffer));
