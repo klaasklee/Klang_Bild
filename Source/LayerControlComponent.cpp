@@ -39,6 +39,7 @@ LayerControlComponent::LayerControlComponent()
     sPan.setBounds(120, 47, 100, 60);
     addAndMakeVisible(sPan);
     
+    // change the last BlendMode here
     for (int i = 0; i < static_cast<int>(BlendModes::Duck)+1; i++)
     {
         BlendModeDropdown.addItem(getBlendModeName(static_cast<BlendModes>(i)), i+1);
