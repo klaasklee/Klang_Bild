@@ -258,7 +258,10 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSa
     playPosB += numSamples;
 }
 
-
+void MainComponent::setVolume(float volume)
+{
+    globalVolume = volume;
+}
 
 void MainComponent::releaseResources()
 {

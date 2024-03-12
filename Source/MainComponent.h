@@ -25,6 +25,7 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
+    void setVolume(float volume);
     
     enum TransportState
     {
@@ -43,7 +44,7 @@ private:
     //==============================================================================
     // Your private member variables go here...
 
-    
+    float globalVolume;
 
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
