@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Globals.h"
-#include "MainComponent.h"
+//#include "MainComponent.h"
 
 //==============================================================================
 
@@ -26,7 +26,13 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void sliderValueChanged (juce::Slider* slider) override;
+    void sliderValueChanged(juce::Slider* slider) override {
+        if (slider == &sVolumeDial)
+        {
+            std::cout << "volume: " << sVolumeDial.getValue() << std::endl;
+            //findParentComponentOfClass<MainComponent>()->setVolume(sVolumeDial.getValue());
+        }
+    }
     
     //Volume
     juce::Slider sVolumeDial;
