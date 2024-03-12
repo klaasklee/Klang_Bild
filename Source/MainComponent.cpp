@@ -116,41 +116,59 @@ void MainComponent::setTransportLoop(bool b)
     
 }
 
-void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
+void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     bufferToFill.clearActiveBufferRegion();
-    
+
     auto numChannels = bufferToFill.buffer->getNumChannels();
     auto lengthInSamples = bufferToFill.numSamples;
     int nullInt = 0;
-    if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[1].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[2].LayerWave.fileLoaded) {
+    int numLayers = 5;
+    int numActiveLayers = 0;
+    int activeLayerIndexes[5] = { -1, -1, -1, -1, -1 };
 
-        functionPointerType blendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[2].LayerControl.selectedBlendMode);
-
-        //todo: die smarte for schleife fuer alle Layer
-
-        // todo: besseres handling von verschiedenen layer längen (zB nicht Abstürzen des Programms.)
-
-        // todo: pause: als globale variable bool machen: in getNextAudioBlock abfragen, wenn true: noch einen Audio Block abspielen, aber am ende eine GainRamp machen. 
-
-        blendModeAdd(LayersViewPort.LayersContainer.Layers[2].LayerWave.playBuffer, 
-            LayersViewPort.LayersContainer.Layers[1].LayerWave.playBuffer, 
-            outBuffer, 
-            lengthInSamples, 
-            LayersViewPort.LayersContainer.Layers[2].LayerWave.playPos, 
-            LayersViewPort.LayersContainer.Layers[1].LayerWave.playPos);
-
-        blendModeMult(outBuffer,
-            LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer,
-            outBuffer,
-            lengthInSamples,
-            nullInt,
-            LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos);
+    // find the last active layer, and the number of active layers
+    for (int layerCounter = numLayers - 1; layerCounter >= 0; layerCounter--) {
+        if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
+            activeLayerIndexes[numActiveLayers] = layerCounter;
+            numActiveLayers += 1;
+            if (numActiveLayers > 1) {
+                int a = 1;
+            }
+        }
     }
 
 
-    if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded)
-    {
+    if (numActiveLayers > 0) {
+
+        // always copy the last active layer to the outBuffer.
+        for (int ch = 0; ch < numChannels; ch++) {
+            outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
+                0,                                                                              //  sample offset in output buffer
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
+                ch % numChannels,                                                               //  channel of input buffer
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
+                lengthInSamples);                                                               //  number of samples to copy                
+        }
+        LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
+
+
+        // calculate blend modes, if there are at least two active layers
+        // for only one active layer, the loop will be skipped
+        for (int i = 1; i < numActiveLayers; i++) {
+            if (numActiveLayers == 3) {
+                int a = 1;
+            }
+            functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
+            blendModeAdd(outBuffer,
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
+                outBuffer,
+                lengthInSamples,
+                nullInt,
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos);
+        }
+
+        //copy the calculation result to output (bufferToFill)
         for (int ch = 0; ch < numChannels; ch++) {
             bufferToFill.buffer->copyFrom(ch,                                       //  destination buffer channel index
                 0,                                                                  //  sample offset in output buffer
@@ -162,10 +180,54 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     }
 }
 
+#
+    //if (numActiveLayers == 1) { // only one layer active, no calculations to be done.
+    //    for (int ch = 0; ch < numChannels; ch++) {
+    //        outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
+    //            0,                                                                              //  sample offset in output buffer
+    //            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
+    //            ch % numChannels,                                                               //  channel of input buffer
+    //            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
+    //            lengthInSamples);                                                               //  number of samples to copy                
+    //    }
+    //    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
+    //}
+    //if(0) {}
+    //else {
+
+    //}
+
+
+    //if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[1].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[2].LayerWave.fileLoaded) {
+
+    //    functionPointerType blendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[2].LayerControl.selectedBlendMode);
+
+    //    //todo: die smarte for schleife fuer alle Layer
+
+    //    // todo: besseres handling von verschiedenen layer längen (zB nicht Abstürzen des Programms.)
+
+    //    // todo: pause: als globale variable bool machen: in getNextAudioBlock abfragen, wenn true: noch einen Audio Block abspielen, aber am ende eine GainRamp machen. 
+
+    //    blendModeAdd(LayersViewPort.LayersContainer.Layers[2].LayerWave.playBuffer, 
+    //        LayersViewPort.LayersContainer.Layers[1].LayerWave.playBuffer, 
+    //        outBuffer, 
+    //        lengthInSamples, 
+    //        LayersViewPort.LayersContainer.Layers[2].LayerWave.playPos, 
+    //        LayersViewPort.LayersContainer.Layers[1].LayerWave.playPos);
+
+    //    blendModeMult(outBuffer,
+    //        LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer,
+    //        outBuffer,
+    //        lengthInSamples,
+    //        nullInt,
+    //        LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos);
+    //}
 
 
 
-void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB)
+
+
+void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB)
 {
     int numChannelsA = layerA.getNumChannels();
     int numChannelsB = layerB.getNumChannels();
@@ -186,11 +248,12 @@ void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSam
             *writeOut++ = *readA++ + *readB++;
         }
     }
-    playPosA += numSamples;
+    // do not increment playPosA as it is always the outBuffer! 
+    //playPosA += numSamples;
     playPosB += numSamples; 
 }
 
-void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int& playPosA, int& playPosB)
+void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB)
 {
     int numChannelsA = layerA.getNumChannels();
     int numChannelsB = layerB.getNumChannels();
@@ -211,7 +274,7 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSa
             *writeOut++ = *readA++ * *readB++;
         }
     }
-    playPosA += numSamples;
+    //playPosA += numSamples;
     playPosB += numSamples;
 }
 
