@@ -121,13 +121,13 @@ ControlBarComponent::~ControlBarComponent()
 void ControlBarComponent::bPlayClicked()
 {
     DBG("play clicked");
-    findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Starting);
+    findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Play);
 }
 
 void ControlBarComponent::bStopClicked()
 {
     DBG("stop clicked");
-    findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stopping);
+    findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
 }
 
 void ControlBarComponent::bPauseClicked()

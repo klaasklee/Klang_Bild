@@ -28,7 +28,10 @@ public:
     void sliderValueChanged (juce::Slider* slider) override
     {
         if (slider == &sVolumeDial)
+        {
             std::cout << "volume: " << sVolumeDial.getValue() << std::endl;
+            globalVolume = sVolumeDial.getValue();
+        }
     }
     
     //Volume

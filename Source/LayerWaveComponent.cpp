@@ -65,9 +65,10 @@ void LayerWaveComponent::openButtonClicked()
             
             // save audio to Audio buffer
             int lengthInSamples = (int)reader->lengthInSamples;
-//            fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
+            fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playPos = 0;
+            playOffset = 0;
             
             //reads data into the fileBuffer
             reader->read(&fileBuffer,
@@ -78,7 +79,7 @@ void LayerWaveComponent::openButtonClicked()
                 true);                          //use left channel    
             
             // todo: resample to correct samplerate before loading to RAM
-            resampleBuffer(fileBuffer, resampledBuffer, reader->sampleRate, globalSampleRate);
+//            resampleBuffer(fileBuffer, resampledBuffer, reader->sampleRate, globalSampleRate);
             
             // todo: release memory of fileBuffer??
             // todo: work with resampled buffer
@@ -98,7 +99,7 @@ void LayerWaveComponent::openButtonClicked()
             fileLoaded = true; 
 
 
-            findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stopped);
+            findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
             
  //          setAudioChannels (0, (int) reader->numChannels);
             

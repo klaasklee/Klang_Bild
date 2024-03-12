@@ -32,6 +32,7 @@ public:
     // trotzdem mache ich das erstmal wie besprochen, weil das dann einfacher ist :) 
     int playPos;
     bool fileLoaded;
+    int playOffset;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)

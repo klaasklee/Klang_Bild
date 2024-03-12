@@ -35,8 +35,8 @@ MainComponent::~MainComponent()
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     outBuffer.setSize(2, samplesPerBlockExpected);
-
-    transportStateChanged(Stopped);
+    
+    transportStateChanged(Stop);
 
 }
 
@@ -47,8 +47,7 @@ void MainComponent::transportStateChanged(TransportState newState)
         state = newState;
         
         switch (state) {
-            case Stopped:
-                setTransportPos(0.0);
+            case Stop:
                 ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setEnabled(false);
@@ -57,33 +56,13 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
                 DBG("state = stopped");
                 break;
-            case Playing:
+            case Play:
                 ControlBar.bPlay.setEnabled(false);
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setEnabled(true);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                break;
-            case Starting:
-                ControlBar.bPlay.setEnabled(false);
-                ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(true);
-                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
-                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                setTransportStart();
-                DBG("state = starting");
-                break;
-            case Stopping:
-                ControlBar.bPlay.setEnabled(true);
-                ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(false);
-                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(false);
-                ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-                setTransportStop();
-                DBG("state = stopping");
                 break;
             case Pause:
                 ControlBar.bPlay.setEnabled(true);
@@ -92,25 +71,13 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                setTransportStop();
+
                 DBG("state = pause");
                 break;
         }
     }
 }
 
-void MainComponent::setTransportPos(float pos)
-{
-    
-}
-void MainComponent::setTransportStart()
-{
-    
-}
-void MainComponent::setTransportStop()
-{
-    
-}
 void MainComponent::setTransportLoop(bool b)
 {
     
@@ -118,63 +85,77 @@ void MainComponent::setTransportLoop(bool b)
 
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    bufferToFill.clearActiveBufferRegion();
-
-    auto numChannels = bufferToFill.buffer->getNumChannels();
-    auto lengthInSamples = bufferToFill.numSamples;
-    int nullInt = 0;
-    int numActiveLayers = 0;
-    int activeLayerIndexes[numOfLayers] = { -1, -1, -1, -1, -1 };
-
-    // find the last active layer, and the number of active layers
-    for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
-        if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
-            activeLayerIndexes[numActiveLayers] = layerCounter;
-            numActiveLayers += 1;
-            if (numActiveLayers > 1) {
-                int a = 1;
+    if (state == Play) {
+        
+        bufferToFill.clearActiveBufferRegion();
+        
+        auto numChannels = bufferToFill.buffer->getNumChannels();
+        auto lengthInSamples = bufferToFill.numSamples;
+        int nullInt = 0;
+        int numActiveLayers = 0;
+        int activeLayerIndexes[numOfLayers] = { -1, -1, -1, -1, -1 };
+        
+        // find the last active layer, and the number of active layers
+        for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
+            if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
+                activeLayerIndexes[numActiveLayers] = layerCounter;
+                numActiveLayers += 1;
+                if (numActiveLayers > 1) {
+                    int a = 1;
+                }
+            }
+        }
+        
+        
+        if (numActiveLayers > 0) {
+            
+            // always copy the last active layer to the outBuffer.
+            for (int ch = 0; ch < numChannels; ch++) {
+                outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
+                                   0,                                                                              //  sample offset in output buffer
+                                   LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
+                                   ch % numChannels,                                                               //  channel of input buffer
+                                   LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
+                                   lengthInSamples);                                                               //  number of samples to copy
+            }
+            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
+            
+            
+            // calculate blend modes, if there are at least two active layers
+            // for only one active layer, the loop will be skipped
+            for (int i = 1; i < numActiveLayers; i++) {
+                if (numActiveLayers == 3) {
+                    int a = 1;
+                }
+                functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
+                blendModeAdd(outBuffer,
+                             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
+                             outBuffer,
+                             lengthInSamples,
+                             nullInt,
+                             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos);
+            }
+            
+            //copy the calculation result to output (bufferToFill)
+            for (int ch = 0; ch < numChannels; ch++) {
+                bufferToFill.buffer->copyFrom(ch,                                       //  destination buffer channel index
+                                              0,                                                                  //  sample offset in output buffer
+                                              outBuffer,                                                          //  source buffer
+                                              ch % numChannels,                                                   //  channel of input buffer
+                                              0,                                                                  //  start copy position in input buffer
+                                              lengthInSamples);                                                   //  number of samples to copy
+                bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             }
         }
     }
-
-
-    if (numActiveLayers > 0) {
-
-        // always copy the last active layer to the outBuffer.
-        for (int ch = 0; ch < numChannels; ch++) {
-            outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
-                0,                                                                              //  sample offset in output buffer
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
-                ch % numChannels,                                                               //  channel of input buffer
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
-                lengthInSamples);                                                               //  number of samples to copy                
-        }
-        LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
-
-
-        // calculate blend modes, if there are at least two active layers
-        // for only one active layer, the loop will be skipped
-        for (int i = 1; i < numActiveLayers; i++) {
-            if (numActiveLayers == 3) {
-                int a = 1;
-            }
-            functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
-            blendModeAdd(outBuffer,
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
-                outBuffer,
-                lengthInSamples,
-                nullInt,
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos);
-        }
-
-        //copy the calculation result to output (bufferToFill)
-        for (int ch = 0; ch < numChannels; ch++) {
-            bufferToFill.buffer->copyFrom(ch,                                       //  destination buffer channel index
-                0,                                                                  //  sample offset in output buffer
-                outBuffer,                                                          //  source buffer
-                ch % numChannels,                                                   //  channel of input buffer
-                0,                                                                  //  start copy position in input buffer
-                lengthInSamples);                                                   //  number of samples to copy
+    
+    
+    if (state == Stop)
+    {
+        // find the last active layer, and the number of active layers
+        for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--)
+        {
+            LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
     }
 }

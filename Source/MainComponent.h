@@ -28,10 +28,8 @@ public:
     
     enum TransportState
     {
-        Stopped,
-        Starting,
-        Stopping,
-        Playing,
+        Stop,
+        Play,
         Pause
     };
     TransportState state;
@@ -44,10 +42,8 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
+
     
-    void setTransportPos(float pos);
-    void setTransportStart();
-    void setTransportStop();
 
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
