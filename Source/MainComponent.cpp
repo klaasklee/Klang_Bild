@@ -130,7 +130,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 
             if (samplesWritten >= globalSampleRate*exportTime) {
                 // this ends recording and the recording will be saved
-                writeExportBuffer();
+                toggleExportState();
             }
         }
     }
@@ -282,7 +282,7 @@ void MainComponent::setTransportLoop(bool b)
     globalLoop = b;
 }
 
-void MainComponent::writeExportBuffer()
+void MainComponent::toggleExportState()
 {
     if (state == Export)
     {

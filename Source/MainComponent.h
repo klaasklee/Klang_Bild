@@ -39,7 +39,7 @@ public:
     
     void setTransportLoop(bool b);
     
-    void writeExportBuffer();
+    void toggleExportState();
     void exportAudioToFile(juce::AudioBuffer<float> buffer);
 
 private:

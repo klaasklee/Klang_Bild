@@ -157,7 +157,7 @@ void ControlBarComponent::bLoopClicked()
 void ControlBarComponent::recordButtonClicked()
 {
     DBG("export Button clicked");
-    findParentComponentOfClass<MainComponent>()->writeExportBuffer();
+    findParentComponentOfClass<MainComponent>()->toggleExportState();
 }
 
 void ControlBarComponent::paint (juce::Graphics& g)
