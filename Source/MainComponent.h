@@ -65,6 +65,8 @@ private:
         }
     }
 
+    void applyGainForAllTracks(int lengthInSamples, int numActiveLayers, int activeLayerIndexes[], bool applyRevert);
+
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
 
