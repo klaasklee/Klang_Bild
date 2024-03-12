@@ -43,9 +43,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     if (state == Play) {
-        
+
         bufferToFill.clearActiveBufferRegion();
-        
+
         auto numChannels = bufferToFill.buffer->getNumChannels();
         auto lengthInSamples = bufferToFill.numSamples;
         int nullInt = 0;
@@ -55,7 +55,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         {
             activeLayerIndexes[i] = -1;
         }
-        
+
+
         // find the last active layer, and the number of active layers
         for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
             if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
@@ -63,49 +64,78 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 numActiveLayers += 1;
             }
         }
-        
-        
+
+        // apply gain and pan for all active layers
+        for (int i = 0; i < numActiveLayers; i++) {
+            float gain, pan;
+            gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
+            pan = 2*(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
+
+            int playPos;
+            playPos = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
+            for (int ch = 0; ch < numChannels; ch++) {
+                double gainFactor = 2*(1 - (std::pow(-1, ch)) * pan);
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos, lengthInSamples, gain*gainFactor);
+            }
+        }
+
         if (numActiveLayers > 0) {
-            
+
             // always copy the last active layer to the outBuffer.
             for (int ch = 0; ch < numChannels; ch++) {
                 outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
-                                   0,                                                                              //  sample offset in output buffer
-                                   LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
-                                   ch % numChannels,                                                               //  channel of input buffer
-                                   LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
-                                   lengthInSamples);                                                               //  number of samples to copy
+                    0,                                                                              //  sample offset in output buffer
+                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
+                    ch % numChannels,                                                               //  channel of input buffer
+                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
+                    lengthInSamples);                                                               //  number of samples to copy
             }
             // maoves the playPosition one bufferlenght forward
             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
-            
-            
+
+
             // calculate blend modes, if there are at least two active layers
             // for only one active layer, the loop will be skipped
             for (int i = 1; i < numActiveLayers; i++) {
                 functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
                 calcBlendMode(outBuffer,
-                             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
-                             outBuffer,
-                             lengthInSamples,
-                             nullInt,
-                             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos);
+                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer,
+                    outBuffer,
+                    lengthInSamples,
+                    nullInt,
+                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos);
             }
-            
+
             //copy the calculation result to output (bufferToFill)
             for (int ch = 0; ch < numChannels; ch++) {
                 bufferToFill.buffer->copyFrom(ch,                                       //  destination buffer channel index
-                                              0,                                                                  //  sample offset in output buffer
-                                              outBuffer,                                                          //  source buffer
-                                              ch % numChannels,                                                   //  channel of input buffer
-                                              0,                                                                  //  start copy position in input buffer
-                                              lengthInSamples);                                                   //  number of samples to copy
+                    0,                                                                  //  sample offset in output buffer
+                    outBuffer,                                                          //  source buffer
+                    ch % numChannels,                                                   //  channel of input buffer
+                    0,                                                                  //  start copy position in input buffer
+                    lengthInSamples);                                                   //  number of samples to copy
                 bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             }
         }
+
+
+        // revert gain application and pan for all active layers
+        for (int i = 0; i < numActiveLayers; i++) {
+            float gain, pan;
+            gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
+            pan = 2 * (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
+
+            int playPos;
+            playPos = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
+            for (int ch = 0; ch < numChannels; ch++) {
+                double gainFactor = 2 * (1 - (std::pow(-1, ch)) * pan);
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos - lengthInSamples, lengthInSamples, 1/(gainFactor*gain));
+            }
+        }
+
     }
-    
-    
+
+
     if (state == Stop)
     {
         // find the last active layer, and the number of active layers
@@ -114,54 +144,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
     }
-    
-    // if state = pause nothing hapens
+
 }
-
-#
-    //if (numActiveLayers == 1) { // only one layer active, no calculations to be done.
-    //    for (int ch = 0; ch < numChannels; ch++) {
-    //        outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
-    //            0,                                                                              //  sample offset in output buffer
-    //            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
-    //            ch % numChannels,                                                               //  channel of input buffer
-    //            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
-    //            lengthInSamples);                                                               //  number of samples to copy                
-    //    }
-    //    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
-    //}
-    //if(0) {}
-    //else {
-
-    //}
-
-
-    //if (LayersViewPort.LayersContainer.Layers[0].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[1].LayerWave.fileLoaded && LayersViewPort.LayersContainer.Layers[2].LayerWave.fileLoaded) {
-
-    //    functionPointerType blendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[2].LayerControl.selectedBlendMode);
-
-    //    //todo: die smarte for schleife fuer alle Layer
-
-    //    // todo: besseres handling von verschiedenen layer längen (zB nicht Abstürzen des Programms.)
-
-    //    // todo: pause: als globale variable bool machen: in getNextAudioBlock abfragen, wenn true: noch einen Audio Block abspielen, aber am ende eine GainRamp machen. 
-
-    //    blendModeAdd(LayersViewPort.LayersContainer.Layers[2].LayerWave.playBuffer, 
-    //        LayersViewPort.LayersContainer.Layers[1].LayerWave.playBuffer, 
-    //        outBuffer, 
-    //        lengthInSamples, 
-    //        LayersViewPort.LayersContainer.Layers[2].LayerWave.playPos, 
-    //        LayersViewPort.LayersContainer.Layers[1].LayerWave.playPos);
-
-    //    blendModeMult(outBuffer,
-    //        LayersViewPort.LayersContainer.Layers[0].LayerWave.playBuffer,
-    //        outBuffer,
-    //        lengthInSamples,
-    //        nullInt,
-    //        LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos);
-    //}
-
-
+    // if state = pause nothing hapens
 
 
 

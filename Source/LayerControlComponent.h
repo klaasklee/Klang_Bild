@@ -33,12 +33,12 @@ public:
     {
         if (slider == &sGain)
         {
-            gain = sGain.getValue();
+            gain = sGain.getValue() + 0.01; // avoid zero gain to be able to restore applyGain()
             std::cout << "gain: " << gain << std::endl;
         }
         else if (slider == &sPan)
         {
-            pan = sPan.getValue();
+            pan = 0.005 + 0.99*sPan.getValue(); // avoid extrene pan to be able to restore applyGain()
             std::cout << "pan: " << pan << std::endl;
         }
     }
