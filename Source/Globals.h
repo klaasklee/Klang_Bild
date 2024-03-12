@@ -16,6 +16,7 @@
 
 const int numOfLayers = 5;
 const int layerHeight = 200;
+const float globalSampleRate = 48000.0;
 
 // if you add a Blendmode
 // add BlendModeName in LayerControlComponent.h

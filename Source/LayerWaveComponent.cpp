@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "LayerWaveComponent.h"
 #include "MainComponent.h"
+#include "Globals.h"
 
 //==============================================================================
 LayerWaveComponent::LayerWaveComponent() : openButton("open file (WAV, MP3)")
@@ -68,18 +69,24 @@ void LayerWaveComponent::openButtonClicked()
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playPos = 0;
             
-            // todo: resample to correct samplerate before loading to RAM
-            
+            //reads data into the fileBuffer
             reader->read(&fileBuffer,
                 0,                              //destination start sample                                 
                 (int)reader->lengthInSamples,   //numSamples                               
                 0,                              //reader start sample                                  
                 true,                           //use right channel                                
-                true);                          //use left channel     
-
+                true);                          //use left channel    
+            
+            // todo: resample to correct samplerate before loading to RAM
+            resampleBuffer(fileBuffer, resampledBuffer, reader->sampleRate, globalSampleRate);
+            
+            // todo: release memory of fileBuffer??
+            // todo: work with resampled buffer
+            
+            
             auto numChannels = fileBuffer.getNumChannels();
 
-            //copy audio to playBuffer, with zero shift initially
+            //copy audio from fileBuffer to playBuffer, with zero shift initially
             for (int ch = 0; ch < numChannels; ch++) {
                 playBuffer.copyFrom(ch,            //  destination buffer channel index
                     0,                             //  sample offset in output buffer
@@ -99,3 +106,20 @@ void LayerWaveComponent::openButtonClicked()
         }
     }
 }
+
+void LayerWaveComponent::resampleBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
+{
+    
+    
+    
+    // Initialisiere den ResamplingAudioSource
+//    juce::ResamplingAudioSource resamplingSource = new juce::ResamplingAudioSource(&srcBuffer, false, srcBuffer.getNumChannels())
+//    resamplingSource.setResamplingRatio(double(destBuffer / srcSampleRate);
+
+    // Fülle den Ausgangspuffer mit resamplen Audio
+//    resamplingSource.prepareToPlay(destBuffer.getNumSamples();
+                                        
+//    resamplingSource.getNextAudioBlock(juce::AudioSourceChannelInfo(destBuffer));
+    
+}
+

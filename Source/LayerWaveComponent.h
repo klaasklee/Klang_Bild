@@ -26,7 +26,8 @@ public:
     void resized() override;
     
     juce::AudioSampleBuffer fileBuffer; // contains the original file
-    juce::AudioSampleBuffer playBuffer; // contains the portion of the original file after shifting etc
+    juce::AudioSampleBuffer resampledBuffer; // contains the resampled file
+    juce::AudioSampleBuffer playBuffer; // contains the portion of the resampled file after shifting etc
     // @klaas: eventuell ist es doch besser, wenn wir das mit dem shiften nicht mit den zwei Buffern loesen, sondern mit irgendwelchen integern, die dann die "startposition" angeben? Damit hat man weniger redundanz und ballert den Arbeitsspeicher nicht so voll
     // trotzdem mache ich das erstmal wie besprochen, weil das dann einfacher ist :) 
     int playPos;
@@ -42,5 +43,7 @@ private:
     std::unique_ptr<juce::AudioFormatReaderSource> playSource;
     
     float duration;
+    
+    void resampleBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate,  float destSampleRate);
     
 };

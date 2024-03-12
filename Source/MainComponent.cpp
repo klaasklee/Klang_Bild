@@ -123,12 +123,11 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
     auto numChannels = bufferToFill.buffer->getNumChannels();
     auto lengthInSamples = bufferToFill.numSamples;
     int nullInt = 0;
-    int numLayers = 5;
     int numActiveLayers = 0;
-    int activeLayerIndexes[5] = { -1, -1, -1, -1, -1 };
+    int activeLayerIndexes[numOfLayers] = { -1, -1, -1, -1, -1 };
 
     // find the last active layer, and the number of active layers
-    for (int layerCounter = numLayers - 1; layerCounter >= 0; layerCounter--) {
+    for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
         if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
             activeLayerIndexes[numActiveLayers] = layerCounter;
             numActiveLayers += 1;
