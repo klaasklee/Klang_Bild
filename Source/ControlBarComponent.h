@@ -36,6 +36,8 @@ public:
     juce::ToggleButton bStop;
 
     juce::ToggleButton bLoop;
+    
+    juce::TextButton recordButton;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlBarComponent)
@@ -46,8 +48,7 @@ private:
     
     void bLoopClicked();
     
-    juce::TextButton exportButton;
-    void exportButtonClicked();
+    void recordButtonClicked();
     
     //items
 

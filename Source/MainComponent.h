@@ -31,14 +31,16 @@ public:
     {
         Stop,
         Play,
-        Pause
+        Pause,
+        Export
     };
     TransportState state;
     void transportStateChanged(TransportState newState);
     
     void setTransportLoop(bool b);
     
-
+    void writeExportBuffer();
+    void exportAudioToFile(juce::AudioBuffer<float> buffer);
 
 private:
     //==============================================================================
@@ -67,6 +69,9 @@ private:
     LayerViewPortComponent LayersViewPort;
 
     juce::AudioSampleBuffer outBuffer;
+    
+    juce::AudioSampleBuffer exportBuffer;
+    long samplesWritten;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 

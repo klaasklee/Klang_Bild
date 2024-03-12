@@ -42,7 +42,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    if (state == Play) {
+    if (state == Play || state == Export) {
 
         bufferToFill.clearActiveBufferRegion();
 
@@ -133,6 +133,16 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
         }
 
+        if (state == Export)
+        {
+            // write to export Buffer
+            // increment samplesWritten
+            
+            if (samplesWritten >= globalSampleRate*exportTime) {
+                // this ends recording and the recording will be saved
+                //writeExportBuffer();
+            }
+        }
     }
 
 
@@ -144,9 +154,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
     }
-
-}
+    
     // if state = pause nothing hapens
+}
 
 
 
@@ -215,6 +225,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
                 DBG("state = stop");
                 break;
             case Play:
@@ -224,6 +235,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
                 DBG("state = play");
                 break;
             case Pause:
@@ -233,7 +245,18 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
                 DBG("state = pause");
+                break;
+            case Export:
+                ControlBar.bPlay.setEnabled(false);
+                ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
+                ControlBar.bPause.setEnabled(true);
+                ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.bStop.setEnabled(true);
+                ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
+                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::red);
+                DBG("state = export");
                 break;
         }
     }
@@ -249,6 +272,36 @@ void MainComponent::setTransportLoop(bool b)
     globalLoop = b;
 }
 
+void MainComponent::writeExportBuffer()
+{
+    if (state == Export)
+    {
+        exportAudioToFile(exportBuffer);
+        transportStateChanged(Stop);
+    }
+    else
+    {
+        samplesWritten = 0;
+        exportBuffer.setSize(outBuffer.getNumChannels(), globalSampleRate*exportTime);
+        
+        transportStateChanged(Export);
+    }
+}
+void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer)
+{
+    juce::File file;
+    file.create();
+    juce::WavAudioFormat format;
+    std::unique_ptr<juce::AudioFormatWriter> writer;
+    writer.reset (format.createWriterFor (new juce::FileOutputStream (file),    // output Stream
+                                          globalSampleRate,                     // sampleRate
+                                          buffer.getNumChannels(),              // num of channels
+                                          24,                                   // bits per sample
+                                          {},                                   // metadataValues
+                                          0));                                  // qualityOptionIndex
+    if (writer != nullptr)
+        writer->writeFromAudioSampleBuffer (buffer, 0, buffer.getNumSamples());
+}
 
 void MainComponent::releaseResources()
 {

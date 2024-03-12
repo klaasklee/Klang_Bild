@@ -14,7 +14,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-ControlBarComponent::ControlBarComponent() : exportButton("export WAV")
+ControlBarComponent::ControlBarComponent() : recordButton("record")
 {
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -99,8 +99,9 @@ ControlBarComponent::ControlBarComponent() : exportButton("export WAV")
     bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bLoop);
     
-    exportButton.onClick = [this] { exportButtonClicked(); };
-    addAndMakeVisible(&exportButton);
+    recordButton.onClick = [this] { recordButtonClicked(); };
+    recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+    addAndMakeVisible(&recordButton);
     
     //Info
     addAndMakeVisible(lMeter);
@@ -153,12 +154,10 @@ void ControlBarComponent::bLoopClicked()
     findParentComponentOfClass<MainComponent>()->setTransportLoop(bLoop.getToggleState());
 }
 
-void ControlBarComponent::exportButtonClicked()
+void ControlBarComponent::recordButtonClicked()
 {
     DBG("export Button clicked");
-    
-    
-    
+    findParentComponentOfClass<MainComponent>()->writeExportBuffer();
 }
 
 void ControlBarComponent::paint (juce::Graphics& g)
@@ -211,7 +210,7 @@ void ControlBarComponent::resized()
     mainControlsFB.items.add(juce::FlexItem(bPause).withMinWidth(60).withMaxHeight(getHeight()/3));
     mainControlsFB.items.add(juce::FlexItem(bStop).withMinWidth(60).withMaxHeight(getHeight()/3));
     mainControlsFB.items.add(juce::FlexItem(bLoop).withMinWidth(60).withMaxHeight(getHeight()/3));
-    mainControlsFB.items.add(juce::FlexItem(exportButton).withMinWidth(60).withMaxHeight(getHeight()/3));
+    mainControlsFB.items.add(juce::FlexItem(recordButton).withMinWidth(60).withMaxHeight(getHeight()/3));
     
     
     //Info FlexBox
