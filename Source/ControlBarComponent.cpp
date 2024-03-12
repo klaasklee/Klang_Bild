@@ -118,14 +118,14 @@ ControlBarComponent::~ControlBarComponent()
 {
 }
 
-//void ControlBarComponent::sliderValueChanged(juce::Slider *slider)
-//{
-//    if (slider == &sVolumeDial)
-//    {
-//        std::cout << "volume: " << sVolumeDial.getValue() << std::endl;
-//        findParentComponentOfClass<MainComponent>()->setVolume(sVolumeDial.getValue());
-//    }
-//}
+void ControlBarComponent::sliderValueChanged(juce::Slider *slider)
+{
+    if (slider == &sVolumeDial)
+    {
+        std::cout << "volume: " << sVolumeDial.getValue() << std::endl;
+        findParentComponentOfClass<MainComponent>()->setVolume(sVolumeDial.getValue());
+    }
+}
 
 void ControlBarComponent::bPlayClicked()
 {

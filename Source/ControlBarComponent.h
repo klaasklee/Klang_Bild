@@ -26,13 +26,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void sliderValueChanged(juce::Slider* slider) override {
-        if (slider == &sVolumeDial)
-        {
-            std::cout << "volume: " << sVolumeDial.getValue() << std::endl;
-            //findParentComponentOfClass<MainComponent>()->setVolume(sVolumeDial.getValue());
-        }
-    }
+    void sliderValueChanged(juce::Slider* slider) override;
     
     //Volume
     juce::Slider sVolumeDial;
