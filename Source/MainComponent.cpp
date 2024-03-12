@@ -66,29 +66,22 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         }
 
         // apply gain and pan for all active layers
-        for (int i = 0; i < numActiveLayers; i++) {
-            float gain, pan;
-            gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
-            pan = 2*(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
-
-            int playPos;
-            playPos = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
-            for (int ch = 0; ch < numChannels; ch++) {
-                double gainFactor = 2*(1 - (std::pow(-1, ch)) * pan);
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos, lengthInSamples, gain*gainFactor);
-            }
-        }
+        applyGainForAllTracks(lengthInSamples, numActiveLayers, activeLayerIndexes, true);
 
         if (numActiveLayers > 0) {
 
             // always copy the last active layer to the outBuffer.
+            int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer.getNumSamples() - LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos;
+            if (samplesLeftToPlay < lengthInSamples) {
+                int a = 1;
+            }
             for (int ch = 0; ch < numChannels; ch++) {
                 outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
                     0,                                                                              //  sample offset in output buffer
                     LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
                     ch % numChannels,                                                               //  channel of input buffer
                     LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos,          //  start copy position in input buffer
-                    lengthInSamples);                                                               //  number of samples to copy
+                    std::min(lengthInSamples, samplesLeftToPlay));                                                               //  number of samples to copy
             }
             // maoves the playPosition one bufferlenght forward
             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
@@ -120,19 +113,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 
 
         // revert gain application and pan for all active layers
-        for (int i = 0; i < numActiveLayers; i++) {
-            float gain, pan;
-            gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
-            pan = 2 * (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
-
-            int playPos;
-            playPos = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
-            for (int ch = 0; ch < numChannels; ch++) {
-                double gainFactor = 2 * (1 - (std::pow(-1, ch)) * pan);
-                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos - lengthInSamples, lengthInSamples, 1/(gainFactor*gain));
-            }
-        }
-
+        applyGainForAllTracks(lengthInSamples, numActiveLayers, activeLayerIndexes, false);
     }
 
 
@@ -149,6 +130,24 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
     // if state = pause nothing hapens
 
 
+void MainComponent::applyGainForAllTracks(int lengthInSamples, int numActiveLayers, int activeLayerIndexes[], bool applyRevert) {
+    for (int i = 0; i < numActiveLayers; i++) {
+        float gain, pan;
+        gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
+        pan = 2 * (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
+        int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer.getNumSamples() - LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos;
+
+        int playPos;
+        playPos = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
+        for (int ch = 0; ch < 2; ch++) {
+            double gainFactor = 2 * (1 - (std::pow(-1, ch)) * pan);
+            if (applyRevert) //apply
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos, std::min(lengthInSamples, samplesLeftToPlay), (gainFactor * gain));
+            else //revert
+                LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos - lengthInSamples, std::min(lengthInSamples, samplesLeftToPlay), 1 / (gainFactor * gain));
+        }
+    }
+}
 
 void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB)
 {
