@@ -13,7 +13,6 @@
 #include <JuceHeader.h>
 
 
-
 const int numOfLayers = 5;
 const int layerHeight = 200;
 const float exportTime = 30;
