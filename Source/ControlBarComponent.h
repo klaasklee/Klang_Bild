@@ -46,6 +46,9 @@ private:
     
     void bLoopClicked();
     
+    juce::TextButton exportButton;
+    void exportButtonClicked();
+    
     //items
 
     //Tools
