@@ -119,7 +119,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             //copy outBuffer to exportBuffer
             for (int ch = 0; ch < numChannels; ch++) {
                 exportBuffer.copyFrom(ch,                                               //  destination buffer channel index
-                    0,                                                                  //  sample offset in output buffer
+                    int(samplesWritten),                                                     //  sample offset in output buffer
                     outBuffer,                                                          //  source buffer
                     ch % numChannels,                                                   //  channel of input buffer
                     0,                                                                  //  start copy position in input buffer
@@ -286,8 +286,8 @@ void MainComponent::toggleExportState()
 {
     if (state == Export)
     {
-        exportAudioToFile(exportBuffer);
         transportStateChanged(Stop);
+        exportAudioToFile(exportBuffer);
     }
     else
     {
@@ -300,18 +300,32 @@ void MainComponent::toggleExportState()
 void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer)
 {
     DBG("exportAudioFile()");
-//    juce::File file;
-//    file.create();
-//    juce::WavAudioFormat format;
-//    std::unique_ptr<juce::AudioFormatWriter> writer;
-//    writer.reset (format.createWriterFor (new juce::FileOutputStream (file),    // output Stream
-//                                          globalSampleRate,                     // sampleRate
-//                                          buffer.getNumChannels(),              // num of channels
-//                                          24,                                   // bits per sample
-//                                          {},                                   // metadataValues
-//                                          0));                                  // qualityOptionIndex
-//    if (writer != nullptr)
-//        writer->writeFromAudioSampleBuffer (buffer, 0, buffer.getNumSamples());
+    
+    juce::FileChooser chooser("Aufnahme speichern", {}, "*.wav");
+    juce::File file;
+    file.create();
+    if (chooser.browseForDirectory())
+    {
+        file = chooser.getResult();
+        
+        juce::String filePath = file.getFullPathName()+"/AUDIOLAYERSoutput.wav";
+        DBG(filePath);
+        
+        juce::WavAudioFormat format;
+        std::unique_ptr<juce::AudioFormatWriter> writer;
+        writer.reset (format.createWriterFor (new juce::FileOutputStream (filePath),    // output Stream
+                                              globalSampleRate,                         // sampleRate
+                                              buffer.getNumChannels(),                  // num of channels
+                                              24,                                       // bits per sample
+                                              {},                                       // metadataValues
+                                              0));                                      // qualityOptionIndex
+        if (writer != nullptr)
+                writer->writeFromAudioSampleBuffer (buffer, 0, int(samplesWritten));
+    }
+    else
+    {
+        DBG("export failed");
+    }
 }
 
 void MainComponent::releaseResources()

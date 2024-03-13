@@ -12,15 +12,14 @@
 
 #include <JuceHeader.h>
 
-
 const int numOfLayers = 5;
 const int layerHeight = 200;
 const float exportTime = 30;
-const float globalSampleRate = 44100.0;
+const float globalSampleRate = 48000.0;
 
 // if you add a Blendmode
 // add BlendModeName in LayerControlComponent.h
-// change last Blendmode in LayerControlComponent.cpp line 42
+// change last Blendmode in LayerControlComponent.cpp line 20
 
 enum BlendModes
 {
