@@ -431,6 +431,7 @@ void MainComponent::setExportFileName(juce::String header, juce::String info)
             fileName = &text;
             // IRGENDWIE MUSS HIER DIE exportAudioToFile() funktion aufgerufen werden!!!!!
             // ABER WIEEEE
+            // funktion muss irgendwie an lambda als Pointer(?) übergeben werden??
         } else {
             juce::String text = juce::String("");
             DBG("export cancel");
