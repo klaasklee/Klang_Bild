@@ -35,8 +35,8 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
     
-    // draws code if buffer is loadet
-    // not very performative right now
+    // draws waveform if audio is loadet to playBuffer
+    // not very performative right now, draws waveforms too frequently
     // todo: make more performative
     if (playBuffer.getNumSamples() > 0)
     {
