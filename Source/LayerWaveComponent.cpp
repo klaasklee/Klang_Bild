@@ -116,27 +116,27 @@ void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer
 " Wouldn’t have thought it’s difficult to do though."
  */
     
-    // Spezifikationen für die Eingangs- und Ausgangsrate
-        juce::dsp::ProcessSpec srcSpec;
-        srcSpec.sampleRate = srcSampleRate;
-        srcSpec.maximumBlockSize = srcBuffer.getNumSamples();
-        srcSpec.numChannels = srcBuffer.getNumChannels();
-
-        // Resampling-Verhältnis
-        double ratio = globalSampleRate / srcSpec.sampleRate;
-
-        // Resampler erstellen
-        juce::dsp::Oversampling<float> oversampling{ srcSpec.numChannels, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, false };
-        oversampling.initProcessing(srcSpec.maximumBlockSize);
-
-        // Eingangs- und Ausgangsblöcke
-        juce::dsp::AudioBlock<float> srcBlock(srcBuffer);
-        juce::dsp::AudioBlock<float> destBlock(destBuffer);
-
-        // Resampling durchführen
-        oversampling.processSamplesUp(srcBlock);
-        oversampling.processSamplesDown(destBlock);
-
-        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
-        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
+//    // Spezifikationen für die Eingangs- und Ausgangsrate
+//        juce::dsp::ProcessSpec srcSpec;
+//        srcSpec.sampleRate = srcSampleRate;
+//        srcSpec.maximumBlockSize = srcBuffer.getNumSamples();
+//        srcSpec.numChannels = srcBuffer.getNumChannels();
+//
+//        // Resampling-Verhältnis
+//        double ratio = globalSampleRate / srcSpec.sampleRate;
+//
+//        // Resampler erstellen
+//        juce::dsp::Oversampling<float> oversampling{ srcSpec.numChannels, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, false };
+//        oversampling.initProcessing(srcSpec.maximumBlockSize);
+//
+//        // Eingangs- und Ausgangsblöcke
+//        juce::dsp::AudioBlock<float> srcBlock(srcBuffer);
+//        juce::dsp::AudioBlock<float> destBlock(destBuffer);
+//
+//        // Resampling durchführen
+//        oversampling.processSamplesUp(srcBlock);
+//        oversampling.processSamplesDown(destBlock);
+//
+//        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
+//        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
 }

@@ -48,6 +48,9 @@ private:
 
     float globalVolume;
     bool globalLoop;
+    
+    std::unique_ptr<juce::AlertWindow> alertWindow; 
+    juce::TextEditor alertTextEditor;
 
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
