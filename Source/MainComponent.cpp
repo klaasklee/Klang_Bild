@@ -82,6 +82,11 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                         std::min(lengthInSamples, samplesLeftToPlay));                                                               //  number of samples to copy
                 }
             }
+            else
+            {
+                outBuffer.clear();
+            }
+
             // maoves the playPosition one bufferlenght forward
             LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos += lengthInSamples;
 
@@ -108,6 +113,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                     lengthInSamples);                                                   //  number of samples to copy
                 bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             }
+            
+
         }
 
 
@@ -154,7 +161,12 @@ void MainComponent::applyGainForAllTracks(int lengthInSamples, int numActiveLaye
         float gain, pan;
         gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
         pan = 2 * (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
-        int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer.getNumSamples() - LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playPos;
+        int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.getNumSamples() - LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playPos;
+
+        if (samplesLeftToPlay < lengthInSamples)
+        {
+            int a = 1;
+        }
 
         if (samplesLeftToPlay > 0) {
             int playPos;
@@ -181,14 +193,18 @@ void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSam
 
     jassert (numChannelsA == numChannelsB);
 
+    int samplesLeftToPlay = layerB.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
+
     for (int ch = 0; ch < numChannelsA; ch++)
     {
-        readA = layerA.getReadPointer(ch, playPosA);
-        readB = layerB.getReadPointer(ch, playPosB);
         writeOut = outLayer.getWritePointer(ch);
-
+        readA = layerA.getReadPointer(ch, playPosA);
+        if(samplesLeftToPlay > 0)
+            readB = layerB.getReadPointer(ch, playPosB);
+        
         for (int i = 0; i < numSamples; i++) {
-            *writeOut++ = *readA++ + *readB++;
+            // perform adding, if B has no samples left to play, use neutral element (0) 
+            *writeOut++ = *readA++ + ((samplesLeftToPlay <= i) ? 0 : (*readB++));
         }
     }
     // do not increment playPosA as it is always the outBuffer!
