@@ -8,7 +8,8 @@ MainComponent::MainComponent()
 
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(LayersViewPort);
-
+    
+    
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
@@ -388,7 +389,7 @@ void MainComponent::toggleExportState()
     if (state == Export)
     {
         transportStateChanged(Stop);
-        prepareAudioExport(exportBuffer);
+        prepareAudioExport();
     }
     else
     {
@@ -399,54 +400,17 @@ void MainComponent::toggleExportState()
     }
 }
 
-void MainComponent::prepareAudioExport(juce::AudioBuffer<float> &buffer)
+void MainComponent::prepareAudioExport()
 {
-    DBG("prepareAudioExport()");
-    
-    exportBuffer = buffer;
-    
-    // inside here the exportAudioToFile function will be executed after getting the file name from async alert window
-    setExportFileName("export", "enter filename");
+    ExportAlertWindow.setBounds(getWidth()/2-150, getHeight()/2-150, 300, 300);
+    addAndMakeVisible(ExportAlertWindow);
 }
 
-void MainComponent::setExportFileName(juce::String header, juce::String info)
-{
-    DBG("setExportFileName()");
-    
-    juce::String *fileName = &exportFileName;
-    
-    juce::AlertWindow *alertWindow = new juce::AlertWindow(header, "", juce::AlertWindow::NoIcon);
-
-    alertTextEditor.setBounds(10, 60, 300, 24);
-    alertWindow->addTextEditor("text", "", info, false);
-    alertWindow->addButton("OK", 1, juce::KeyPress(juce::KeyPress::returnKey, 0, 0));
-    alertWindow->addButton("CANCEL", 0, juce::KeyPress(juce::KeyPress::escapeKey, 0, 0));
-    
-    auto alertLambda = [alertWindow, &fileName](int result)
-    {
-        // OK Button Clicked
-        if (result == 1) {
-            juce::String text = alertWindow->getTextEditorContents("text");
-            DBG("fileName: "+text);
-            fileName = &text;
-            // IRGENDWIE MUSS HIER DIE exportAudioToFile() funktion aufgerufen werden!!!!!
-            // ABER WIEEEE
-            // funktion muss irgendwie an lambda als Pointer(?) übergeben werden??
-        } else {
-            juce::String text = juce::String("");
-            DBG("export cancel");
-        }
-    };
-    
-    alertWindow->enterModalState (true, juce::ModalCallbackFunction::create(alertLambda), true);
-    
-}
-
-void MainComponent::exportAudioToFile()
+void MainComponent::exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::String fileName)
 {
     DBG("exportAudioToFile()");
     
-    if (exportFileName != "")
+    if (fileName != "")
     {
         juce::FileChooser chooser("Aufnahme speichern", {}, "*.wav");
         juce::File file;
@@ -455,20 +419,20 @@ void MainComponent::exportAudioToFile()
         {
             file = chooser.getResult();
             
-            juce::String filePath = file.getFullPathName()+"/"+exportFileName+".wav";
+            juce::String filePath = file.getFullPathName()+"/"+fileName+".wav";
             DBG(filePath);
             
             juce::WavAudioFormat format;
             std::unique_ptr<juce::AudioFormatWriter> writer;
             writer.reset (format.createWriterFor (new juce::FileOutputStream (filePath),    // output Stream
                                                   globalSampleRate,                         // sampleRate
-                                                  exportBuffer.getNumChannels(),                  // num of channels
+                                                  buffer.getNumChannels(),                  // num of channels
                                                   24,                                       // bits per sample
                                                   {},                                       // metadataValues
                                                   0));                                      // qualityOptionIndex
             if (writer != nullptr)
                 {
-                    writer->writeFromAudioSampleBuffer (exportBuffer, 0, int(samplesWritten));
+                    writer->writeFromAudioSampleBuffer (buffer, 0, int(samplesWritten));
                 }
             }
         else
@@ -480,9 +444,11 @@ void MainComponent::exportAudioToFile()
     {
         DBG("incorrect fileName");
     }
-    
-    
-    exportFileName = "";
+}
+
+void MainComponent::killAlertWindow()
+{
+    removeChildComponent(&ExportAlertWindow);
 }
 
 void MainComponent::releaseResources()
@@ -503,4 +469,7 @@ void MainComponent::resized()
 {
     ControlBar.setBounds(0, 0, getWidth(), getHeight()/5);
     LayersViewPort.setBounds(0, getHeight()/5, getWidth(), getHeight() -  getHeight()/5);
+    
+    ExportAlertWindow.setBounds(500, 500, 200, 200);
+    
 }

@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "ControlBarComponent.h"
 #include "LayerViewPortComponent.h"
+#include "AlertWindowComponent.h"
 
 //==============================================================================
 /*
@@ -40,6 +41,12 @@ public:
     void setTransportLoop(bool b);
     
     void toggleExportState();
+    
+    juce::AudioSampleBuffer exportBuffer;
+    void prepareAudioExport();
+    void exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::String fileName);
+    
+    void killAlertWindow();
 
 private:
     //==============================================================================
@@ -51,13 +58,7 @@ private:
     std::unique_ptr<juce::AlertWindow> alertWindow; 
     juce::TextEditor alertTextEditor;
     
-    juce::AudioSampleBuffer exportBuffer;
     long samplesWritten;
-    juce::String exportFileName;
-    
-    void prepareAudioExport(juce::AudioBuffer<float> &buffer);
-    void setExportFileName(juce::String header, juce::String info);
-    void exportAudioToFile();
     
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
@@ -83,6 +84,8 @@ private:
 
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
+    
+    AlertWindowComponent ExportAlertWindow;
 
     juce::AudioSampleBuffer outBuffer;
     

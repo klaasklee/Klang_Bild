@@ -10,6 +10,10 @@
       <FILE id="YdujAk" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="sUdWAx" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
+      <FILE id="haNnna" name="AlertWindowComponent.h" compile="0" resource="0"
+            file="Source/AlertWindowComponent.h"/>
+      <FILE id="rKyZmz" name="AlertWindowComponent.cpp" compile="1" resource="0"
+            file="Source/AlertWindowComponent.cpp"/>
       <FILE id="KB8jyc" name="ControlBarComponent.h" compile="0" resource="0"
             file="Source/ControlBarComponent.h"/>
       <FILE id="t7rMzI" name="ControlBarComponent.cpp" compile="1" resource="0"
