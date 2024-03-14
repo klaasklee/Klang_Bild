@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    alertWindowComponent.h
+    AlertWindowComponent.h
     Created: 14 Mar 2024 9:13:36pm
     Author:  Klaas Klee
 

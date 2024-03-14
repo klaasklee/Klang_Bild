@@ -19,6 +19,7 @@ LayerControlComponent::LayerControlComponent()
     sGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sGain.setRange(0.0, 1.0);
     sGain.setValue(0.5);
+    sGain.setDoubleClickReturnValue(true, 0.5);
     sGain.setNumDecimalPlacesToDisplay(2);
     sGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     sGain.setTextValueSuffix(" dB gain");
@@ -31,6 +32,7 @@ LayerControlComponent::LayerControlComponent()
     sPan.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sPan.setRange(0.0, 1.0);
     sPan.setValue(0.5);
+    sPan.setDoubleClickReturnValue(true, 0.5);
     sPan.setNumDecimalPlacesToDisplay(2);
     sPan.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     sPan.setTextValueSuffix(" pan");
