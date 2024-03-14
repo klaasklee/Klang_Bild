@@ -78,11 +78,8 @@ void LayerWaveComponent::openButtonClicked()
                 true,                           //use right channel                                
                 true);                          //use left channel    
             
-            // todo: resample to correct samplerate before loading to RAM
-//            resampleBuffer(fileBuffer, resampledBuffer, reader->sampleRate, globalSampleRate);
             
-            // todo: release memory of fileBuffer??
-            // todo: work with resampled buffer
+            // todo: resample to correct samplerate before loading to RAM
             
             
             auto numChannels = fileBuffer.getNumChannels();
@@ -108,7 +105,7 @@ void LayerWaveComponent::openButtonClicked()
     }
 }
 
-void LayerWaveComponent::resampleBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
+void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
 {
     
 /*
@@ -119,28 +116,27 @@ void LayerWaveComponent::resampleBuffer(juce::AudioBuffer<float>& srcBuffer, juc
 " Wouldn’t have thought it’s difficult to do though."
  */
     
-//    // Spezifikationen für die Eingangs- und Ausgangsrate
-//        juce::dsp::ProcessSpec spec;
-//        spec.sampleRate = srcSampleRate;
-//        spec.maximumBlockSize = srcBuffer.getNumSamples();
-//        spec.numChannels = srcBuffer.getNumChannels();
-//
-//        // Resampling-Verhältnis
-//        double ratio = globalSampleRate / spec.sampleRate;
-//
-//        // Resampler erstellen
-//        juce::dsp::Oversampling<float> oversampling{ spec.numChannels, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, false };
-//        oversampling.initProcessing(spec.maximumBlockSize);
-//
-//        // Eingangs- und Ausgangsblöcke
-//        juce::dsp::AudioBlock<float> srcBlock(srcBuffer);
-//        juce::dsp::AudioBlock<float> destBlock(destBuffer);
-//
-//        // Resampling durchführen
-//        oversampling.processSamplesUp(srcBlock);
-//        oversampling.processSamplesDown(destBlock);
-//
-//        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
-//        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
-//    
+    // Spezifikationen für die Eingangs- und Ausgangsrate
+        juce::dsp::ProcessSpec srcSpec;
+        srcSpec.sampleRate = srcSampleRate;
+        srcSpec.maximumBlockSize = srcBuffer.getNumSamples();
+        srcSpec.numChannels = srcBuffer.getNumChannels();
+
+        // Resampling-Verhältnis
+        double ratio = globalSampleRate / srcSpec.sampleRate;
+
+        // Resampler erstellen
+        juce::dsp::Oversampling<float> oversampling{ srcSpec.numChannels, 4, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, false };
+        oversampling.initProcessing(srcSpec.maximumBlockSize);
+
+        // Eingangs- und Ausgangsblöcke
+        juce::dsp::AudioBlock<float> srcBlock(srcBuffer);
+        juce::dsp::AudioBlock<float> destBlock(destBuffer);
+
+        // Resampling durchführen
+        oversampling.processSamplesUp(srcBlock);
+        oversampling.processSamplesDown(destBlock);
+
+        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
+        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
 }
