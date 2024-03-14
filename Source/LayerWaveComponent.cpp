@@ -27,18 +27,55 @@ LayerWaveComponent::~LayerWaveComponent()
 {
 }
 
+//draws Waveform
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.fillAll (juce::Colours::black);   // clear the background
 
     g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 15);   // draw an outline around the component
+    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
+    
+    // draws code if buffer is loadet
+    // not very performative right now
+    // todo: make more performative
+    if (playBuffer.getNumSamples() > 0)
+    {
+        audioPoints.clear();
+        juce::Path p;
+        int ratio = (playBuffer.getNumSamples()/(getWidth()-waveBorder*2));
+        auto buffer = playBuffer.getReadPointer(0);
+        // scale audio on x axis
+        for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
+        {
+            audioPoints.push_back(buffer[sample]);
+//            DBG(playBuffer.getNumSamples());
+//            DBG(getWidth());
+//            DBG(ratio);
+//            DBG("audioPointsSize: ");
+//            DBG(audioPoints.size());
+        }
+        
+        p.startNewSubPath(0+waveBorder, getHeight()/2);
+        
+        // scale audio on y axis
+        for (int sample = 0; sample < audioPoints.size(); ++sample)
+        {
+            auto point = juce::jmap<float>(audioPoints[sample], -1.0f, 1.0f, getHeight()-waveBorder, 0+waveBorder);
+            p.lineTo(sample+waveBorder, point);
+        }
+        
+        g.setColour(juce::Colours::white);
+        g.strokePath(p, juce::PathStrokeType(2));
+    }
 }
+
 
 void LayerWaveComponent::resized()
 {
     openButton.setBounds(getWidth()/2-75, getHeight()/2-15, 150, 30);
 }
+
+
 
 void LayerWaveComponent::openButtonClicked()
 {

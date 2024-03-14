@@ -47,4 +47,8 @@ private:
     
     void resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate,  float destSampleRate);
     
+    //drawing Waveforms
+    int waveBorder = 15;
+    std::vector<float> audioPoints;
+    
 };
