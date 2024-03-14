@@ -22,7 +22,6 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }
 
-
 }
 
 MainComponent::~MainComponent()
@@ -308,7 +307,29 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer)
     {
         file = chooser.getResult();
         
-        juce::String filePath = file.getFullPathName()+"/AUDIOLAYERSoutput.wav";
+        // AlertWindow with TextInput for FileName
+        
+        alertWindow = std::make_unique<juce::AlertWindow>("Alert",
+                                                          "Choose an Option",
+                                                          juce::MessageBoxIconType::WarningIcon,
+                                                          nullptr);
+        
+        alertWindow->addAndMakeVisible(alertTextEditor);
+        alertTextEditor.setBounds(10, 60, 300, 24);
+        
+        alertWindow->showOkCancelBox(alertWindow->InfoIcon,
+                                    "export",
+                                    "filename:",
+                                    "OK",
+                                    "Abbrechen",
+                                    this,
+                                    nullptr
+                                    );
+        
+        juce::String fileName = alertTextEditor.getText();
+        if (fileName != "")
+        {
+        juce::String filePath = file.getFullPathName()+"/"+fileName+"i.wav";
         DBG(filePath);
         
         juce::WavAudioFormat format;
@@ -321,6 +342,12 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer)
                                               0));                                      // qualityOptionIndex
         if (writer != nullptr)
                 writer->writeFromAudioSampleBuffer (buffer, 0, int(samplesWritten));
+            
+        }
+        else
+        {
+            DBG("incorrect fileName");
+        }
     }
     else
     {
