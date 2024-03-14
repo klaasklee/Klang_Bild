@@ -204,7 +204,7 @@ void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSam
 
             for (int i = 0; i < numSamples; i++) {
                 // perform adding
-                *writeOut++ = *readA++ + *readB++;
+                *writeOut++ = *readA++ + (i < samplesLeftToPlay) ? *readB++ : 0;
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -269,7 +269,7 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSa
     int numChannelsA = layerA.getNumChannels();
     int numChannelsB = layerB.getNumChannels();
 
-    const float intensity = 1;
+    const float intensity = 10;
     const float offset = 0.001;
 
     const float* readA;
@@ -282,7 +282,7 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSa
 
     for (int ch = 0; ch < numChannelsA; ch++)
     {
-        if (samplesLeftToPlay > 0)
+        if (samplesLeftToPlay > numSamples)
         {
             readA = layerA.getReadPointer(ch, playPosA);
             readB = layerB.getReadPointer(ch, playPosB);
@@ -293,7 +293,7 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSa
             double powerB = 0;
             double powerBNextBlock = 0;
             for (int i = 0; i < numSamples; i++) {
-                powerB = (*readB) * ((*readB++)); 
+                powerB += (*readB) * ((*readB++)); 
             }
             for (int i = 0; i < numSamples; i++) {
                 powerBNextBlock += (*readB) * ((*readB++));
@@ -303,7 +303,9 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSa
 
             // scale the buffer A with the power of buffer B; interpolate linearly to the next block power. 
             for (int i = 0; i < numSamples; i++) {
-                *writeOut++ = *readA++ * ((powerB + i * ((powerBNextBlock - powerB)/numSamples)) + offset) * intensity;
+                double x;
+                x = i * ((powerBNextBlock - powerB) / numSamples);
+                *writeOut++ = (*readA++) * ((powerB + x) + offset) * intensity;
                 //*writeOut++ = *readA++ * (powerB + offset) * intensity;
             }
         }
