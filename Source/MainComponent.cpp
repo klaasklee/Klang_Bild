@@ -399,17 +399,21 @@ void MainComponent::toggleExportState()
     }
 }
 
-void MainComponent::prepareAudioExport(juce::AudioBuffer<float> buffer)
+void MainComponent::prepareAudioExport(juce::AudioBuffer<float> &buffer)
 {
-    DBG("exportAudioFile()");
+    DBG("prepareAudioExport()");
+    
+    exportBuffer = buffer;
     
     // inside here the exportAudioToFile function will be executed after getting the file name from async alert window
-    setExportFileName(buffer, "export", "enter filename");
+    setExportFileName("export", "enter filename");
 }
 
-void MainComponent::setExportFileName(juce::AudioBuffer<float> buffer, juce::String header, juce::String info)
+void MainComponent::setExportFileName(juce::String header, juce::String info)
 {
-    std::function<void(juce::AudioBuffer<float>, const juce::String&)> setExportFileNameString;
+    DBG("setExportFileName()");
+    
+    juce::String *fileName = &exportFileName;
     
     juce::AlertWindow *alertWindow = new juce::AlertWindow(header, "", juce::AlertWindow::NoIcon);
 
@@ -417,36 +421,31 @@ void MainComponent::setExportFileName(juce::AudioBuffer<float> buffer, juce::Str
     alertWindow->addTextEditor("text", "", info, false);
     alertWindow->addButton("OK", 1, juce::KeyPress(juce::KeyPress::returnKey, 0, 0));
     alertWindow->addButton("CANCEL", 0, juce::KeyPress(juce::KeyPress::escapeKey, 0, 0));
-
-    juce::String fileName;
-
-    auto alertLambda = [alertWindow, setExportFileNameString, buffer](int result)
+    
+    auto alertLambda = [alertWindow, &fileName](int result)
     {
+        // OK Button Clicked
         if (result == 1) {
             juce::String text = alertWindow->getTextEditorContents("text");
-            // inside here the exportAudioToFile fuction will be called
-            setExportFileNameString(buffer, text);
+            DBG("fileName: "+text);
+            fileName = &text;
+            // IRGENDWIE MUSS HIER DIE exportAudioToFile() funktion aufgerufen werden!!!!!
+            // ABER WIEEEE
         } else {
-            // inside here the exportAudioToFile fuction will be called
             juce::String text = juce::String("");
-            setExportFileNameString(buffer, text);
+            DBG("export cancel");
         }
     };
-    auto callback = juce::ModalCallbackFunction::create(alertLambda);
-
-    //run alertWindow asynchronously
-    alertWindow->enterModalState(true, callback, true);
+    
+    alertWindow->enterModalState (true, juce::ModalCallbackFunction::create(alertLambda), true);
+    
 }
 
-void MainComponent::setExportFileNameString(juce::AudioBuffer<float> buffer, juce::String string)
+void MainComponent::exportAudioToFile()
 {
-    exportAudioToFile(buffer, string);
-}
-
-
-void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer, juce::String fileName)
-{
-    if (fileName != "")
+    DBG("exportAudioToFile()");
+    
+    if (exportFileName != "")
     {
         juce::FileChooser chooser("Aufnahme speichern", {}, "*.wav");
         juce::File file;
@@ -455,20 +454,20 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer, juce::Str
         {
             file = chooser.getResult();
             
-            juce::String filePath = file.getFullPathName()+"/"+fileName+".wav";
+            juce::String filePath = file.getFullPathName()+"/"+exportFileName+".wav";
             DBG(filePath);
             
             juce::WavAudioFormat format;
             std::unique_ptr<juce::AudioFormatWriter> writer;
             writer.reset (format.createWriterFor (new juce::FileOutputStream (filePath),    // output Stream
                                                   globalSampleRate,                         // sampleRate
-                                                  buffer.getNumChannels(),                  // num of channels
+                                                  exportBuffer.getNumChannels(),                  // num of channels
                                                   24,                                       // bits per sample
                                                   {},                                       // metadataValues
                                                   0));                                      // qualityOptionIndex
             if (writer != nullptr)
                 {
-                    writer->writeFromAudioSampleBuffer (buffer, 0, int(samplesWritten));
+                    writer->writeFromAudioSampleBuffer (exportBuffer, 0, int(samplesWritten));
                 }
             }
         else
@@ -480,6 +479,9 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> buffer, juce::Str
     {
         DBG("incorrect fileName");
     }
+    
+    
+    exportFileName = "";
 }
 
 void MainComponent::releaseResources()

@@ -51,10 +51,13 @@ private:
     std::unique_ptr<juce::AlertWindow> alertWindow; 
     juce::TextEditor alertTextEditor;
     
-    void prepareAudioExport(juce::AudioBuffer<float> buffer);
-    void setExportFileName(juce::AudioBuffer<float> buffer, juce::String header, juce::String info);
-    void setExportFileNameString(juce::AudioBuffer<float> buffer, juce::String string);
-    void exportAudioToFile(juce::AudioBuffer<float> buffer, juce::String fileName);
+    juce::AudioSampleBuffer exportBuffer;
+    long samplesWritten;
+    juce::String exportFileName;
+    
+    void prepareAudioExport(juce::AudioBuffer<float> &buffer);
+    void setExportFileName(juce::String header, juce::String info);
+    void exportAudioToFile();
     
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
@@ -83,8 +86,6 @@ private:
 
     juce::AudioSampleBuffer outBuffer;
     
-    juce::AudioSampleBuffer exportBuffer;
-    long samplesWritten;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 
