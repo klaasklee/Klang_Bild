@@ -19,7 +19,7 @@ const float globalSampleRate = 48000.0;
 
 // if you add a Blendmode
 // add BlendModeName in LayerControlComponent.h
-// change last Blendmode in LayerControlComponent.cpp line 20
+// change last Blendmode in LayerControlComponent.cpp line 42
 
 enum BlendModes
 {

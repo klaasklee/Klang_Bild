@@ -40,7 +40,6 @@ public:
     void setTransportLoop(bool b);
     
     void toggleExportState();
-    void exportAudioToFile(juce::AudioBuffer<float> buffer);
 
 private:
     //==============================================================================
@@ -51,7 +50,12 @@ private:
     
     std::unique_ptr<juce::AlertWindow> alertWindow; 
     juce::TextEditor alertTextEditor;
-
+    
+    void prepareAudioExport(juce::AudioBuffer<float> buffer);
+    void setExportFileName(juce::AudioBuffer<float> buffer, juce::String header, juce::String info);
+    void setExportFileNameString(juce::AudioBuffer<float> buffer, juce::String string);
+    void exportAudioToFile(juce::AudioBuffer<float> buffer, juce::String fileName);
+    
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
 
