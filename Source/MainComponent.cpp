@@ -260,6 +260,66 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSa
     playPosB += numSamples;
 }
 
+void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB)
+{
+    // computes the average power per block of the active layer of interest (layerB), which has this blendMode selected. 
+    // use this value, to scale the other oudio (layerA) per block
+    // todo: interpolate smoothly between blocks
+
+    int numChannelsA = layerA.getNumChannels();
+    int numChannelsB = layerB.getNumChannels();
+
+    const float intensity = 1;
+    const float offset = 0.001;
+
+    const float* readA;
+    const float* readB;
+    float* writeOut;
+
+    jassert(numChannelsA == numChannelsB);
+
+    int samplesLeftToPlay = layerB.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
+
+    for (int ch = 0; ch < numChannelsA; ch++)
+    {
+        if (samplesLeftToPlay > 0)
+        {
+            readA = layerA.getReadPointer(ch, playPosA);
+            readB = layerB.getReadPointer(ch, playPosB);
+            writeOut = outLayer.getWritePointer(ch);
+
+            // calculate the mean power of this block and the next 
+            double maxPowerB = 0;
+            double powerB = 0;
+            double powerBNextBlock = 0;
+            for (int i = 0; i < numSamples; i++) {
+                powerB = (*readB) * ((*readB++)); 
+            }
+            for (int i = 0; i < numSamples; i++) {
+                powerBNextBlock += (*readB) * ((*readB++));
+            }
+            powerB /= numSamples;
+            powerBNextBlock /= numSamples;
+
+            // scale the buffer A with the power of buffer B; interpolate linearly to the next block power. 
+            for (int i = 0; i < numSamples; i++) {
+                *writeOut++ = *readA++ * ((powerB + i * ((powerBNextBlock - powerB)/numSamples)) + offset) * intensity;
+                //*writeOut++ = *readA++ * (powerB + offset) * intensity;
+            }
+        }
+        else { // if one track is finished, just copy the other one to output
+            readA = layerA.getReadPointer(ch, playPosA);
+            writeOut = outLayer.getWritePointer(ch);
+
+            for (int i = 0; i < numSamples; i++) {
+                *writeOut++ = *readA++;
+            }
+        }
+    }
+    //playPosA += numSamples;
+    playPosB += numSamples;
+}
+
 void MainComponent::transportStateChanged(TransportState newState)
 {
     if (newState != state)

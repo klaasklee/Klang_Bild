@@ -71,10 +71,6 @@ private:
         switch (value) {
             case BlendModes::Normal:
                 return "NORMAL";
-            case BlendModes::Subdivide:
-                return "SUBDIVIDE";
-            case BlendModes::Blend:
-                return "BLEND";
             case BlendModes::Multiply:
                 return "MULTIPLY";
             case BlendModes::Duck:

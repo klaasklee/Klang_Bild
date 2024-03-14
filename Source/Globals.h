@@ -24,8 +24,6 @@ const float globalSampleRate = 48000.0;
 enum BlendModes
 {
     Normal,
-    Subdivide,
-    Blend,
     Multiply,
     Duck
 };
