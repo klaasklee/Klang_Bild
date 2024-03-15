@@ -33,6 +33,9 @@ public:
     int playPos;
     bool fileLoaded;
     int playOffset;
+    
+    int waveBorder = 15;
+
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)
@@ -50,7 +53,6 @@ private:
     //drawing Waveforms
     bool updateWaveform = false;
     juce::Path p;
-    int waveBorder = 15;
     std::vector<float> audioPoints;
     
 };

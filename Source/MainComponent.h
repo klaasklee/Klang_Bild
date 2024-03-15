@@ -49,7 +49,7 @@ public:
     
     void killAlertWindow();
     
-    float playHeadStartPos = 0.0f;
+    float playHeadStartPos = 0;
     
     float playHeadPos = playHeadStartPos;
     

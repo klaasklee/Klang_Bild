@@ -24,7 +24,7 @@ PlayHeadComponent::~PlayHeadComponent()
 void PlayHeadComponent::paint (juce::Graphics& g)
 {
     // drawPlayHead
-    g.fillAll(juce::Colours::red);
+    g.fillAll(juce::Colours::yellow);
 }
 
 void PlayHeadComponent::resized()
