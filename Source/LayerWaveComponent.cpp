@@ -38,10 +38,10 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     // draws waveform if audio is loadet to playBuffer
     // not very performative right now, draws waveforms too frequently
     // todo: make more performative
-    if (playBuffer.getNumSamples() > 0)
+    if (updateWaveform == true && playBuffer.getNumSamples() > 0)
     {
+        p.clear();
         audioPoints.clear();
-        juce::Path p;
         int ratio = (playBuffer.getNumSamples()/(getWidth()-waveBorder*2));
         auto buffer = playBuffer.getReadPointer(0);
         // scale audio on x axis
@@ -66,12 +66,20 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         
         g.setColour(juce::Colours::white);
         g.strokePath(p, juce::PathStrokeType(2));
+        
+        updateWaveform = false;
+    }
+    else
+    {
+        g.setColour(juce::Colours::white);
+        g.strokePath(p, juce::PathStrokeType(2));
     }
 }
 
 
 void LayerWaveComponent::resized()
 {
+    updateWaveform = true;
     openButton.setBounds(getWidth()/2-75, getHeight()/2-15, 150, 30);
 }
 
@@ -138,6 +146,8 @@ void LayerWaveComponent::openButtonClicked()
  //          setAudioChannels (0, (int) reader->numChannels);
             
             DBG(reader->getFormatName());
+            
+            updateWaveform = true;
         }
     }
 }
