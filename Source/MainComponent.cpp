@@ -9,6 +9,8 @@ MainComponent::MainComponent()
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(LayersViewPort);
     
+//    PlayHead.setBounds(getWidth(), getHeight()/5, 2, getHeight() -  getHeight()/5);
+    addAndMakeVisible(PlayHead);
     
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -114,12 +116,18 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
             bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             
-            // Timecode
+            // update Timecode + PlayHead
             // only testvalue right now
             // todo: set to playheadposition
-            juce::MessageManager::callAsync([=](){
-                ControlBar.lTimeCode.setText(juce::String(LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos), juce::dontSendNotification);
-                                            });
+            juce::MessageManager::callAsync([=]()
+            {
+                playHeadPos = LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos;
+                
+                // setTimeCode
+                ControlBar.lTimeCode.setText(juce::String(playHeadPos), juce::dontSendNotification);
+                // setPlayHead
+                PlayHead.setBounds(250+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+            });
         }
 
 
@@ -155,11 +163,18 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         {
             LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
-        // Timecode for Stop
+        
+        // update Timecode + PlayHead
         // todo: reset to playheadposition
-        juce::MessageManager::callAsync([=](){
-            ControlBar.lTimeCode.setText("0", juce::dontSendNotification);
-                                        });
+        juce::MessageManager::callAsync([=]()
+            {
+                playHeadPos = playHeadStartPos;
+            
+                // setTimeCode
+                ControlBar.lTimeCode.setText(juce::String(playHeadPos), juce::dontSendNotification);
+                // setPlayHead
+                PlayHead.setBounds(250+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+            });
     }
 
     // if state = pause nothing hapens
@@ -472,14 +487,13 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    g.fillAll(GlobalColors::BG);
 }
 
 void MainComponent::resized()
 {
     ControlBar.setBounds(0, 0, getWidth(), getHeight()/5);
     LayersViewPort.setBounds(0, getHeight()/5, getWidth(), getHeight() -  getHeight()/5);
-    
+        
     ExportAlertWindow.setBounds(500, 500, 200, 200);
     
 }

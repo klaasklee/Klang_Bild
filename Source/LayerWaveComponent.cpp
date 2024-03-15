@@ -14,7 +14,7 @@
 #include "Globals.h"
 
 //==============================================================================
-LayerWaveComponent::LayerWaveComponent() : openButton("open file (WAV, MP3)")
+LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
 {
     fileLoaded = false; 
     openButton.onClick = [this] { openButtonClicked(); };
@@ -80,7 +80,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 void LayerWaveComponent::resized()
 {
     updateWaveform = true;
-    openButton.setBounds(getWidth()/2-75, getHeight()/2-15, 150, 30);
+    openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
 }
 
 

@@ -4,6 +4,7 @@
 #include "ControlBarComponent.h"
 #include "LayerViewPortComponent.h"
 #include "AlertWindowComponent.h"
+#include "PlayHeadComponent.h"
 
 //==============================================================================
 /*
@@ -47,7 +48,12 @@ public:
     void exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::String fileName);
     
     void killAlertWindow();
-
+    
+    float playHeadStartPos = 0.0f;
+    
+    float playHeadPos = playHeadStartPos;
+    
+    
 private:
     //==============================================================================
     // Your private member variables go here...
@@ -87,8 +93,10 @@ private:
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
     
+    PlayHeadComponent PlayHead;
+    
     AlertWindowComponent ExportAlertWindow;
-
+    
     juce::AudioSampleBuffer outBuffer;
 
     
