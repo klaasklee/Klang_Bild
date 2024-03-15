@@ -38,6 +38,10 @@ public:
     juce::ToggleButton bLoop;
     
     juce::TextButton recordButton;
+    
+    //Info
+    juce::Label lMeter;
+    juce::Label lTimeCode;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlBarComponent)
@@ -61,9 +65,6 @@ private:
     juce::ToggleButton bSechs;
     //MainControls
     juce::Label lAppTitle;
-    //Info
-    juce::Label lMeter;
-    juce::Label lTimeCode;
     
     //styling - lookAndFeel
     LookAndFeel001 LookAndFeel001;

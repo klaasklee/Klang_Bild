@@ -114,7 +114,12 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
             bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             
-
+            // Timecode
+            // only testvalue right now
+            // todo: set to playheadposition
+            juce::MessageManager::callAsync([=](){
+                ControlBar.lTimeCode.setText(juce::String(LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos), juce::dontSendNotification);
+                                            });
         }
 
 
@@ -150,6 +155,11 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         {
             LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playPos = LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.playOffset;
         }
+        // Timecode for Stop
+        // todo: reset to playheadposition
+        juce::MessageManager::callAsync([=](){
+            ControlBar.lTimeCode.setText("0", juce::dontSendNotification);
+                                        });
     }
 
     // if state = pause nothing hapens

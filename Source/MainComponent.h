@@ -52,18 +52,19 @@ private:
     //==============================================================================
     // Your private member variables go here...
 
+    //ControlBar
     float globalVolume;
     bool globalLoop;
     
-    std::unique_ptr<juce::AlertWindow> alertWindow; 
+    //Export
+    std::unique_ptr<juce::AlertWindow> alertWindow;
     juce::TextEditor alertTextEditor;
-    
     long samplesWritten;
     
+    //BlendModes
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
     static void blendModeDuck(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
-
 
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, juce::AudioSampleBuffer& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int& playPosB);
 
@@ -82,14 +83,15 @@ private:
 
     void applyGainForAllTracks(int lengthInSamples, int numActiveLayers, int activeLayerIndexes[], bool applyRevert);
 
+    //Components
     ControlBarComponent ControlBar;
     LayerViewPortComponent LayersViewPort;
     
     AlertWindowComponent ExportAlertWindow;
 
     juce::AudioSampleBuffer outBuffer;
-    
 
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 
 };

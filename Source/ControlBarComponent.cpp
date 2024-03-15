@@ -110,6 +110,7 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     lMeter.setFont(GlobalFonts::titleFont);
     lMeter.setText("METER", juce::dontSendNotification);
     lMeter.setJustificationType(juce::Justification::centred);
+    
     addAndMakeVisible(lTimeCode);
     lTimeCode.setColour (juce::Label::textColourId, GlobalColors::darkText);
     lTimeCode.setFont(GlobalFonts::titleFont);
