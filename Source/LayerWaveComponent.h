@@ -17,12 +17,16 @@
 /*
 */
 class LayerWaveComponent  : public juce::Component
+
 {
 public:
     LayerWaveComponent();
     ~LayerWaveComponent() override;
 
     void paint (juce::Graphics&) override;
+    
+    void mouseDown(const juce::MouseEvent& event) override;
+    
     void resized() override;
     
     juce::AudioSampleBuffer fileBuffer; // contains the original file

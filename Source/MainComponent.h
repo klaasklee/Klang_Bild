@@ -50,6 +50,7 @@ public:
     void killAlertWindow();
     
     float playHeadStartPos = 0;
+    void setPlayHeadPos(int pos);
     
     float playHeadPos = playHeadStartPos;
     

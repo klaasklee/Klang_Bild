@@ -169,12 +169,10 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         // todo: reset to playheadposition
         juce::MessageManager::callAsync([=]()
             {
-                playHeadPos = playHeadStartPos;
-            
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String(LayersViewPort.LayersContainer.Layers[0].LayerWave.playPos), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(250+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                setPlayHeadPos(playHeadStartPos);
             });
     }
 
@@ -475,6 +473,31 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::St
 void MainComponent::killAlertWindow()
 {
     removeChildComponent(&ExportAlertWindow);
+}
+
+void MainComponent::setPlayHeadPos(int pos)
+{
+//    DBG("setPlayHeadPos()");
+//    DBG(pos);
+    
+    int layersWaveBorder = LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder;
+    int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();
+    
+    if (pos > layersWaveBorder && pos < layersWidth - layersWaveBorder)
+    {
+        playHeadStartPos = pos;
+        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+    }
+    else if (pos < layersWaveBorder)
+    {
+        playHeadStartPos = layersWaveBorder;
+        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+    }
+    else if (pos > layersWidth - layersWaveBorder)
+    {
+        playHeadStartPos = layersWidth - layersWaveBorder;
+        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+    }
 }
 
 void MainComponent::releaseResources()

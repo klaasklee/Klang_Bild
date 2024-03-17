@@ -16,7 +16,11 @@
 //==============================================================================
 LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
 {
-    fileLoaded = false; 
+    // movePlayhead
+    addMouseListener(this, true);
+    
+    // load audio functionality
+    fileLoaded = false;
     openButton.onClick = [this] { openButtonClicked(); };
     addAndMakeVisible(&openButton);
     
@@ -74,6 +78,12 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         g.setColour(juce::Colours::white);
         g.strokePath(p, juce::PathStrokeType(2));
     }
+}
+
+void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
+{
+    DBG("WaveLayer - MouseDown");
+    findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
 }
 
 
