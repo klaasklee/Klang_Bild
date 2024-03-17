@@ -23,8 +23,13 @@ public:
     LayerComponent();
     ~LayerComponent() override;
 
+    void paint (juce::Graphics&) override;
+
+    
     void resized() override;
 
+    int layerIndex;
+    
     LayerControlComponent LayerControl;
     LayerWaveComponent LayerWave;
 

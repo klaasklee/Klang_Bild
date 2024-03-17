@@ -480,6 +480,10 @@ void MainComponent::setPlayHeadPos(int pos)
 //    DBG("setPlayHeadPos()");
 //    DBG(pos);
     
+    // sets Position of PlayHead
+    // set Pos only works insite the actual drawn wave
+    // when the edge is clicked, the playhead moves to the very left or right
+    
     int layersWaveBorder = LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder;
     int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();
     

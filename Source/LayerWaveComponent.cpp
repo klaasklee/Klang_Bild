@@ -83,21 +83,26 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
 {
     DBG("WaveLayer - MouseDown");
-    findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
+    
+    if (event.eventComponent == &openButton)
+    {
+        return;
+    }
+    else
+    {
+        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
+    }
 }
-
-
-void LayerWaveComponent::resized()
-{
-    updateWaveform = true;
-    openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
-}
-
-
 
 void LayerWaveComponent::openButtonClicked()
 {
-    DBG("open File clicked");
+    DBG("openButton");
+    importAudio();
+}
+
+void LayerWaveComponent::importAudio()
+{
+    DBG("importAudio()");
     
 //    findParentComponentOfClass<MainComponent>()->shutdownAudio();
     
@@ -127,11 +132,11 @@ void LayerWaveComponent::openButtonClicked()
             
             //reads data into the fileBuffer
             reader->read(&fileBuffer,
-                0,                              //destination start sample                                 
-                (int)reader->lengthInSamples,   //numSamples                               
-                0,                              //reader start sample                                  
-                true,                           //use right channel                                
-                true);                          //use left channel    
+                0,                              //destination start sample
+                (int)reader->lengthInSamples,   //numSamples
+                0,                              //reader start sample
+                true,                           //use right channel
+                true);                          //use left channel
             
             
             // todo: resample to correct samplerate before loading to RAM
@@ -148,7 +153,7 @@ void LayerWaveComponent::openButtonClicked()
                     0,                             //  start copy position in input buffer
                     lengthInSamples);              //  number of samples to copy
             }
-            fileLoaded = true; 
+            fileLoaded = true;
 
 
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
@@ -196,4 +201,10 @@ void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer
 //
 //        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
 //        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
+}
+
+void LayerWaveComponent::resized()
+{
+    updateWaveform = true;
+    openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
 }

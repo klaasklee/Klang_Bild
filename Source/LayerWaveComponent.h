@@ -46,6 +46,7 @@ private:
     
     juce::TextButton openButton;
     void openButtonClicked();
+    void importAudio();
     
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> playSource;

@@ -22,6 +22,14 @@ LayerComponent::~LayerComponent()
 {
 }
 
+void LayerComponent::paint (juce::Graphics& g)
+{
+    g.fillAll(juce::Colours::darkgrey);
+    g.setFont(20);
+    g.drawText(juce::String(layerIndex), 20, 20, 20, 20, juce::Justification::centred);
+}
+
+
 void LayerComponent::resized()
 {
     juce::FlexBox layerFB;
