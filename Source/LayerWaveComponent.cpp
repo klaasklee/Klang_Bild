@@ -66,15 +66,30 @@ void LayerWaveComponent::paint (juce::Graphics& g)
             p.lineTo(sample+waveBorder, point);
         }
         
+        rect.setBounds(waveBorder, waveBorder, p.getBounds().getRight()-waveBorder, getHeight()-waveBorder*2);
+        
+        g.setColour(juce::Colours::darkgrey);
+        g.fillRoundedRectangle(rect, 3);
+        
         g.setColour(juce::Colours::white);
         g.strokePath(p, juce::PathStrokeType(2));
         
+        g.setColour(juce::Colours::white);
+        g.drawRoundedRectangle(rect, 7, 3);
+        
         updateWaveform = false;
     }
-    else
+    else if (playBuffer.getNumSamples() > 0)
     {
+        g.setColour(juce::Colours::darkgrey);
+        g.fillRoundedRectangle(rect, 3);
+        
         g.setColour(juce::Colours::white);
         g.strokePath(p, juce::PathStrokeType(2));
+        
+        g.setColour(juce::Colours::white);
+        g.drawRoundedRectangle(rect, 7, 3);
+        
     }
     
     

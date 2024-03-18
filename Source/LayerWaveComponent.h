@@ -58,6 +58,7 @@ private:
     //drawing Waveforms
     bool updateWaveform = false;
     juce::Path p;
+    juce::Rectangle<float> rect;
     std::vector<float> audioPoints;
     
 };
