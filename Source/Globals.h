@@ -12,10 +12,17 @@
 
 #include <JuceHeader.h>
 
+const float globalSampleRate = 48000.0;
+
 const int numOfLayers = 5;
 const int layerHeight = 200;
+
+// timeLineSize in seconds
+const int timeLineSize = 60;
+
+// exportTime in seconds
 const float exportTime = 30;
-const float globalSampleRate = 48000.0;
+
 
 // if you add a Blendmode
 // add BlendModeName in LayerControlComponent.h

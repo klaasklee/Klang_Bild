@@ -134,19 +134,19 @@ void ControlBarComponent::sliderValueChanged(juce::Slider *slider)
 
 void ControlBarComponent::bPlayClicked()
 {
-    DBG("play clicked");
+//    DBG("play clicked");
     findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Play);
 }
 
 void ControlBarComponent::bStopClicked()
 {
-    DBG("stop clicked");
+//    DBG("stop clicked");
     findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
 }
 
 void ControlBarComponent::bPauseClicked()
 {
-    DBG("stop clicked");
+//    DBG("stop clicked");
     findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Pause);
 }
 
@@ -158,7 +158,7 @@ void ControlBarComponent::bLoopClicked()
 
 void ControlBarComponent::recordButtonClicked()
 {
-    DBG("export Button clicked");
+//    DBG("export Button clicked");
     findParentComponentOfClass<MainComponent>()->toggleExportState();
 }
 

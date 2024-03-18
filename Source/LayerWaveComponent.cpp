@@ -35,9 +35,6 @@ LayerWaveComponent::~LayerWaveComponent()
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
     
     // draws waveform if audio is loadet to playBuffer
     // not very performative right now, draws waveforms too frequently
@@ -46,7 +43,8 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     {
         p.clear();
         audioPoints.clear();
-        int ratio = (playBuffer.getNumSamples()/(getWidth()-waveBorder*2));
+//        int ratio = (playBuffer.getNumSamples()/(getWidth()-waveBorder*2));
+        int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
         auto buffer = playBuffer.getReadPointer(0);
         // scale audio on x axis
         for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
@@ -78,11 +76,15 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         g.setColour(juce::Colours::white);
         g.strokePath(p, juce::PathStrokeType(2));
     }
+    
+    
+    g.setColour (juce::Colours::grey);
+    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
 }
 
 void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
 {
-    DBG("WaveLayer - MouseDown");
+//    DBG("WaveLayer - MouseDown");
     
     if (event.eventComponent == &openButton)
     {
@@ -96,7 +98,7 @@ void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
 
 void LayerWaveComponent::openButtonClicked()
 {
-    DBG("openButton");
+//    DBG("openButton");
     importAudio();
 }
 
