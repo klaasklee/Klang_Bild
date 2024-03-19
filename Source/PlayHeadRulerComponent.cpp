@@ -26,15 +26,28 @@ PlayHeadRulerComponent::~PlayHeadRulerComponent()
 
 void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::white);   // clear the background
+    g.fillAll (juce::Colours::lightgrey);
     g.setColour(juce::Colours::black);
     
-    int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-layerControlW-waveBorder*2));
+    int ratio = (globalSampleRate*timeLineSize)/(getWidth()-layerControlW-waveBorder*2);
     
-    for (int sample = 0; sample <= timeLineSize*globalSampleRate; sample += (globalSampleRate*10))
+    int big = 10;
+    
+    for (int sample = 0; sample <= timeLineSize*globalSampleRate; sample += (globalSampleRate*1))
     {
-        DBG(sample);
-        g.drawLine(250+waveBorder +1 + (sample / ratio), 5, 250+waveBorder +1 + (sample / ratio), 30, 3);
+        if (big == 10)
+        {
+//            DBG("big");
+            g.drawLine(250+waveBorder +1 + (sample / ratio), 10, 250+waveBorder +1 + (sample / ratio), 30, 3);
+            big = 0;
+        }
+        else
+        {
+//            DBG("smal");
+            g.drawLine(250+waveBorder +1 + (sample / ratio), 15, 250+waveBorder +1 + (sample / ratio), 30, 2);
+        }
+        big ++;
+        
     }
 
 }
