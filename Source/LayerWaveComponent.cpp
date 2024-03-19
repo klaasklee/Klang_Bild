@@ -34,7 +34,7 @@ LayerWaveComponent::~LayerWaveComponent()
 //draws Waveform
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::black);   // clear the background
+    g.fillAll (juce::Colours::darkgrey);   // clear the background
     
     // draws waveform if audio is loadet to playBuffer
     // not very performative right now, draws waveforms too frequently
@@ -68,7 +68,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         
         rect.setBounds(waveBorder, waveBorder, p.getBounds().getRight()-waveBorder, getHeight()-waveBorder*2);
         
-        g.setColour(juce::Colours::darkgrey);
+        g.setColour(juce::Colours::black);
         g.fillRoundedRectangle(rect, 3);
         
         g.setColour(juce::Colours::white);
@@ -81,7 +81,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     }
     else if (playBuffer.getNumSamples() > 0)
     {
-        g.setColour(juce::Colours::darkgrey);
+        g.setColour(juce::Colours::black);
         g.fillRoundedRectangle(rect, 3);
         
         g.setColour(juce::Colours::white);
