@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "LayerComponent.h"
+#include "Globals.h"
 
 //==============================================================================
 LayerComponent::LayerComponent()
@@ -37,7 +38,7 @@ void LayerComponent::resized()
     layerFB.flexDirection = juce::FlexBox::Direction::row;
     layerFB.flexWrap = juce::FlexBox::Wrap::wrap;
     
-        layerFB.items.add(juce::FlexItem(LayerControl).withWidth(250));
+        layerFB.items.add(juce::FlexItem(LayerControl).withWidth(layerControlW));
         layerFB.items.add(juce::FlexItem(LayerWave).withFlex(1));
    
     layerFB.performLayout(getLocalBounds());

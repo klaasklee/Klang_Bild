@@ -16,9 +16,10 @@ const float globalSampleRate = 48000.0;
 
 const int numOfLayers = 5;
 const int layerHeight = 200;
+const int layerControlW = 250;
 
 // timeLineSize in seconds
-const int timeLineSize = 6;
+const int timeLineSize = 60;
 
 // exportTime in seconds
 const float exportTime = 30;

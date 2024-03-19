@@ -15,9 +15,11 @@
 //==============================================================================
 LayersContainerComponent::LayersContainerComponent()
 {
+    int index = numOfLayers;
     for (int i = 0; i < numOfLayers; i++) {
         addAndMakeVisible(Layers[i]);
-        Layers[i].layerIndex = i;
+        Layers[i].layerIndex = index;
+        index--;
     }
 }
 

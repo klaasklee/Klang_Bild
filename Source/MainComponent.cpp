@@ -116,12 +116,16 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             bufferToFill.buffer->applyGain(0, lengthInSamples, globalVolume);
             
             // maoves the playPosition one bufferlenght forward
-            if (playPosInSamples > timeLineSize * globalSampleRate - lengthInSamples) {
+            if (playPosInSamples > (timeLineSize * globalSampleRate) - lengthInSamples) {
                 if (globalLoop) {
                     playPosInSamples = 0;
                 }
                 else {
-                    transportStateChanged(Stop);
+                    // calls transportStateChanged() asyncon bec og changing some GUI elements etc...
+                    juce::MessageManager::callAsync([=]()
+                    {
+                        transportStateChanged(Stop);
+                    });
                 }
                 
             }
@@ -140,7 +144,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(250+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
         }
 
@@ -172,12 +176,13 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 
     if (state == Stop)
     {
-        // find the last active layer, and the number of active layers
-        for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--)
-        {           
-            int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
-            playPosInSamples = playHeadStartPos * ratio;
-        }
+//        // find the last active layer, and the number of active layers
+//        for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--)
+//        {
+//        }
+        
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        playPosInSamples = playHeadStartPos * ratio;
         
         // update Timecode + PlayHead
         // todo: reset to playheadposition
@@ -186,11 +191,26 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
                 // setPlayHead
-                setPlayHeadPos(playHeadStartPos);
+                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
     }
 
-    // if state = pause nothing hapens
+    if (state == Pause)
+    {
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        playPosInSamples = playHeadPos * ratio;
+        
+        // update Timecode + PlayHead
+        // todo: reset to playheadposition
+        juce::MessageManager::callAsync([=]()
+            {
+                // setTimeCode
+                ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
+                // setPlayHead
+                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+            });
+    }
+    
 }
 
 
@@ -498,23 +518,36 @@ void MainComponent::setPlayHeadPos(int pos)
     // set Pos only works insite the actual drawn wave
     // when the edge is clicked, the playhead moves to the very left or right
     
+    transportStateChanged(Stop);
+    
     int layersWaveBorder = LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder;
     int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();
     
     if (pos > layersWaveBorder && pos < layersWidth - layersWaveBorder)
     {
-        playHeadStartPos = pos;
-        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        playHeadStartPos = pos - layersWaveBorder;
+        
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        playPosInSamples = playHeadStartPos * ratio;
+        
+        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
     }
     else if (pos < layersWaveBorder)
     {
-        playHeadStartPos = layersWaveBorder;
-        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        playHeadStartPos = 0;
+        
+        playPosInSamples = 0;
+        
+        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
     }
     else if (pos > layersWidth - layersWaveBorder)
     {
-        playHeadStartPos = layersWidth - layersWaveBorder;
-        PlayHead.setBounds(250 + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        playHeadStartPos = layersWidth - (layersWaveBorder*2);
+        
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        playPosInSamples = playHeadStartPos * ratio;
+        
+        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
     }
 }
 

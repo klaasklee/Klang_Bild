@@ -96,7 +96,7 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     bLoop.setButtonText("loop");
     bLoop.setLookAndFeel(&LookAndFeel001);
     bLoop.onClick = [this] { bLoopClicked(); };
-    bLoop.setEnabled(false);
+    bLoop.setEnabled(true);
     bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bLoop);
     

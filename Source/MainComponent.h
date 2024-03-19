@@ -37,6 +37,7 @@ public:
         Export
     };
     TransportState state;
+    
     void transportStateChanged(TransportState newState);
     
     void setTransportLoop(bool b);
@@ -49,12 +50,20 @@ public:
     
     void killAlertWindow();
     
-    float playHeadStartPos = 0;
-    void setPlayHeadPos(int pos);
     
-    float playHeadPos = playHeadStartPos;
-
-    int playPosInSamples = 0; 
+    // position of playHead if state == stop
+    float playHeadStartPos = 0;
+    
+    // playHead position in pixel X
+    float playHeadPos = 0;
+    
+    // play position in samples
+    int playPosInSamples = 0;
+    
+    // this function is for setting the playHead with a mouseEvent
+    // in GUI and changes playHeadPos as well as playPosInSamples
+    // and stops Playback
+    void setPlayHeadPos(int pos);
     
     
 private:
@@ -63,7 +72,7 @@ private:
 
     //ControlBar
     float globalVolume;
-    bool globalLoop;
+    bool globalLoop = false;
     
     //Export
     std::unique_ptr<juce::AlertWindow> alertWindow;
