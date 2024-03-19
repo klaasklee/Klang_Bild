@@ -142,7 +142,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 playHeadPos = playPosInSamples/ratio;
                 
                 // setTimeCode
-                ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
+                ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
@@ -189,7 +189,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         juce::MessageManager::callAsync([=]()
             {
                 // setTimeCode
-                ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
+                ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
@@ -205,7 +205,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         juce::MessageManager::callAsync([=]()
             {
                 // setTimeCode
-                ControlBar.lTimeCode.setText(juce::String(playPosInSamples), juce::dontSendNotification);
+                ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
