@@ -5,6 +5,7 @@
 #include "LayerViewPortComponent.h"
 #include "AlertWindowComponent.h"
 #include "PlayHeadComponent.h"
+#include "PlayHeadRulerComponent.h"
 
 //==============================================================================
 /*
@@ -103,6 +104,7 @@ private:
 
     //Components
     ControlBarComponent ControlBar;
+    PlayHeadRulerComponent PlayHeadRuler;
     LayerViewPortComponent LayersViewPort;
     
     PlayHeadComponent PlayHead;

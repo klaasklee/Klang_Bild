@@ -25,7 +25,7 @@ public:
 
     void paint (juce::Graphics&) override;
     
-    void mouseDown(const juce::MouseEvent& event) override;
+//    void mouseDown(const juce::MouseEvent& event) override;
     
     void resized() override;
     

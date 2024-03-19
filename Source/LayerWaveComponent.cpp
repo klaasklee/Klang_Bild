@@ -52,6 +52,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
             audioPoints.push_back(buffer[sample]);
 //            DBG(playBuffer.getNumSamples());
 //            DBG(getWidth());
+//            DBG("ratio");
 //            DBG(ratio);
 //            DBG("audioPointsSize: ");
 //            DBG(audioPoints.size());
@@ -97,19 +98,19 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
 }
 
-void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
-{
-//    DBG("WaveLayer - MouseDown");
-    
-    if (event.eventComponent == &openButton)
-    {
-        return;
-    }
-    else
-    {
-        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
-    }
-}
+//void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
+//{
+////    DBG("WaveLayer - MouseDown");
+//    
+//    if (event.eventComponent == &openButton)
+//    {
+//        return;
+//    }
+//    else
+//    {
+//        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
+//    }
+//}
 
 void LayerWaveComponent::openButtonClicked()
 {

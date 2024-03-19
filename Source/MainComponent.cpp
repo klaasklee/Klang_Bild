@@ -7,6 +7,7 @@ MainComponent::MainComponent()
     setSize (1200, 800);
 
     addAndMakeVisible(ControlBar);
+    addAndMakeVisible(PlayHeadRuler);
     addAndMakeVisible(LayersViewPort);
     
 //    PlayHead.setBounds(getWidth(), getHeight()/5, 2, getHeight() -  getHeight()/5);
@@ -138,13 +139,13 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             // todo: set to playheadposition
             juce::MessageManager::callAsync([=]()
             {
-                int ratio = ((timeLineSize*globalSampleRate)/(LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth()-LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder*2));
+                int ratio = ((timeLineSize*globalSampleRate)/(LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth()-waveBorder*2));
                 playHeadPos = playPosInSamples/ratio;
                 
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
         }
 
@@ -181,7 +182,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 //        {
 //        }
         
-        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
         
         // update Timecode + PlayHead
@@ -191,13 +192,13 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
     }
 
     if (state == Pause)
     {
-        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadPos * ratio;
         
         // update Timecode + PlayHead
@@ -207,7 +208,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
     }
     
@@ -520,14 +521,14 @@ void MainComponent::setPlayHeadPos(int pos)
     
     transportStateChanged(Stop);
     
-    int layersWaveBorder = LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder;
+    int layersWaveBorder = waveBorder;
     int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();
     
     if (pos > layersWaveBorder && pos < layersWidth - layersWaveBorder)
     {
         playHeadStartPos = pos - layersWaveBorder;
         
-        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
         
         PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
@@ -544,7 +545,7 @@ void MainComponent::setPlayHeadPos(int pos)
     {
         playHeadStartPos = layersWidth - (layersWaveBorder*2);
         
-        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - LayersViewPort.LayersContainer.Layers[0].LayerWave.waveBorder * 2));
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
         
         PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
@@ -566,7 +567,8 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    ControlBar.setBounds(0, 0, getWidth(), getHeight()/5);
+    ControlBar.setBounds(0, 0, getWidth(), getHeight()/5-30);
+    PlayHeadRuler.setBounds(0, getHeight()/5-30, getWidth(), 30);
     LayersViewPort.setBounds(0, getHeight()/5, getWidth(), getHeight() -  getHeight()/5);
         
     ExportAlertWindow.setBounds(500, 500, 200, 200);

@@ -22,6 +22,10 @@
             file="Source/ControlBarComponent.h"/>
       <FILE id="t7rMzI" name="ControlBarComponent.cpp" compile="1" resource="0"
             file="Source/ControlBarComponent.cpp"/>
+      <FILE id="q3awn8" name="PlayHeadRulerComponent.h" compile="0" resource="0"
+            file="Source/PlayHeadRulerComponent.h"/>
+      <FILE id="LWx0gR" name="PlayHeadRulerComponent.cpp" compile="1" resource="0"
+            file="Source/PlayHeadRulerComponent.cpp"/>
       <FILE id="s5tJgk" name="LayerViewPortComponent.h" compile="0" resource="0"
             file="Source/LayerViewPortComponent.h"/>
       <FILE id="OxanpO" name="LayerViewPortComponent.cpp" compile="1" resource="0"
