@@ -18,7 +18,7 @@ const int numOfLayers = 5;
 const int layerHeight = 200;
 
 // timeLineSize in seconds
-const int timeLineSize = 60;
+const int timeLineSize = 6;
 
 // exportTime in seconds
 const float exportTime = 30;
