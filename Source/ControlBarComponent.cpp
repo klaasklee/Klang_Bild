@@ -69,7 +69,6 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     
     //MainControls
     lAppTitle.setColour (juce::Label::textColourId, GlobalColors::brightText);
-    lAppTitle.setFont(GlobalFonts::titleFont);
     lAppTitle.setText("controlBar", juce::dontSendNotification);
     lAppTitle.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(lAppTitle);
@@ -115,7 +114,7 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
 
     addAndMakeVisible(lTimeCode);
     lTimeCode.setColour (juce::Label::textColourId, GlobalColors::darkText);
-    lTimeCode.setFont(GlobalFonts::titleFont);
+    lTimeCode.setFont(40.0f);
     lTimeCode.setText("TIMECODE", juce::dontSendNotification);
     lTimeCode.setJustificationType(juce::Justification::centred);
                                     
