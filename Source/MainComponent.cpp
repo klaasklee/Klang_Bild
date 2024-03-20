@@ -81,7 +81,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                         0,                                                                              //  sample offset in output buffer
                         LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
                         ch % numChannels,                                                               //  channel of input buffer
-                        (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playOffset),          //  start copy position in input buffer
+                        (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playOffsetInSamples),          //  start copy position in input buffer
                         std::min(lengthInSamples, samplesLeftToPlay));                                                               //  number of samples to copy
                 }
             }
@@ -102,7 +102,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                     outBuffer,
                     lengthInSamples,
                     nullInt,
-                    (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playOffset));
+                    (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playOffsetInSamples));
             }
 
             //copy the calculation result to output (bufferToFill)

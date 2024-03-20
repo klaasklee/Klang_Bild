@@ -58,16 +58,16 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 //            DBG(audioPoints.size());
         }
         
-        p.startNewSubPath(0+waveBorder, getHeight()/2);
+        p.startNewSubPath(playOffset+waveBorder, getHeight()/2);
         
         // scale audio on y axis
         for (int sample = 0; sample < audioPoints.size(); ++sample)
         {
             auto point = juce::jmap<float>(audioPoints[sample], -1.0f, 1.0f, getHeight()-waveBorder, 0+waveBorder);
-            p.lineTo(sample+waveBorder, point);
+            p.lineTo(sample+waveBorder+playOffset, point);
         }
         
-        rect.setBounds(waveBorder, waveBorder, p.getBounds().getRight()-waveBorder, getHeight()-waveBorder*2);
+        rect.setBounds(waveBorder+playOffset, waveBorder, p.getBounds().getRight()-playOffset-waveBorder, getHeight()-waveBorder*2);
         
         g.setColour(juce::Colours::black);
         g.fillRoundedRectangle(rect, 3);
@@ -111,6 +111,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 //        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
 //    }
 //}
+
 void LayerWaveComponent::mouseDrag(const juce::MouseEvent& event)
 {
 //    DBG("mouse drag");
@@ -131,8 +132,15 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
         
         int distance = event.getPosition().getX() - mouseDownX;
         
+        // nur wenn das sample nicht komplett aus dem fenster verschwindet
+        playOffset = playOffset + distance;
+//        playOffsetInSamples = playOffset + distance;
+
         DBG("distance: ");
         DBG(distance);
+        
+        updateWaveform = true;
+        repaint();
         
         boolMouseDrag = false;
     }
@@ -173,6 +181,7 @@ void LayerWaveComponent::importAudio()
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playPos = 0;
             playOffset = 0;
+            playOffsetInSamples = 0;
             
             //reads data into the fileBuffer
             reader->read(&fileBuffer,
@@ -207,6 +216,8 @@ void LayerWaveComponent::importAudio()
             DBG(reader->getFormatName());
             
             updateWaveform = true;
+            
+            repaint();
         }
     }
 }

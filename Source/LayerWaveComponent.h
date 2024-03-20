@@ -38,7 +38,8 @@ public:
     // trotzdem mache ich das erstmal wie besprochen, weil das dann einfacher ist :) 
     int playPos;
     bool fileLoaded;
-    int playOffset;
+    int playOffset = 0;
+    int playOffsetInSamples = 0;
     
     int waveBorder = 15;
 
