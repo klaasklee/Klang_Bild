@@ -68,4 +68,6 @@ private:
     bool boolMouseDrag;
     int mouseDownX;
     
+    void offsetPlayBuffer();
+    
 };

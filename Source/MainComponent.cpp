@@ -135,8 +135,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
 
             // update Timecode + PlayHead
-            // only testvalue right now
-            // todo: set to playheadposition
             juce::MessageManager::callAsync([=]()
             {
                 int ratio = ((timeLineSize*globalSampleRate)/(LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth()-waveBorder*2));
@@ -186,7 +184,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         playPosInSamples = playHeadStartPos * ratio;
         
         // update Timecode + PlayHead
-        // todo: reset to playheadposition
         juce::MessageManager::callAsync([=]()
             {
                 // setTimeCode
@@ -202,7 +199,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         playPosInSamples = playHeadPos * ratio;
         
         // update Timecode + PlayHead
-        // todo: reset to playheadposition
         juce::MessageManager::callAsync([=]()
             {
                 // setTimeCode

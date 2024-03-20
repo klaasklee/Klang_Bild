@@ -38,7 +38,6 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     // draws waveform if audio is loadet to playBuffer
     // not very performative right now, draws waveforms too frequently
-    // todo: make more performative
     if (updateWaveform == true && playBuffer.getNumSamples() > 0)
     {
         p.clear();
@@ -96,54 +95,6 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
-}
-
-//void LayerWaveComponent::mouseDown(const juce::MouseEvent& event)
-//{
-////    DBG("WaveLayer - MouseDown");
-//    
-//    if (event.eventComponent == &openButton)
-//    {
-//        return;
-//    }
-//    else
-//    {
-//        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
-//    }
-//}
-
-void LayerWaveComponent::mouseDrag(const juce::MouseEvent& event)
-{
-//    DBG("mouse drag");
-    if (!boolMouseDrag)
-    {
-        mouseDownX = event.getMouseDownX();
-    }
-    boolMouseDrag = true;
-}
-void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
-{
-//    DBG("mouse up");
-    if (boolMouseDrag)
-    {
-        DBG("move waveform");
-//        DBG(mouseDownX);
-//        DBG(event.getPosition().getX());
-        
-        int distance = event.getPosition().getX() - mouseDownX;
-        
-        // nur wenn das sample nicht komplett aus dem fenster verschwindet
-        playOffset = playOffset + distance;
-//        playOffsetInSamples = playOffset + distance;
-
-        DBG("distance: ");
-        DBG(distance);
-        
-        updateWaveform = true;
-        repaint();
-        
-        boolMouseDrag = false;
-    }
 }
 
 void LayerWaveComponent::openButtonClicked()
@@ -256,6 +207,49 @@ void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer
 //
 //        // Sicherstellen, dass der Ausgangs-Puffer die richtige Anzahl von Samples hat
 //        destBuffer.setSize(destBuffer.getNumChannels(), static_cast<int>(destBuffer.getNumSamples()), false, false, true);
+}
+
+void LayerWaveComponent::mouseDrag(const juce::MouseEvent& event)
+{
+//    DBG("mouse drag");
+    if (!boolMouseDrag)
+    {
+        mouseDownX = event.getMouseDownX();
+    }
+    boolMouseDrag = true;
+}
+void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
+{
+//    DBG("mouse up");
+    if (boolMouseDrag)
+    {
+        DBG("move waveform");
+//        DBG(mouseDownX);
+//        DBG(event.getPosition().getX());
+        
+        int distance = event.getPosition().getX() - mouseDownX;
+        
+        // todo: nur wenn das sample nicht komplett aus dem fenster verschwindet verschieben
+        
+        playOffset = playOffset + distance;
+
+//        int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
+//        playOffsetInSamples = playOffset * ratio;
+//        offsetPlayBuffer();
+        
+        DBG("distance: ");
+        DBG(distance);
+        
+        updateWaveform = true;
+        repaint();
+        
+        boolMouseDrag = false;
+    }
+}
+
+void LayerWaveComponent::offsetPlayBuffer()
+{
+     
 }
 
 void LayerWaveComponent::resized()
