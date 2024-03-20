@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "AudioMeterComponent.h"
 #include "Globals.h"
 //#include "MainComponent.h"
 
@@ -40,8 +41,9 @@ public:
     juce::TextButton recordButton;
     
     //Info
-    juce::Label lMeter;
+//    juce::Label lMeter;
     juce::Label lTimeCode;
+    AudioMeterComponent AudioMeter;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlBarComponent)

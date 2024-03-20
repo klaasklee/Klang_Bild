@@ -105,12 +105,14 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     addAndMakeVisible(&recordButton);
     
     //Info
-    addAndMakeVisible(lMeter);
-    lMeter.setColour (juce::Label::textColourId, GlobalColors::darkText);
-    lMeter.setFont(GlobalFonts::titleFont);
-    lMeter.setText("METER", juce::dontSendNotification);
-    lMeter.setJustificationType(juce::Justification::centred);
+//    addAndMakeVisible(lMeter);
+//    lMeter.setColour (juce::Label::textColourId, GlobalColors::darkText);
+//    lMeter.setFont(GlobalFonts::titleFont);
+//    lMeter.setText("METER", juce::dontSendNotification);
+//    lMeter.setJustificationType(juce::Justification::centred);
     
+    addAndMakeVisible(AudioMeter);
+
     addAndMakeVisible(lTimeCode);
     lTimeCode.setColour (juce::Label::textColourId, GlobalColors::darkText);
     lTimeCode.setFont(GlobalFonts::titleFont);
@@ -219,7 +221,8 @@ void ControlBarComponent::resized()
     infoFB.flexDirection = juce::FlexBox::Direction::column;
     infoFB.alignContent = juce::FlexBox::AlignContent::flexStart;
     
-    infoFB.items.add(juce::FlexItem(lMeter).withFlex(1));
+//    infoFB.items.add(juce::FlexItem(lMeter).withFlex(1));
+    infoFB.items.add(juce::FlexItem(AudioMeter).withFlex(1));
     infoFB.items.add(juce::FlexItem(lTimeCode).withFlex(1));
     
     

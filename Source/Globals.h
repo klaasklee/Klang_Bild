@@ -20,7 +20,7 @@ const int layerControlW = 250;
 const int waveBorder = 15;
 
 // timeLineSize in seconds
-const int timeLineSize = 60;
+const int timeLineSize = 90;
 
 // exportTime in seconds
 const float exportTime = 30;
