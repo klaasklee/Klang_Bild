@@ -111,6 +111,32 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 //        findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX());
 //    }
 //}
+void LayerWaveComponent::mouseDrag(const juce::MouseEvent& event)
+{
+//    DBG("mouse drag");
+    if (!boolMouseDrag)
+    {
+        mouseDownX = event.getMouseDownX();
+    }
+    boolMouseDrag = true;
+}
+void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
+{
+//    DBG("mouse up");
+    if (boolMouseDrag)
+    {
+        DBG("move waveform");
+//        DBG(mouseDownX);
+//        DBG(event.getPosition().getX());
+        
+        int distance = event.getPosition().getX() - mouseDownX;
+        
+        DBG("distance: ");
+        DBG(distance);
+        
+        boolMouseDrag = false;
+    }
+}
 
 void LayerWaveComponent::openButtonClicked()
 {

@@ -26,6 +26,8 @@ public:
     void paint (juce::Graphics&) override;
     
 //    void mouseDown(const juce::MouseEvent& event) override;
+    void mouseDrag(const juce::MouseEvent& event) override;
+    void mouseUp(const juce::MouseEvent& event) override;
     
     void resized() override;
     
@@ -60,5 +62,9 @@ private:
     juce::Path p;
     juce::Rectangle<float> rect;
     std::vector<float> audioPoints;
+    
+    // moving waveforms
+    bool boolMouseDrag;
+    int mouseDownX;
     
 };
