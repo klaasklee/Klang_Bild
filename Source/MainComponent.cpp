@@ -51,6 +51,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 
         auto numChannels = bufferToFill.buffer->getNumChannels();
         auto lengthInSamples = bufferToFill.numSamples;
+//        DBG(lengthInSamples);
         int nullInt = 0;
         int numActiveLayers = 0;
         int activeLayerIndexes[numOfLayers];
@@ -170,6 +171,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 toggleExportState();
             }
         }
+        
+        // update AudioMeter
+        ControlBar.AudioMeter.updateAudioMeter(bufferToFill);
     }
 
 
@@ -206,6 +210,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
+        
     }
     
 }
@@ -393,6 +398,10 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
+                
                 DBG("state = stop");
                 break;
             case Play:
@@ -413,6 +422,10 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
+                
                 DBG("state = pause");
                 break;
             case Export:

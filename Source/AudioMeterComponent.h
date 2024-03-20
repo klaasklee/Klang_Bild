@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Globals.h"
 
 //==============================================================================
 /*
@@ -23,7 +24,14 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void updateAudioMeter(const juce::AudioSourceChannelInfo& bufferToFill);
+    void resetAudioMeter();
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioMeterComponent)
+    
+    // amount of samples I need to update the levelMeter about every 24 seconds
+    const int rmsIMax = globalSampleRate/24;
+    juce::AudioSampleBuffer rmsValues;
 };

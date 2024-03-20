@@ -9,7 +9,7 @@
 */
 
 #include <JuceHeader.h>
-#include "alertWindowComponent.h"
+#include "AlertWindowComponent.h"
 #include "MainComponent.h"
 
 //==============================================================================
