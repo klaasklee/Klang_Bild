@@ -45,7 +45,7 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
     {
         if (rmsMaxNumOfValues < rmsNumOfCurrentValues)
         {
-            // nächstes bufferToFill Sample auslesen
+            // nächstes bufferToFill Sample auslesen beider channels
             
             // rmsSumOfCurrentValuesSquare = rmsSumOfCurrentValuesSquare + bufferToFillSample^2
             
