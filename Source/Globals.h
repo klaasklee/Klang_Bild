@@ -14,7 +14,7 @@
 
 const float globalSampleRate = 48000.0;
 
-const float volumeOnStartUp = 0.5f;
+const float volumeOnStartUp = 0.8f;
 
 const int numOfLayers = 5;
 
