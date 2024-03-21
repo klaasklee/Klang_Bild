@@ -32,6 +32,8 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioMeterComponent)
     
     // amount of samples I need to update the levelMeter about every 24 seconds
-    const int rmsIMax = globalSampleRate/24;
-    juce::AudioSampleBuffer rmsValues;
+    const int rmsMaxNumOfValues = globalSampleRate/24;
+    
+    int rmsNumOfCurrentValues;
+    float rmsSumOfCurrentValuesSquare;
 };

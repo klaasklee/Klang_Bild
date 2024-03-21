@@ -13,8 +13,6 @@
 //==============================================================================
 AudioMeterComponent::AudioMeterComponent()
 {
-    // set size of rmsValues
-    rmsValues.setSize(2, rmsIMax);
 }
 
 AudioMeterComponent::~AudioMeterComponent()
@@ -38,17 +36,25 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
 {
 //    DBG("updateAudioMeter");
     
-    // solange in rmsValues samples reinpassen
-        // bufferToFillSamples nach rmsValues
+    int numBufferSamples = bufferToFill.numSamples;
+    
+    // solange rmsMaxNumOfValues nicht überschritten oder buffer leer
+        // nächstes bufferToFillSamples auslesen
+        // rmsSumOfCurrentValuesSquare = rmsSumOfCurrentValuesSquare + bufferToFillSample^2
+        // increment rmsNumOfCurrentValues
+    
     // wenn voll
-        // rms Calc
-        // update GUI
+        // rms Calc von beiden channels
+            // all values^2
+            // devidet by rmsValues (besser eigene int dafür (akkurater))
+            // root of all
+        // update GUI von beiden channels
     // resetAudioMeter()
 }
 void AudioMeterComponent::resetAudioMeter()
 {
 //    DBG("resetAudioMeter");
-    rmsValues.clear();
+    rmsSumOfCurrentValuesSquare = 0;
 }
 
 void AudioMeterComponent::resized()

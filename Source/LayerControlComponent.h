@@ -54,14 +54,20 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    //Knobs
+    // Knobs
     juce::Slider sGain;
     juce::Slider sPan;
+    
+    // MUTE
+    bool layerMute = false;
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerControlComponent)
     
     juce::ComboBox BlendModeDropdown;
+    
+    juce::ToggleButton bMute;
+    void bMuteClicked();
     
     //styling - lookAndFeel
     LookAndFeel001 LookAndFeel001;

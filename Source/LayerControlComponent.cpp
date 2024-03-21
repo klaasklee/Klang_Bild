@@ -25,7 +25,7 @@ LayerControlComponent::LayerControlComponent()
     sGain.setTextValueSuffix(" dB gain");
     sGain.addListener(this);
     sGain.setLookAndFeel(&LookAndFeel001);
-    sGain.setBounds(30, 47, 100, 60);
+    sGain.setBounds(30, 55, 100, 60);
     addAndMakeVisible(sGain);
     
     //Pan Knob
@@ -38,7 +38,7 @@ LayerControlComponent::LayerControlComponent()
     sPan.setTextValueSuffix(" pan");
     sPan.addListener(this);
     sPan.setLookAndFeel(&LookAndFeel001);
-    sPan.setBounds(120, 47, 100, 60);
+    sPan.setBounds(120, 55, 100, 60);
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
@@ -53,6 +53,14 @@ LayerControlComponent::LayerControlComponent()
     addAndMakeVisible(BlendModeDropdown);
 
     BlendModeDropdown.setSelectedId(1);
+    
+    // muteButton
+    bMute.setButtonText("Mute");
+    bMute.setLookAndFeel(&LookAndFeel001);
+    bMute.onClick = [this] { bMuteClicked(); };
+    bMute.setEnabled(true);
+    bMute.setBounds(50, 15, 100, 30);
+    addAndMakeVisible(bMute);
 }
 
 LayerControlComponent::~LayerControlComponent()
@@ -69,4 +77,10 @@ void LayerControlComponent::paint (juce::Graphics& g)
 void LayerControlComponent::resized()
 {
     
+}
+
+void LayerControlComponent::bMuteClicked()
+{
+    layerMute = bMute.getToggleState();
+    std::cout << "layerMute: " << bMute.getToggleState() << std::endl;
 }
