@@ -19,7 +19,7 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sVolumeDial.setRange(0.0, 1.0);
-    sVolumeDial.setValue(0.5);
+    sVolumeDial.setValue(volumeOnStartUp);
     sVolumeDial.setDoubleClickReturnValue(true, 0.5);
     sVolumeDial.setNumDecimalPlacesToDisplay(2);
     sVolumeDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
