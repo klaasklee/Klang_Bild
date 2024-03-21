@@ -14,7 +14,10 @@
 
 const float globalSampleRate = 48000.0;
 
+const float volumeOnStartUp = 0.5f;
+
 const int numOfLayers = 5;
+
 const int layerHeight = 200;
 const int layerControlW = 250;
 const int waveBorder = 15;
