@@ -37,11 +37,26 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
 //    DBG("updateAudioMeter");
     
     int numBufferSamples = bufferToFill.numSamples;
+    const float* readL = bufferToFill.buffer->getReadPointer(0);
+    const float* readR = bufferToFill.buffer->getReadPointer(1);
     
     // solange rmsMaxNumOfValues nicht überschritten oder buffer leer
-        // nächstes bufferToFillSamples auslesen
-        // rmsSumOfCurrentValuesSquare = rmsSumOfCurrentValuesSquare + bufferToFillSample^2
-        // increment rmsNumOfCurrentValues
+    for (int i = 0; i < numBufferSamples; i++)
+    {
+        if (rmsMaxNumOfValues < rmsNumOfCurrentValues)
+        {
+            // nächstes bufferToFill Sample auslesen
+            
+            // rmsSumOfCurrentValuesSquare = rmsSumOfCurrentValuesSquare + bufferToFillSample^2
+            
+            // increment rmsNumOfCurrentValues
+            rmsNumOfCurrentValues ++;
+        }
+        else
+        {
+            return;
+        }
+    }
     
     // wenn voll
         // rms Calc von beiden channels

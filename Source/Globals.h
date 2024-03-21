@@ -69,8 +69,8 @@ namespace GlobalColors {
 }
 
 namespace GlobalFonts {
-//const juce::Font titleFont = juce::Font("Eastman Roman Alt", "Regular", 40.0f);
-const juce::Font mainFont = juce::Font(20.0f);
+const juce::Font titleFont = juce::Font("Eastman Roman Alt", "Regular", 40.0f);
+const juce::Font mainFont = juce::Font("Eastman Roman Alt", "Regular", 20.0f);
 }
 
 //==============================================================================

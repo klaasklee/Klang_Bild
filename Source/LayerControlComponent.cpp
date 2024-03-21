@@ -59,7 +59,7 @@ LayerControlComponent::LayerControlComponent()
     bMute.setLookAndFeel(&LookAndFeel001);
     bMute.onClick = [this] { bMuteClicked(); };
     bMute.setEnabled(false);
-    bMute.setBounds(50, 15, 100, 30);
+    bMute.setBounds(50, 15, 70, 30);
     addAndMakeVisible(bMute);
 }
 
