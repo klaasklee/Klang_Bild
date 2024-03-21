@@ -38,9 +38,8 @@ public:
     // trotzdem mache ich das erstmal wie besprochen, weil das dann einfacher ist :) 
     int playPos;
     bool fileLoaded;
-    int playOffset = 0;
     int playOffsetInSamples = 0;
-    
+    int playOffsetInPx = 0;
     int waveBorder = 15;
 
 
@@ -65,8 +64,10 @@ private:
     std::vector<float> audioPoints;
     
     // moving waveforms
-    bool boolMouseDrag;
+    bool boolMouseDrag = false;
     int mouseDownX;
+    bool blockDrag = true;
 
-    
+
+
 };

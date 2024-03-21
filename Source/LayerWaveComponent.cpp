@@ -25,8 +25,6 @@ LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
     addAndMakeVisible(&openButton);
     
     formatManager.registerBasicFormats(); //now we can read wav and aiff formats
-
-    //playBuffer.setSize(2, 1000);
 }
 
 LayerWaveComponent::~LayerWaveComponent()
@@ -37,41 +35,36 @@ LayerWaveComponent::~LayerWaveComponent()
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::darkgrey);   // clear the background
-    
-    // draws waveform if audio is loadet to playBuffer
-    // not very performative right now, draws waveforms too frequently
-    int spls = playBuffer.getNumSamples();
 
-    if (updateWaveform < 1 && fileLoaded)//playBuffer.getNumSamples() > 0)
+    if (updateWaveform < 1 && fileLoaded)
     {
         p.clear();
         audioPoints.clear();
-//        int ratio = (playBuffer.getNumSamples()/(getWidth()-waveBorder*2));
         int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
         auto buffer = playBuffer.getReadPointer(0);
+
+        DBG("update waveform");
+        //DBG(playBuffer.getNumSamples());
+        //DBG(ratio);
+
+
         // scale audio on x axis
         for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
         {
             audioPoints.push_back(buffer[sample]);
-//            DBG(playBuffer.getNumSamples());
-//            DBG(getWidth());
-//            DBG("ratio");
-//            DBG(ratio);
-//            DBG("audioPointsSize: ");
-//            DBG(audioPoints.size());
         }
         
-        p.startNewSubPath(playOffset+waveBorder, getHeight()/2);
+        p.startNewSubPath(playOffsetInPx+waveBorder, getHeight()/2);
         
         // scale audio on y axis
         for (int sample = 0; sample < audioPoints.size(); ++sample)
         {
             auto point = juce::jmap<float>(audioPoints[sample], -1.0f, 1.0f, getHeight()-waveBorder, 0+waveBorder);
-            p.lineTo(sample+waveBorder+playOffset, point);
+            p.lineTo(sample+waveBorder+playOffsetInPx, point);
         }
-        
-        rect.setBounds(waveBorder+playOffset, waveBorder, p.getBounds().getRight()-playOffset-waveBorder, getHeight()-waveBorder*2);
-        
+
+        rect.setBounds(waveBorder+playOffsetInPx, waveBorder, p.getBounds().getRight()-playOffsetInPx-waveBorder, getHeight()-waveBorder*2);
+
         g.setColour(juce::Colours::black);
         g.fillRoundedRectangle(rect, 3);
         
@@ -80,10 +73,9 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         
         g.setColour(juce::Colours::white);
         g.drawRoundedRectangle(rect, 7, 3);
-        
-        
+
     }
-    else if (playBuffer.getNumSamples() > 0)
+    else if (fileLoaded)
     {
         g.setColour(juce::Colours::black);
         g.fillRoundedRectangle(rect, 3);
@@ -105,6 +97,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 void LayerWaveComponent::openButtonClicked()
 {
 //    DBG("openButton");
+    blockDrag = true;
     importAudio();
 }
 
@@ -136,7 +129,7 @@ void LayerWaveComponent::importAudio()
             fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playBuffer.setSize((int)reader->numChannels, lengthInSamples);
             playPos = 0;
-            playOffset = 0;
+            playOffsetInPx = 0;
             playOffsetInSamples = 0;
 
             //reads data into the fileBuffer
@@ -162,8 +155,9 @@ void LayerWaveComponent::importAudio()
                     0,                             //  start copy position in input buffer
                     lengthInSamples);              //  number of samples to copy
             }
-            fileLoaded = true;
 
+
+            fileLoaded = true;
 
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
 
@@ -171,10 +165,11 @@ void LayerWaveComponent::importAudio()
 
             DBG(reader->getFormatName());
 
+            blockDrag = false;
+
             updateWaveform = 0;
 
             repaint();
-
         }
     }
 }
@@ -218,11 +213,11 @@ void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer
 void LayerWaveComponent::mouseDrag(const juce::MouseEvent& event)
 {
 //    DBG("mouse drag");
-    if (!boolMouseDrag)
+    if (!boolMouseDrag && !blockDrag)
     {
         mouseDownX = event.getMouseDownX();
+        boolMouseDrag = true;
     }
-    boolMouseDrag = true;
 }
 void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
 {
@@ -239,12 +234,12 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
         
         // todo: nur wenn das sample nicht komplett aus dem fenster verschwindet verschieben
     
-        playOffset = playOffset + distance;
+        playOffsetInPx = playOffsetInPx + distance;
         
         int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
-//        playOffsetInSamples = -playOffset * ratio;
+//        playOffsetInSamples = -playOffsetInPx * ratio;
         
-        updateWaveform = 1;
+        updateWaveform = 0;
         repaint();
         
         boolMouseDrag = false;
