@@ -100,8 +100,6 @@ private:
         }
     }
 
-    void applyGainForAllTracks(int lengthInSamples, int numActiveLayers, int activeLayerIndexes[], bool applyRevert);
-
     //Components
     ControlBarComponent ControlBar;
     PlayHeadRulerComponent PlayHeadRuler;

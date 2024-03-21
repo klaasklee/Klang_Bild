@@ -69,27 +69,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
         }
 
-        // apply gain and pan for all active layers
-        //applyGainForAllTracks(lengthInSamples, numActiveLayers, activeLayerIndexes, true);
-
         if (numActiveLayers > 0) {
-
-            // always copy the last active layer to the outBuffer.
-            //int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer.getNumSamples() - playPosInSamples;
-            //if (samplesLeftToPlay > 0) {
-            //    for (int ch = 0; ch < numChannels; ch++) {
-            //        outBuffer.copyFrom(ch,                                                              //  destination buffer channel index
-            //            0,                                                                              //  sample offset in output buffer
-            //            LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playBuffer,       //  source buffer
-            //            ch % numChannels,                                                               //  channel of input buffer
-            //            (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[0]].LayerWave.playOffsetInSamples),          //  start copy position in input buffer
-            //            std::min(lengthInSamples, samplesLeftToPlay));                                                               //  number of samples to copy
-            //    }
-            //}
-            //else
-            //{
-            //    outBuffer.clear();
-            //}
 
             outBuffer.clear();
 
@@ -146,10 +126,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
             });
         }
-
-
-        // revert gain application and pan for all active layers
-        //applyGainForAllTracks(lengthInSamples, numActiveLayers, activeLayerIndexes, false);
 
         if (state == Export)
         {
@@ -215,32 +191,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 }
 
 
-void MainComponent::applyGainForAllTracks(int lengthInSamples, int numActiveLayers, int activeLayerIndexes[], bool applyRevert) {
-    for (int i = 0; i < numActiveLayers; i++) {
-        float gain, pan;
-        gain = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.gain;
-        pan = 2 * (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.pan - 0.5);
-        int samplesLeftToPlay = LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.getNumSamples() - playPosInSamples;
-
-        if (samplesLeftToPlay < lengthInSamples)
-        {
-            int a = 1;
-        }
-
-        if (samplesLeftToPlay > 0) {
-            int playPos;
-            playPos = playPosInSamples;
-            for (int ch = 0; ch < globalNumChannels; ch++) {
-                double gainFactor = 2 * (1 - (std::pow(-1, ch)) * pan);
-                if (applyRevert) //apply
-                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos, std::min(lengthInSamples, samplesLeftToPlay), (gainFactor * gain));
-                else //revert
-                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playBuffer.applyGain(ch, playPos - lengthInSamples, std::min(lengthInSamples, samplesLeftToPlay), 1 / (gainFactor * gain));
-            }
-        }
-    }
-}
-
 void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
 {
     int numChannelsA = layerA.getNumChannels();
@@ -257,7 +207,7 @@ void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, LayerComponent
     for (int ch = 0; ch < numChannelsA; ch++)
     {
         float gain = layerB.LayerControl.channelGain[ch];
-        if (samplesLeftToPlay > 0)
+        if (samplesLeftToPlay > 0 && playPosB >= 0)
         {
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
             writeOut = outLayer.getWritePointer(ch);
@@ -299,7 +249,7 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponen
     for (int ch = 0; ch < numChannelsA; ch++)
     {
         float gain = layerB.LayerControl.channelGain[ch];
-        if (samplesLeftToPlay > 0)
+        if (samplesLeftToPlay > 0 && playPosB >= 0)
         {
             readA = layerA.getReadPointer(ch, playPosA);
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
@@ -345,7 +295,7 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponen
     for (int ch = 0; ch < numChannelsA; ch++)
     {
         float gain = layerB.LayerControl.channelGain[ch];
-        if (samplesLeftToPlay > numSamples)
+        if (samplesLeftToPlay > numSamples && playPosB >= 0)
         {
             readA = layerA.getReadPointer(ch, playPosA);
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
@@ -356,10 +306,10 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponen
             double powerB = 0;
             double powerBNextBlock = 0;
             for (int i = 0; i < numSamples; i++) {
-                powerB += (*readB) * ((*readB++)) * gain * gain;
+                powerB += (*readB) * ((*readB++));
             }
             for (int i = 0; i < numSamples; i++) {
-                powerBNextBlock += (*readB) * ((*readB++)) * gain * gain;
+                powerBNextBlock += (*readB) * ((*readB++));
             }
             powerB /= numSamples;
             powerBNextBlock /= numSamples;
@@ -368,8 +318,10 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponen
             for (int i = 0; i < numSamples; i++) {
                 double x;
                 x = i * ((powerBNextBlock - powerB) / numSamples);
-                *writeOut++ = (*readA++) * ((powerB + x) + offset) * intensity;
-                //*writeOut++ = *readA++ * (powerB + offset) * intensity;
+                *writeOut++ = (*readA++) * (((powerB + x) + offset) * intensity * gain);
+                //*writeOut++ = std::sqrt(((*readA) * (*readA++)) - 0*(((powerB + x) + offset) * intensity * gain));
+                //*writeOut++ = std::sqrt(*readA * (*readA));
+                //readA++;
             }
         }
         else { // if one track is finished, just copy the other one to output

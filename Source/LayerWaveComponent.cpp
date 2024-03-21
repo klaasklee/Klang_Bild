@@ -237,7 +237,7 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
         playOffsetInPx = playOffsetInPx + distance;
         
         int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
-//        playOffsetInSamples = -playOffsetInPx * ratio;
+        playOffsetInSamples = -playOffsetInPx * ratio;
         
         updateWaveform = 0;
         repaint();
