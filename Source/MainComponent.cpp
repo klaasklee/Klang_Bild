@@ -74,17 +74,21 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             outBuffer.clear();
 
 
+
             // calculate blend modes, if there are at least two active layers
             // for only one active layer, the loop will be skipped
             for (int i = 0; i < numActiveLayers; i++) {
-                functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
-                calcBlendMode(outBuffer,
-                    LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]],
-                    outBuffer,
-                    lengthInSamples,
-                    nullInt,
-                    (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playOffsetInSamples));
+                if (!LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.layerMute) {
+                    functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
+                    calcBlendMode(outBuffer,
+                        LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]],
+                        outBuffer,
+                        lengthInSamples,
+                        nullInt,
+                        (playPosInSamples + LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerWave.playOffsetInSamples));
+                }
             }
+
 
             //copy the calculation result to output (bufferToFill)
             for (int ch = 0; ch < numChannels; ch++) {
