@@ -59,7 +59,7 @@ private:
     void resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate,  float destSampleRate);
     
     //drawing Waveforms
-    bool updateWaveform = false;
+    int updateWaveform = 2;
     juce::Path p;
     juce::Rectangle<float> rect;
     std::vector<float> audioPoints;
@@ -67,5 +67,6 @@ private:
     // moving waveforms
     bool boolMouseDrag;
     int mouseDownX;
+
     
 };

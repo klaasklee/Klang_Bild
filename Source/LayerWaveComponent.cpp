@@ -25,6 +25,8 @@ LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
     addAndMakeVisible(&openButton);
     
     formatManager.registerBasicFormats(); //now we can read wav and aiff formats
+
+    //playBuffer.setSize(2, 1000);
 }
 
 LayerWaveComponent::~LayerWaveComponent()
@@ -38,7 +40,9 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     // draws waveform if audio is loadet to playBuffer
     // not very performative right now, draws waveforms too frequently
-    if (updateWaveform == true && playBuffer.getNumSamples() > 0)
+    int spls = playBuffer.getNumSamples();
+
+    if (updateWaveform < 1 && fileLoaded)//playBuffer.getNumSamples() > 0)
     {
         p.clear();
         audioPoints.clear();
@@ -77,7 +81,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         g.setColour(juce::Colours::white);
         g.drawRoundedRectangle(rect, 7, 3);
         
-        updateWaveform = false;
+        
     }
     else if (playBuffer.getNumSamples() > 0)
     {
@@ -95,6 +99,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
+    updateWaveform++;
 }
 
 void LayerWaveComponent::openButtonClicked()
@@ -124,8 +129,8 @@ void LayerWaveComponent::importAudio()
         
         if (reader != nullptr)
         {
-            duration = (float) reader->lengthInSamples / reader->sampleRate;
-            
+            duration = (float)reader->lengthInSamples / reader->sampleRate;
+
             // save audio to Audio buffer
             int lengthInSamples = (int)reader->lengthInSamples;
             fileBuffer.setSize((int)reader->numChannels, lengthInSamples);
@@ -133,7 +138,7 @@ void LayerWaveComponent::importAudio()
             playPos = 0;
             playOffset = 0;
             playOffsetInSamples = 0;
-            
+
             //reads data into the fileBuffer
             reader->read(&fileBuffer,
                 0,                              //destination start sample
@@ -141,11 +146,11 @@ void LayerWaveComponent::importAudio()
                 0,                              //reader start sample
                 true,                           //use right channel
                 true);                          //use left channel
-            
-            
+
+
             // todo: resample to correct samplerate before loading to RAM
-            
-            
+
+
             auto numChannels = fileBuffer.getNumChannels();
 
             //copy audio from fileBuffer to playBuffer, with zero shift initially
@@ -161,14 +166,15 @@ void LayerWaveComponent::importAudio()
 
 
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
-            
- //          setAudioChannels (0, (int) reader->numChannels);
-            
+
+            //          setAudioChannels (0, (int) reader->numChannels);
+
             DBG(reader->getFormatName());
-            
-            updateWaveform = true;
-            
+
+            updateWaveform = 0;
+
             repaint();
+
         }
     }
 }
@@ -238,7 +244,7 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
         int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
 //        playOffsetInSamples = -playOffset * ratio;
         
-        updateWaveform = true;
+        updateWaveform = 1;
         repaint();
         
         boolMouseDrag = false;
@@ -247,6 +253,6 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
 
 void LayerWaveComponent::resized()
 {
-    updateWaveform = true;
+    updateWaveform = 1;
     openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
 }

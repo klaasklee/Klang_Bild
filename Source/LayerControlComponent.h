@@ -27,6 +27,8 @@ public:
     //public variables of Layer Control
     float gain;
     float pan;
+    float channelGain[globalNumChannels];
+
     BlendModes selectedBlendMode;
     
     void sliderValueChanged (juce::Slider* slider) override
@@ -41,6 +43,11 @@ public:
             pan = 0.005 + 0.99*sPan.getValue(); // avoid extrene pan to be able to restore applyGain()
             std::cout << "pan: " << pan << std::endl;
         }
+
+        for (int ch = 0; ch < globalNumChannels; ch++) {
+            channelGain[ch] = gain * 2 * (1 - ((std::pow(-1, ch)) * 2 * (pan - 0.5)));
+        }
+        
     }
 
     void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override
