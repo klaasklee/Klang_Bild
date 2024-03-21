@@ -228,28 +228,21 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
 //        DBG(event.getPosition().getX());
         
         int distance = event.getPosition().getX() - mouseDownX;
+//        DBG("distance: ");
+//        DBG(distance);
         
         // todo: nur wenn das sample nicht komplett aus dem fenster verschwindet verschieben
-        
+    
         playOffset = playOffset + distance;
-
-//        int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
-//        playOffsetInSamples = playOffset * ratio;
-//        offsetPlayBuffer();
         
-        DBG("distance: ");
-        DBG(distance);
+        int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
+//        playOffsetInSamples = -playOffset * ratio;
         
         updateWaveform = true;
         repaint();
         
         boolMouseDrag = false;
     }
-}
-
-void LayerWaveComponent::offsetPlayBuffer()
-{
-     
 }
 
 void LayerWaveComponent::resized()
