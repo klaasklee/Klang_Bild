@@ -10,8 +10,10 @@
       <FILE id="YdujAk" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="sUdWAx" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
-      <FILE id="w5BRZw" name="KeyListener.h" compile="0" resource="0" file="Source/KeyListener.h"/>
-      <FILE id="pxWVPM" name="KeyListener.cpp" compile="1" resource="0" file="Source/KeyListener.cpp"/>
+      <FILE id="vQmFYF" name="KeyListenerComponent.h" compile="0" resource="0"
+            file="Source/KeyListenerComponent.h"/>
+      <FILE id="JuTURr" name="KeyListenerComponent.cpp" compile="1" resource="0"
+            file="Source/KeyListenerComponent.cpp"/>
       <FILE id="haNnna" name="AlertWindowComponent.h" compile="0" resource="0"
             file="Source/AlertWindowComponent.h"/>
       <FILE id="rKyZmz" name="AlertWindowComponent.cpp" compile="1" resource="0"

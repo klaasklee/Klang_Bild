@@ -512,6 +512,21 @@ void MainComponent::transportStateChanged(TransportState newState)
     }
 }
 
+void MainComponent::toggleTransportPlayPause()
+{
+    DBG("transportToggle");
+    
+//    transportStateChanged(Stop);
+//    if (state == TransportState::Play || state == TransportState::Export)
+//    {
+//        DBG("toggle state zu Pause");
+//    }
+//    else if (state == TransportState::Pause || state == TransportState::Stop)
+//    {
+//        DBG("toggle state zu Play");
+//    }
+}
+
 void MainComponent::setVolume(float volume)
 {
     globalVolume = volume;
