@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "AlertWindowComponent.h"
 
 //==============================================================================
 /*
@@ -31,4 +32,6 @@ private:
 
     juce::TextButton bSetTimeLineSize;
     
+
+    void showSetTimeLineSizeAlertWindow();
 };
