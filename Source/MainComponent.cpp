@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 //==============================================================================
-MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "New Timeline Size:", "in seconds:  ", AlertWindows::SetTimeLineSizeWindow), ExportAlertWindow("OK", "CANCEL", "Export:", "filename: ", AlertWindows::ExportWindow)
+MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Timeline Size:", "in seconds:  ", AlertWindows::SetTimeLineSizeWindow), ExportAlertWindow("OK", "CANCEL", "Export:", "filename: ", AlertWindows::ExportWindow)
 {
     setSize (1200, 800);
     

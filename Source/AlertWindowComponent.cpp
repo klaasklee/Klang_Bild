@@ -80,7 +80,7 @@ void AlertWindowComponent::b1Clicked()
 // CancelButton clicked
 void AlertWindowComponent::b2Clicked()
 {
-    DBG("export canceled");
+    DBG("AlertWindow canceled");
     if (windowType == ExportWindow)
     {
         findParentComponentOfClass<MainComponent>()->killExportAlertWindow();
