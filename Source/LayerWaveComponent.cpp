@@ -74,6 +74,9 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         
         g.setColour(juce::Colours::white);
         g.drawRoundedRectangle(rect, 7, 3);
+        
+        g.setColour(juce::Colours::darkred);
+        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-5, 20, juce::Justification::centred);
 
     }
     else if (fileLoaded)
@@ -86,6 +89,9 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         
         g.setColour(juce::Colours::white);
         g.drawRoundedRectangle(rect, 7, 3);
+        
+        g.setColour(juce::Colours::darkred);
+        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-5, 20, juce::Justification::centred);
         
     }
     
@@ -157,7 +163,7 @@ void LayerWaveComponent::importAudio()
                     lengthInSamples);              //  number of samples to copy
             }
 
-
+            fileName = file.getFileName();
             fileLoaded = true;
 
             findParentComponentOfClass<MainComponent>()->transportStateChanged(MainComponent::Stop);
@@ -165,6 +171,7 @@ void LayerWaveComponent::importAudio()
             //          setAudioChannels (0, (int) reader->numChannels);
 
             DBG(reader->getFormatName());
+            DBG(file.getFileName());
 
             blockDrag = false;
 
@@ -232,8 +239,6 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
         int distance = event.getPosition().getX() - mouseDownX;
 //        DBG("distance: ");
 //        DBG(distance);
-        
-        // todo: nur wenn das sample nicht komplett aus dem fenster verschwindet verschieben
     
         playOffsetInPx = playOffsetInPx + distance;
         

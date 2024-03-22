@@ -605,11 +605,13 @@ void MainComponent::setTimeLineSize(int i)
 {
     timeLineSize = i;
     
-    int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
-    LayersViewPort.LayersContainer.Layers[0].LayerWave.playOffsetInPx = -LayersViewPort.LayersContainer.Layers[0].LayerWave.playOffsetInSamples / ratio;
-    
-    
-    LayersViewPort.LayersContainer.Layers[0].LayerWave.updateWaveform = true;
+    for (int i = 0; i < numOfLayers; i++)
+    {
+        int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[i].LayerWave.getWidth() - waveBorder * 2));
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.playOffsetInPx = -LayersViewPort.LayersContainer.Layers[i].LayerWave.playOffsetInSamples / ratio;
+        LayersViewPort.LayersContainer.Layers[i].LayerWave.updateWaveform = true;
+    }
+
     killExportAlertWindow();
 }
 
