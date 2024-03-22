@@ -64,6 +64,8 @@ private:
     juce::Rectangle<float> rect;
     std::vector<float> audioPoints;
     
+    juce::String fileName = "";
+    
     // moving waveforms
     bool boolMouseDrag = false;
     int mouseDownX;
