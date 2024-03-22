@@ -42,7 +42,7 @@ LayerControlComponent::LayerControlComponent()
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
-    for (int i = 0; i < static_cast<int>(BlendModes::Duck)+1; i++)
+    for (int i = 0; i < static_cast<int>(BlendModes::Binary)+1; i++)
     {
         BlendModeDropdown.addItem(getBlendModeName(static_cast<BlendModes>(i)), i+1);
     }

@@ -341,6 +341,52 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponen
     //playPosB += numSamples;
 }
 
+void MainComponent::blendModeBinary(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
+{
+    int numChannelsA = layerA.getNumChannels();
+    int numChannelsB = layerB.LayerWave.playBuffer.getNumChannels();
+
+    const float* readA;
+    const float* readB;
+    float* writeOut;
+
+    jassert(numChannelsA == numChannelsB);
+
+    int samplesLeftToPlay = layerB.LayerWave.playBuffer.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
+
+    for (int ch = 0; ch < numChannelsA; ch++)
+    {
+        float gain = layerB.LayerControl.channelGain[ch];
+        if (samplesLeftToPlay > 0 && playPosB >= 0)
+        {
+            readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
+            writeOut = outLayer.getWritePointer(ch);
+            readA = layerA.getReadPointer(ch, playPosA);
+
+            for (int i = 0; i < numSamples; i++) {
+                // perform adding
+                float accuracyFactor = 1e6;
+                long a = (long) (accuracyFactor  * (*readA++));
+                long b = (long) (accuracyFactor  * (*readB++) * gain);
+                *writeOut++ = (float)((a ^ ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+            }
+        }
+        else { // if one track is finished, just copy the other one to output
+            writeOut = outLayer.getWritePointer(ch);
+            readA = layerA.getReadPointer(ch, playPosA);
+
+            for (int i = 0; i < numSamples; i++) {
+                *writeOut++ = *readA++;
+            }
+        }
+
+    }
+    // do not increment playPosA as it is always the outBuffer!
+    //playPosA += numSamples;
+    //playPosB += numSamples;
+}
+
+
 void MainComponent::transportStateChanged(TransportState newState)
 {
     if (newState != state)
