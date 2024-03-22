@@ -32,9 +32,9 @@ public:
     //Volume
     juce::Slider sVolumeDial;
     //State Buttons
-    juce::ToggleButton bPlay;
-    juce::ToggleButton bPause;
-    juce::ToggleButton bStop;
+    juce::TextButton bPlay;
+    juce::TextButton bPause;
+    juce::TextButton bStop;
 
     juce::ToggleButton bLoop;
     

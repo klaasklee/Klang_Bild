@@ -7,6 +7,10 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     setSize (1200, 800);
     
     timeLineSize = timeLineSizeOnStartUp;
+    
+    // init KeyListener
+    addKeyListener(&globalKeyListener);
+    setWantsKeyboardFocus(true); // Ensure this component can receive keyboard focus
 
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(PlayHeadRuler);
@@ -122,7 +126,14 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                     // calls transportStateChanged() asyncon bec og changing some GUI elements etc...
                     juce::MessageManager::callAsync([=]()
                     {
-                        transportStateChanged(Stop);
+                        if (state = Export)
+                        {
+                            toggleExportState();
+                        }
+                        else
+                        {
+                            transportStateChanged(Stop);
+                        }
                     });
                 }                
             }
@@ -177,6 +188,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         
         int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
+        playHeadPos = playPosInSamples/ratio;
         
         // update Timecode + PlayHead
         juce::MessageManager::callAsync([=]()
@@ -470,14 +482,11 @@ void MainComponent::transportStateChanged(TransportState newState)
     if (newState != state)
     {
         state = newState;
-
+        
         switch (state) {
             case Stop:
-                ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(false);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(false);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
                 
@@ -487,21 +496,16 @@ void MainComponent::transportStateChanged(TransportState newState)
                 DBG("state = stop");
                 break;
             case Play:
-                ControlBar.bPlay.setEnabled(false);
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(true);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                
                 DBG("state = play");
                 break;
             case Pause:
-                ControlBar.bPlay.setEnabled(true);
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(false);
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
                 
@@ -511,17 +515,30 @@ void MainComponent::transportStateChanged(TransportState newState)
                 DBG("state = pause");
                 break;
             case Export:
-                ControlBar.bPlay.setEnabled(false);
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.bPause.setEnabled(true);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.bStop.setEnabled(true);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::red);
+                
                 DBG("state = export");
                 break;
         }
     }
+}
+
+void MainComponent::toggleTransportPlayPause()
+{
+    DBG("transportToggle");
+    
+//    transportStateChanged(Stop);
+//    if (state == TransportState::Play || state == TransportState::Export)
+//    {
+//        DBG("toggle state zu Pause");
+//    }
+//    else if (state == TransportState::Pause || state == TransportState::Stop)
+//    {
+//        DBG("toggle state zu Play");
+//    }
 }
 
 void MainComponent::setVolume(float volume)
@@ -629,7 +646,7 @@ void MainComponent::setPlayHeadPos(int pos)
     // set Pos only works insite the actual drawn wave
     // when the edge is clicked, the playhead moves to the very left or right
     
-//    transportStateChanged(Stop);
+    transportStateChanged(Stop);
     
     int layersWaveBorder = waveBorder;
     int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();

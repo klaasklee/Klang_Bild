@@ -72,7 +72,14 @@ void AlertWindowComponent::b1Clicked()
         juce::String string = textEditor.getText();
         DBG(infoText+string);
         int timeLineSize = string.getIntValue();
-        findParentComponentOfClass<MainComponent>()->setTimeLineSize(timeLineSize);
+        if (timeLineSize > 0)
+        {
+            findParentComponentOfClass<MainComponent>()->setTimeLineSize(timeLineSize);
+        }
+        else
+        {
+            DBG("timeLineSize to smal");
+        }
         findParentComponentOfClass<MainComponent>()->killSetTimeLineSizeAlertWindow();
     }
     

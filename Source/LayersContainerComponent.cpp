@@ -20,6 +20,12 @@ LayersContainerComponent::LayersContainerComponent()
         addAndMakeVisible(Layers[i]);
         Layers[i].layerIndex = index;
         index--;
+        
+        // sets lowest Layer as baseLayer
+        if (i == numOfLayers-1)
+        {
+            Layers[i].LayerControl.removeChildComponent(&Layers[i].LayerControl.BlendModeDropdown);
+        }
     }
 }
 

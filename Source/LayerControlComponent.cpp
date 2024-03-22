@@ -11,10 +11,12 @@
 #include <JuceHeader.h>
 #include "LayerControlComponent.h"
 #include "Globals.h"
+#include "LayerComponent.h"
 
 //==============================================================================
 LayerControlComponent::LayerControlComponent()
 {
+    
     //Gain Knob
     sGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sGain.setRange(0.0, 1.0);
@@ -50,6 +52,7 @@ LayerControlComponent::LayerControlComponent()
 
     BlendModeDropdown.setJustificationType(juce::Justification::centred);
     BlendModeDropdown.setBounds(55, 130, 140, 30);
+    
     addAndMakeVisible(BlendModeDropdown);
 
     BlendModeDropdown.setSelectedId(1);

@@ -7,6 +7,8 @@
 #include "PlayHeadComponent.h"
 #include "PlayHeadRulerComponent.h"
 
+#include "KeyListenerComponent.h"
+
 
 //==============================================================================
 /*
@@ -43,6 +45,8 @@ public:
     TransportState state;
     
     void transportStateChanged(TransportState newState);
+    
+    void toggleTransportPlayPause();
     
     void setTransportLoop(bool b);
     
@@ -134,6 +138,8 @@ private:
     AlertWindowComponent ExportAlertWindow;
     
     juce::AudioSampleBuffer outBuffer;
+    
+    KeyListenerComponent globalKeyListener;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 
