@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+MainComponent::MainComponent() : ExportAlertWindow("OK", "CANCEL", "Export:", "filename: ")
 {
     setSize (1200, 800);
 

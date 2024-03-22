@@ -14,9 +14,11 @@
 #include "MainComponent.h"
 
 //==============================================================================
-PlayHeadRulerComponent::PlayHeadRulerComponent()
+PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timeline length")
 {
-
+    bSetTimeLineSize.onClick = [this] { ; };
+    bSetTimeLineSize.setBounds(waveBorder, 5, layerControlW-waveBorder*2, 20);
+    addAndMakeVisible(&bSetTimeLineSize);
 }
 
 
@@ -60,5 +62,4 @@ void PlayHeadRulerComponent::mouseDown(const juce::MouseEvent& event)
 
 void PlayHeadRulerComponent::resized()
 {
-
 }

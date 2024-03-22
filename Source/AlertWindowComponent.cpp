@@ -13,8 +13,11 @@
 #include "MainComponent.h"
 
 //==============================================================================
-AlertWindowComponent::AlertWindowComponent() : b1(b1Txt), b2(b2Txt)
+AlertWindowComponent::AlertWindowComponent(juce::String b1Txt, juce::String b2Txt, juce::String headerTxt, juce::String infoTxt) : b1(b1Txt), b2(b2Txt)
 {
+    infoText = infoTxt;
+    headerText = headerTxt;
+    
     b1.onClick = [this] { b1Clicked(); };
     b1.setBounds(40, 200, 100, 50);
     addAndMakeVisible(b1);
@@ -39,9 +42,9 @@ void AlertWindowComponent::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::black);
     g.setFont (35.0f);
-    g.drawText ("Export", 0, 30, getWidth(), 30, juce::Justification::centred, true);   // draw some placeholder text
+    g.drawText (headerText, 0, 30, getWidth(), 30, juce::Justification::centred, true);
     g.setFont (18.0f);
-    g.drawText ("filename:", 0, 70, getWidth(), 20, juce::Justification::centred, true);   // draw some placeholder text
+    g.drawText (infoText, 0, 70, getWidth(), 20, juce::Justification::centred, true);
     
 }
 
