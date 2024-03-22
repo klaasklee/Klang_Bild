@@ -2,9 +2,11 @@
 #include "Globals.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Timeline Size:", "in seconds:  ", AlertWindows::SetTimeLineSizeWindow), ExportAlertWindow("OK", "CANCEL", "Export:", "filename: ", AlertWindows::ExportWindow)
 {
     setSize (1200, 800);
+    
+    timeLineSize = timeLineSizeOnStartUp;
 
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(PlayHeadRuler);
@@ -587,9 +589,26 @@ void MainComponent::exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::St
     }
 }
 
-void MainComponent::killAlertWindow()
+void MainComponent::killExportAlertWindow()
 {
     removeChildComponent(&ExportAlertWindow);
+}
+
+void MainComponent::setTimeLineSize(int i)
+{
+    timeLineSize = i;
+    
+    int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
+    LayersViewPort.LayersContainer.Layers[0].LayerWave.playOffsetInPx = -LayersViewPort.LayersContainer.Layers[0].LayerWave.playOffsetInSamples / ratio;
+    
+    
+    LayersViewPort.LayersContainer.Layers[0].LayerWave.updateWaveform = true;
+    killExportAlertWindow();
+}
+
+void MainComponent::killSetTimeLineSizeAlertWindow()
+{
+    removeChildComponent(&SetTimeLineSizeAlertWindow);
 }
 
 void MainComponent::setPlayHeadPos(int pos)
@@ -601,7 +620,7 @@ void MainComponent::setPlayHeadPos(int pos)
     // set Pos only works insite the actual drawn wave
     // when the edge is clicked, the playhead moves to the very left or right
     
-    transportStateChanged(Stop);
+//    transportStateChanged(Stop);
     
     int layersWaveBorder = waveBorder;
     int layersWidth = LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth();

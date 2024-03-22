@@ -14,9 +14,12 @@
 #include "MainComponent.h"
 
 //==============================================================================
-PlayHeadRulerComponent::PlayHeadRulerComponent()
-{
+PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timeline length")
 
+{
+    bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
+    bSetTimeLineSize.setBounds(waveBorder, 5, layerControlW-waveBorder*2, 20);
+    addAndMakeVisible(&bSetTimeLineSize);
 }
 
 
@@ -28,6 +31,8 @@ void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::lightgrey);
     g.setColour(juce::Colours::black);
+    
+    int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
     
     int ratio = (globalSampleRate*timeLineSize)/(getWidth()-layerControlW-waveBorder*2);
     
@@ -58,7 +63,15 @@ void PlayHeadRulerComponent::mouseDown(const juce::MouseEvent& event)
     findParentComponentOfClass<MainComponent>()->setPlayHeadPos(event.getMouseDownX()-layerControlW);
 }
 
+void PlayHeadRulerComponent::showSetTimeLineSizeAlertWindow()
+{
+    int w = findParentComponentOfClass<MainComponent>()->getWidth();
+    int h = findParentComponentOfClass<MainComponent>()->getHeight();
+    
+    findParentComponentOfClass<MainComponent>()->SetTimeLineSizeAlertWindow.setBounds(w/2-150, h/2-150, 300, 300);
+    findParentComponentOfClass<MainComponent>()->addAndMakeVisible(&findParentComponentOfClass<MainComponent>()->SetTimeLineSizeAlertWindow);
+}
+
 void PlayHeadRulerComponent::resized()
 {
-
 }

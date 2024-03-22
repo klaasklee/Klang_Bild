@@ -31,6 +31,8 @@ public:
 
     void setVolume(float volume);
     
+    int timeLineSize = 0;
+    
     enum TransportState
     {
         Stop,
@@ -50,8 +52,11 @@ public:
     void prepareAudioExport();
     void exportAudioToFile(juce::AudioBuffer<float> &buffer, juce::String fileName);
     
-    void killAlertWindow();
+    void killExportAlertWindow();
+    void killSetTimeLineSizeAlertWindow();
+    AlertWindowComponent SetTimeLineSizeAlertWindow;
     
+    void setTimeLineSize(int i);
     
     // position of playHead if state == stop
     float playHeadStartPos = 0;
@@ -64,7 +69,6 @@ public:
     
     // this function is for setting the playHead with a mouseEvent
     // in GUI and changes playHeadPos as well as playPosInSamples
-    // and stops Playback
     void setPlayHeadPos(int pos);
     
     

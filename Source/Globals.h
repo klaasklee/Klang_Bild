@@ -23,8 +23,8 @@ const int layerControlW = 250;
 const int waveBorder = 15;
 const int globalNumChannels = 2;
 
-// timeLineSize in seconds
-const int timeLineSize = 90;
+// timeLineSize in seconds OnStartUp
+const int timeLineSizeOnStartUp = 90;
 
 // exportTime in seconds
 const float exportTime = 30;
@@ -41,6 +41,12 @@ enum BlendModes
     Duck,
     VariableFilter,
     Binary
+};
+
+enum AlertWindows
+{
+    ExportWindow,
+    SetTimeLineSizeWindow
 };
 
 

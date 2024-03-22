@@ -13,8 +13,12 @@
 #include "MainComponent.h"
 
 //==============================================================================
-AlertWindowComponent::AlertWindowComponent() : b1(b1Txt), b2(b2Txt)
+AlertWindowComponent::AlertWindowComponent(juce::String b1Txt, juce::String b2Txt, juce::String headerTxt, juce::String infoTxt, AlertWindows alertWindowType) : b1(b1Txt), b2(b2Txt)
 {
+    headerText = headerTxt;
+    infoText = infoTxt;
+    windowType = alertWindowType;
+    
     b1.onClick = [this] { b1Clicked(); };
     b1.setBounds(40, 200, 100, 50);
     addAndMakeVisible(b1);
@@ -23,6 +27,10 @@ AlertWindowComponent::AlertWindowComponent() : b1(b1Txt), b2(b2Txt)
     addAndMakeVisible(b2);
     
     textEditor.setBounds(50, 120, 200, 30);
+    if (windowType == SetTimeLineSizeWindow)
+    {
+        textEditor.setInputRestrictions(3, "0123456789");
+    }
     addAndMakeVisible(textEditor);
 }
 
@@ -39,9 +47,9 @@ void AlertWindowComponent::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::black);
     g.setFont (35.0f);
-    g.drawText ("Export", 0, 30, getWidth(), 30, juce::Justification::centred, true);   // draw some placeholder text
+    g.drawText (headerText, 0, 30, getWidth(), 30, juce::Justification::centred, true);
     g.setFont (18.0f);
-    g.drawText ("filename:", 0, 70, getWidth(), 20, juce::Justification::centred, true);   // draw some placeholder text
+    g.drawText (infoText, 0, 70, getWidth(), 20, juce::Justification::centred, true);
     
 }
 
@@ -52,14 +60,33 @@ void AlertWindowComponent::resized()
 // OK Button clicked
 void AlertWindowComponent::b1Clicked()
 {
-    juce::String string = textEditor.getText();
-    DBG("fileName: "+string);
-    findParentComponentOfClass<MainComponent>()->exportAudioToFile(findParentComponentOfClass<MainComponent>()->exportBuffer, string);
-    findParentComponentOfClass<MainComponent>()->killAlertWindow();
+    if (windowType == ExportWindow)
+    {
+        juce::String string = textEditor.getText();
+        DBG(infoText+string);
+        findParentComponentOfClass<MainComponent>()->exportAudioToFile(findParentComponentOfClass<MainComponent>()->exportBuffer, string);
+        findParentComponentOfClass<MainComponent>()->killExportAlertWindow();
+    }
+    else if (windowType == SetTimeLineSizeWindow)
+    {
+        juce::String string = textEditor.getText();
+        DBG(infoText+string);
+        int timeLineSize = string.getIntValue();
+        findParentComponentOfClass<MainComponent>()->setTimeLineSize(timeLineSize);
+        findParentComponentOfClass<MainComponent>()->killSetTimeLineSizeAlertWindow();
+    }
+    
 }
 // CancelButton clicked
 void AlertWindowComponent::b2Clicked()
 {
-    DBG("export canceled");
-    findParentComponentOfClass<MainComponent>()->killAlertWindow();
+    DBG("AlertWindow canceled");
+    if (windowType == ExportWindow)
+    {
+        findParentComponentOfClass<MainComponent>()->killExportAlertWindow();
+    }
+    else if (windowType == SetTimeLineSizeWindow)
+    {
+        findParentComponentOfClass<MainComponent>()->killSetTimeLineSizeAlertWindow();
+    }
 }

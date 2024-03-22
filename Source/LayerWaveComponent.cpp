@@ -36,10 +36,11 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::darkgrey);   // clear the background
 
-    if (updateWaveform < 1 && fileLoaded)
+    if (updateWaveform && fileLoaded)
     {
         p.clear();
         audioPoints.clear();
+        int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
         int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
         auto buffer = playBuffer.getReadPointer(0);
 
@@ -91,7 +92,7 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
-    updateWaveform++;
+    updateWaveform = false;
 }
 
 void LayerWaveComponent::openButtonClicked()
@@ -167,7 +168,7 @@ void LayerWaveComponent::importAudio()
 
             blockDrag = false;
 
-            updateWaveform = 0;
+            updateWaveform = true;
 
             repaint();
         }
@@ -236,10 +237,11 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
     
         playOffsetInPx = playOffsetInPx + distance;
         
+        int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
         int ratio = ((timeLineSize * globalSampleRate) / (getWidth() - waveBorder * 2));
         playOffsetInSamples = -playOffsetInPx * ratio;
         
-        updateWaveform = 0;
+        updateWaveform = true;
         repaint();
         
         boolMouseDrag = false;
@@ -248,6 +250,6 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
 
 void LayerWaveComponent::resized()
 {
-    updateWaveform = 1;
+    updateWaveform = true;
     openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
 }

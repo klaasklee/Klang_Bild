@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Globals.h"
 
 //==============================================================================
 /*
@@ -18,17 +19,18 @@
 class AlertWindowComponent  : public juce::Component
 {
 public:
-    AlertWindowComponent();
+    AlertWindowComponent(juce::String b1Txt, juce::String b2Txt, juce::String headerTxt, juce::String infoTxt, AlertWindows alertWindowType);
     ~AlertWindowComponent() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    juce::String b1Txt = "OK";
-    juce::String b2Txt = "CANCEL";
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlertWindowComponent)
+    juce::String headerText;
+    juce::String infoText;
+    AlertWindows windowType;
     
     juce::TextButton b1;
     void b1Clicked();

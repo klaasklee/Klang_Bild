@@ -42,6 +42,8 @@ public:
     int playOffsetInPx = 0;
     int waveBorder = 15;
 
+    //drawing waveforms
+    bool updateWaveform = false;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)
@@ -58,7 +60,6 @@ private:
     void resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate,  float destSampleRate);
     
     //drawing Waveforms
-    int updateWaveform = 2;
     juce::Path p;
     juce::Rectangle<float> rect;
     std::vector<float> audioPoints;
