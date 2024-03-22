@@ -7,6 +7,8 @@
 #include "PlayHeadComponent.h"
 #include "PlayHeadRulerComponent.h"
 
+#include "KeyListener.h"
+
 
 //==============================================================================
 /*
@@ -134,6 +136,8 @@ private:
     AlertWindowComponent ExportAlertWindow;
     
     juce::AudioSampleBuffer outBuffer;
+    
+    KeyListener globalKeyListener;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 

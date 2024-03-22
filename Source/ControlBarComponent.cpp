@@ -14,7 +14,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-ControlBarComponent::ControlBarComponent() : recordButton("record")
+ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), recordButton("record")
 {
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -74,22 +74,19 @@ ControlBarComponent::ControlBarComponent() : recordButton("record")
     lAppTitle.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(lAppTitle);
     
-    bPlay.setButtonText("play");
-    bPlay.setLookAndFeel(&LookAndFeel001);
+//    bPlay.setLookAndFeel(&LookAndFeel001);
     bPlay.onClick = [this] { bPlayClicked(); };
     bPlay.setEnabled(true);
     addAndMakeVisible(bPlay);
 
-    bPause.setButtonText("pause");
-    bPause.setLookAndFeel(&LookAndFeel001);
+//    bPause.setLookAndFeel(&LookAndFeel001);
     bPause.onClick = [this] { bPauseClicked(); };
-    bPause.setEnabled(false);
+    bPause.setEnabled(true);
     addAndMakeVisible(bPause);
 
-    bStop.setButtonText("stop");
-    bStop.setLookAndFeel(&LookAndFeel001);
+//    bStop.setLookAndFeel(&LookAndFeel001);
     bStop.onClick = [this] { bStopClicked(); };
-    bStop.setEnabled(false);
+    bStop.setEnabled(true);
     bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bStop);
 
@@ -209,12 +206,12 @@ void ControlBarComponent::resized()
     mainControlsFB.flexWrap = juce::FlexBox::Wrap::wrap;
     mainControlsFB.justifyContent = juce::FlexBox::JustifyContent::center;
     
-    mainControlsFB.items.add(juce::FlexItem(lAppTitle).withMinWidth(getLocalBounds().getWidth()* 2/6));
-    mainControlsFB.items.add(juce::FlexItem(bPlay).withMinWidth(60).withMaxHeight(getHeight()/3));
-    mainControlsFB.items.add(juce::FlexItem(bPause).withMinWidth(60).withMaxHeight(getHeight()/3));
-    mainControlsFB.items.add(juce::FlexItem(bStop).withMinWidth(60).withMaxHeight(getHeight()/3));
-    mainControlsFB.items.add(juce::FlexItem(bLoop).withMinWidth(60).withMaxHeight(getHeight()/3));
-    mainControlsFB.items.add(juce::FlexItem(recordButton).withMinWidth(60).withMaxHeight(getHeight()/3));
+    mainControlsFB.items.add(juce::FlexItem(lAppTitle).withMinWidth(getLocalBounds().getWidth()* 2/6).withHeight(getHeight()*3/4-30));
+    mainControlsFB.items.add(juce::FlexItem(bPlay).withMinWidth(60).withHeight(getHeight()/4));
+    mainControlsFB.items.add(juce::FlexItem(bPause).withMinWidth(60).withHeight(getHeight()/4));
+    mainControlsFB.items.add(juce::FlexItem(bStop).withMinWidth(60).withHeight(getHeight()/4));
+    mainControlsFB.items.add(juce::FlexItem(bLoop).withMinWidth(60).withHeight(getHeight()/4));
+    mainControlsFB.items.add(juce::FlexItem(recordButton).withMinWidth(60).withHeight(getHeight()/4));
     
     
     //Info FlexBox
