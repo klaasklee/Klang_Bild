@@ -400,6 +400,9 @@ void MainComponent::blendModeBinary(juce::AudioSampleBuffer& layerA, LayerCompon
 
 void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
 {
+
+    // todo: inverted option; other filter modes;
+
     int numChannelsA = layerA.getNumChannels();
     int numChannelsB = layerB.LayerWave.playBuffer.getNumChannels();
 
@@ -410,6 +413,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
 
     float freqRange = 5000; // used to scale the affected frequency range
     float freqOffset = 30;
+    float filterCutoff;
 
     jassert(numChannelsA == numChannelsB);
 
@@ -430,12 +434,15 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
         powerB /= (numChannelsB * numSamples);
     }
 
+    filterCutoff = powerB * freqRange + freqOffset;
+    filterCutoff = (filterCutoff > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoff; // check if cutoff is below nyquist
+
     if (samplesLeftToPlay > numSamples) {
         //auto inputAudioBlock = juce::dsp::AudioBlock<float>(layerA);
         auto outputAudioBlock = juce::dsp::AudioBlock<float>(outLayer);
         auto context = juce::dsp::ProcessContextReplacing<float>(outputAudioBlock);
         filter.setResonance(0.95);
-        filter.setCutoffFrequency(powerB*freqRange + freqOffset);
+        filter.setCutoffFrequency(filterCutoff);
         filter.process(context);
     }
 
