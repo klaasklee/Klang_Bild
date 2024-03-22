@@ -46,6 +46,10 @@
             file="Source/LayerControlComponent.h"/>
       <FILE id="yxVKqx" name="LayerControlComponent.cpp" compile="1" resource="0"
             file="Source/LayerControlComponent.cpp"/>
+      <FILE id="MSaCIb" name="LayerBlendmodeControlComponent.h" compile="0"
+            resource="0" file="Source/LayerBlendmodeControlComponent.h"/>
+      <FILE id="wszAyi" name="LayerBlendmodeControlComponent.cpp" compile="1"
+            resource="0" file="Source/LayerBlendmodeControlComponent.cpp"/>
       <FILE id="puu3pg" name="LayerWaveComponent.h" compile="0" resource="0"
             file="Source/LayerWaveComponent.h"/>
       <FILE id="bkgFo3" name="LayerWaveComponent.cpp" compile="1" resource="0"
