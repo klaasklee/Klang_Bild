@@ -38,7 +38,8 @@ enum BlendModes
 {
     Normal,
     Multiply,
-    Duck
+    Duck,
+    Binary
 };
 
 

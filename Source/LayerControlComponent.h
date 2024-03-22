@@ -88,6 +88,8 @@ private:
                 return "MULTIPLY";
             case BlendModes::Duck:
                 return "DUCK";
+            case BlendModes::Binary:
+                return "BINARY XOR";
                 
             default:
                 return "Unknown";

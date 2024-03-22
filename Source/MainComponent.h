@@ -84,6 +84,7 @@ private:
     static void blendModeAdd(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
+    static void blendModeBinary(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
@@ -95,6 +96,8 @@ private:
             return &blendModeMult;
         case BlendModes::Duck:
             return &blendModeDuck;
+        case BlendModes::Binary:
+            return &blendModeBinary;
         default:
             return NULL;
         }
