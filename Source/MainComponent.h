@@ -68,7 +68,6 @@ public:
     
     // this function is for setting the playHead with a mouseEvent
     // in GUI and changes playHeadPos as well as playPosInSamples
-    // and stops Playback
     void setPlayHeadPos(int pos);
     
     
