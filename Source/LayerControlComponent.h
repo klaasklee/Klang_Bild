@@ -88,6 +88,8 @@ private:
                 return "MULTIPLY";
             case BlendModes::Duck:
                 return "DUCK";
+            case BlendModes::VariableFilter:
+                return "FILTER";
             case BlendModes::Binary:
                 return "BINARY XOR";
                 

@@ -34,12 +34,22 @@ MainComponent::~MainComponent()
     shutdownAudio();
 }
 
+// initialize the static filter 
+juce::dsp::StateVariableTPTFilter<float> MainComponent::filter;
+
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     outBuffer.setSize(2, samplesPerBlockExpected);
-
     transportStateChanged(Stop);
+
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlockExpected;
+    spec.numChannels = globalNumChannels;
+    spec.sampleRate = sampleRate;
+    filter.prepare(spec);
+    filter.reset();
+    
 
 }
 
@@ -386,7 +396,66 @@ void MainComponent::blendModeBinary(juce::AudioSampleBuffer& layerA, LayerCompon
     //playPosB += numSamples;
 }
 
+void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
+{
+    int numChannelsA = layerA.getNumChannels();
+    int numChannelsB = layerB.LayerWave.playBuffer.getNumChannels();
 
+    const float* readA;
+    const float* readB;
+    float* writeOut;
+    double powerB = 0;
+
+    float freqRange = 5000; // used to scale the affected frequency range
+    float freqOffset = 30;
+
+    jassert(numChannelsA == numChannelsB);
+
+    int samplesLeftToPlay = layerB.LayerWave.playBuffer.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
+
+
+    if (samplesLeftToPlay > 0 && playPosB >= 0)
+    {
+        for (int ch = 0; ch < numChannelsB; ch++)
+        {
+            float gain = layerB.LayerControl.channelGain[ch];
+            readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
+            for (int i = 0; i < numSamples; i++) {
+                powerB += (*readB) * ((*readB++)) * gain * gain;
+            }
+            
+        }
+        powerB /= (numChannelsB * numSamples);
+    }
+
+    if (samplesLeftToPlay > numSamples) {
+        //auto inputAudioBlock = juce::dsp::AudioBlock<float>(layerA);
+        auto outputAudioBlock = juce::dsp::AudioBlock<float>(outLayer);
+        auto context = juce::dsp::ProcessContextReplacing<float>(outputAudioBlock);
+        filter.setResonance(0.95);
+        filter.setCutoffFrequency(powerB*freqRange + freqOffset);
+        filter.process(context);
+    }
+
+}
+void MainComponent::setFilterType() 
+{
+    using fType = juce::dsp::StateVariableTPTFilterType;
+
+    switch (filterType) {
+    case FilterType::Lowpass:
+        filter.setType(fType::lowpass);
+        break;
+    case FilterType::Bandpass:
+        filter.setType(fType::bandpass);
+        break;
+    case FilterType::Highpass:
+        filter.setType(fType::highpass);
+        break;
+    default: 
+        filter.setType(fType::lowpass);
+    }
+}
 void MainComponent::transportStateChanged(TransportState newState)
 {
     if (newState != state)

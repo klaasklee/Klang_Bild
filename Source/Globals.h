@@ -39,6 +39,7 @@ enum BlendModes
     Normal,
     Multiply,
     Duck,
+    VariableFilter,
     Binary
 };
 

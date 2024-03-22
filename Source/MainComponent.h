@@ -7,6 +7,7 @@
 #include "PlayHeadComponent.h"
 #include "PlayHeadRulerComponent.h"
 
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -85,6 +86,7 @@ private:
     static void blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeBinary(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
+    static void blendModeVariableFilter(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
@@ -98,10 +100,25 @@ private:
             return &blendModeDuck;
         case BlendModes::Binary:
             return &blendModeBinary;
+        case BlendModes::VariableFilter:
+            return &blendModeVariableFilter;
         default:
             return NULL;
         }
     }
+
+    enum class FilterType
+    {
+        Lowpass,
+        Bandpass,
+        Highpass,
+    };
+
+    void setFilterType();
+    FilterType filterType{ FilterType::Lowpass };
+
+    static juce::dsp::StateVariableTPTFilter<float> filter;
+
 
     //Components
     ControlBarComponent ControlBar;
@@ -113,7 +130,6 @@ private:
     AlertWindowComponent ExportAlertWindow;
     
     juce::AudioSampleBuffer outBuffer;
-
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 
