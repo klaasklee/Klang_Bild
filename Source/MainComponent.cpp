@@ -126,7 +126,14 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                     // calls transportStateChanged() asyncon bec og changing some GUI elements etc...
                     juce::MessageManager::callAsync([=]()
                     {
-                        transportStateChanged(Stop);
+                        if (state = Export)
+                        {
+                            toggleExportState();
+                        }
+                        else
+                        {
+                            transportStateChanged(Stop);
+                        }
                     });
                 }                
             }

@@ -30,6 +30,7 @@ public:
 
     int layerIndex;
     
+    
     LayerControlComponent LayerControl;
     LayerWaveComponent LayerWave;
 

@@ -27,7 +27,7 @@ const int globalNumChannels = 2;
 const int timeLineSizeOnStartUp = 90;
 
 // exportTime in seconds
-const float exportTime = 30;
+const float exportTime = 60;
 
 
 // if you add a Blendmode
