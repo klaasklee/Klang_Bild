@@ -13,6 +13,8 @@
 #include <JuceHeader.h>
 #include "LayerControlComponent.h"
 #include "LayerWaveComponent.h"
+#include "LayerBlendmodeControlComponent.h"
+
 
 //==============================================================================
 /*
@@ -33,6 +35,8 @@ public:
     
     LayerControlComponent LayerControl;
     LayerWaveComponent LayerWave;
+    LayerBlendmodeControlComponent LayerBlendmodeControl;
+
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerComponent)
@@ -43,5 +47,7 @@ private:
     void moveLayerUp();
     void moveLayerDown();
     
+    juce::TextButton bToggleShowBlendPara;
+    void bToggleShowBlendParaClicked();
     
 };

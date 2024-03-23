@@ -13,10 +13,17 @@
 #include "Globals.h"
 
 //==============================================================================
-LayerComponent::LayerComponent() : layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey)
+LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey,
+                                    juce::Colours::lightgrey), layerDown("Down",
+                                    juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), bToggleShowBlendPara("show parameters")
 {
     addAndMakeVisible(LayerControl);
     addAndMakeVisible(LayerWave);
+    
+    // LayerBlendmodeControl
+    LayerBlendmodeControl.setBounds(waveBorder+36, waveBorder, layerControlW-36-waveBorder*2, layerHeight -waveBorder*2);
+    addAndMakeVisible(LayerBlendmodeControl);
+    LayerBlendmodeControl.setVisible(false);
     
     // move Layer Up/Down Buttons
     juce::BorderSize<int> border;
@@ -56,6 +63,12 @@ LayerComponent::LayerComponent() : layerUp("Up", juce::Colours::black, juce::Col
     layerDown.setBorderSize(border);
     layerDown.onClick = [this] { moveLayerDown(); };
     addAndMakeVisible(layerDown);
+    
+    // toggle schow parameters for BlendModes
+    bToggleShowBlendPara.onClick = [this] { bToggleShowBlendParaClicked(); };
+    bToggleShowBlendPara.setBounds(73, 150, 140, 30);
+    bToggleShowBlendPara.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    addAndMakeVisible(bToggleShowBlendPara);
 }
 
 LayerComponent::~LayerComponent()
@@ -95,4 +108,21 @@ void LayerComponent::moveLayerUp()
 void LayerComponent::moveLayerDown()
 {
     DBG("moveLayerDown");
+}
+void LayerComponent::bToggleShowBlendParaClicked()
+{
+    DBG("toggle Parameters");
+    
+    if (!LayerBlendmodeControl.isVisible())
+    {
+        LayerBlendmodeControl.setVisible(true);
+        bToggleShowBlendPara.setButtonText("hide parameters");
+    }else
+    {
+        LayerBlendmodeControl.setVisible(false);
+        bToggleShowBlendPara.setButtonText("show parameters");
+    }
+
+    bToggleShowBlendPara.setVisible(true);
+
 }

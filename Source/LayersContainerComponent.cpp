@@ -22,6 +22,7 @@ LayersContainerComponent::LayersContainerComponent()
         index--;
         
         // sets lowest Layer as baseLayer
+        // removes options for BlendModes because they will have no effect anyway
         if (i == numOfLayers-1)
         {
             Layers[i].LayerControl.removeChildComponent(&Layers[i].LayerControl.BlendModeDropdown);

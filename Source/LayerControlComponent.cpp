@@ -27,7 +27,7 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     sGain.setTextValueSuffix(" gain");
     sGain.addListener(this);
     sGain.setLookAndFeel(&LookAndFeel001);
-    sGain.setBounds(70, 35, 60, 60);
+    sGain.setBounds(73, 30, 60, 60);
     addAndMakeVisible(sGain);
     
     //Pan Knob
@@ -40,7 +40,7 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     sPan.setTextValueSuffix(" pan");
     sPan.addListener(this);
     sPan.setLookAndFeel(&LookAndFeel001);
-    sPan.setBounds(150, 35, 60, 60);
+    sPan.setBounds(153, 30, 60, 60);
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
@@ -51,7 +51,7 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     BlendModeDropdown.addListener(this);
 
     BlendModeDropdown.setJustificationType(juce::Justification::centred);
-    BlendModeDropdown.setBounds(70, 110, 140, 30);
+    BlendModeDropdown.setBounds(73, 108, 140, 30);
     
     addAndMakeVisible(BlendModeDropdown);
 
@@ -95,3 +95,4 @@ void LayerControlComponent::bMuteClicked()
         bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
     }
 }
+
