@@ -70,7 +70,7 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     //MainControls
     lAppTitle.setColour (juce::Label::textColourId, GlobalColors::brightText);
     lAppTitle.setFont(GlobalFonts::titleFont);
-    lAppTitle.setText("controlBar", juce::dontSendNotification);
+    lAppTitle.setText("AudioLayers", juce::dontSendNotification);
     lAppTitle.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(lAppTitle);
     
