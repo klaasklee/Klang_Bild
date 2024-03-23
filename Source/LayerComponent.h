@@ -35,7 +35,10 @@ public:
     
     LayerControlComponent LayerControl;
     LayerWaveComponent LayerWave;
+
     LayerBlendmodeControlComponent LayerBlendmodeControl;
+    
+    juce::TextButton bToggleShowBlendPara;
 
 
 private:
@@ -47,7 +50,6 @@ private:
     void moveLayerUp();
     void moveLayerDown();
     
-    juce::TextButton bToggleShowBlendPara;
     void bToggleShowBlendParaClicked();
     
 };

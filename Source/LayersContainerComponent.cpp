@@ -26,6 +26,7 @@ LayersContainerComponent::LayersContainerComponent()
         if (i == numOfLayers-1)
         {
             Layers[i].LayerControl.removeChildComponent(&Layers[i].LayerControl.BlendModeDropdown);
+            Layers[i].removeChildComponent(&Layers[i].bToggleShowBlendPara);
         }
     }
 }
