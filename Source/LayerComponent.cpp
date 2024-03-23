@@ -68,6 +68,9 @@ LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Co
     bToggleShowBlendPara.setBounds(73, 150, 140, 30);
     bToggleShowBlendPara.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
     addAndMakeVisible(bToggleShowBlendPara);
+    
+    // passes on pointer for layerBlendmodeControl to LayerControl
+    LayerControl.layerBlendmodeControlComponentPointer = &LayerBlendmodeControl;
 }
 
 LayerComponent::~LayerComponent()

@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Globals.h"
+#include "LayerBlendmodeControlComponent.h"
 
 //==============================================================================
 /*
@@ -55,6 +56,7 @@ public:
         if (comboBoxThatHasChanged == &BlendModeDropdown)
         {
             selectedBlendMode = static_cast<BlendModes>(BlendModeDropdown.getSelectedId() - 1);
+            layerBlendmodeControlComponentPointer->updateLayerBlendModeControl(selectedBlendMode);
         }
     }
     
@@ -69,7 +71,10 @@ public:
 
     // MUTE
     bool layerMute = false;
-        
+    
+    // pointer of LayerBlendmodeControlComponent of current Layer
+    LayerBlendmodeControlComponent* layerBlendmodeControlComponentPointer;
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerControlComponent)
     

@@ -33,6 +33,7 @@ const float exportTime = 60;
 // if you add a Blendmode
 // add BlendModeName in LayerControlComponent.h
 // change last Blendmode in LayerControlComponent.cpp line 42
+// add Blendmode in LayerBlendModeControlComponent and make changes according to parameters the Blendmode needs
 
 enum BlendModes
 {

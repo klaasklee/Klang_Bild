@@ -32,17 +32,23 @@ public:
     float fPara2;
     bool boPara1;
     bool boPara2;
+    
+    juce::Slider sPara1;
+    juce::Label lPara1;
+    juce::Slider sPara2;
+    juce::Label lPara2;
+    
+    juce::ToggleButton bPara1;
+    juce::ToggleButton bPara2;
+    
+    void updateLayerBlendModeControl(BlendModes newBlendmode);
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerBlendmodeControlComponent)
     
-    juce::Slider sPara1;
-    juce::Slider sPara2;
-    
     LookAndFeel001 LookAndFeel001;
     
-    juce::ToggleButton bPara1;
-    juce::ToggleButton bPara2;
+    void resetLayerBlendModeControl();
     
     void bPara1Clicked();
     void bPara2Clicked();
