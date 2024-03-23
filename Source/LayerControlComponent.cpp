@@ -14,7 +14,7 @@
 #include "LayerComponent.h"
 
 //==============================================================================
-LayerControlComponent::LayerControlComponent()
+LayerControlComponent::LayerControlComponent() : bMute("M")
 {
     
     //Gain Knob
@@ -24,10 +24,10 @@ LayerControlComponent::LayerControlComponent()
     sGain.setDoubleClickReturnValue(true, 0.5);
     sGain.setNumDecimalPlacesToDisplay(2);
     sGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    sGain.setTextValueSuffix(" dB gain");
+    sGain.setTextValueSuffix(" gain");
     sGain.addListener(this);
     sGain.setLookAndFeel(&LookAndFeel001);
-    sGain.setBounds(30, 55, 100, 60);
+    sGain.setBounds(70, 35, 60, 60);
     addAndMakeVisible(sGain);
     
     //Pan Knob
@@ -40,7 +40,7 @@ LayerControlComponent::LayerControlComponent()
     sPan.setTextValueSuffix(" pan");
     sPan.addListener(this);
     sPan.setLookAndFeel(&LookAndFeel001);
-    sPan.setBounds(120, 55, 100, 60);
+    sPan.setBounds(150, 35, 60, 60);
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
@@ -51,18 +51,16 @@ LayerControlComponent::LayerControlComponent()
     BlendModeDropdown.addListener(this);
 
     BlendModeDropdown.setJustificationType(juce::Justification::centred);
-    BlendModeDropdown.setBounds(55, 130, 140, 30);
+    BlendModeDropdown.setBounds(70, 110, 140, 30);
     
     addAndMakeVisible(BlendModeDropdown);
 
     BlendModeDropdown.setSelectedId(1);
     
     // muteButton
-    bMute.setButtonText("Mute");
-    bMute.setLookAndFeel(&LookAndFeel001);
     bMute.onClick = [this] { bMuteClicked(); };
-    bMute.setEnabled(true);
-    bMute.setBounds(50, 15, 70, 30);
+    bMute.setBounds(waveBorder+3, 150, 30, 30);
+    bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
     addAndMakeVisible(bMute);
 }
 
@@ -84,6 +82,16 @@ void LayerControlComponent::resized()
 
 void LayerControlComponent::bMuteClicked()
 {
-    layerMute = bMute.getToggleState();
-    std::cout << "layerMute: " << bMute.getToggleState() << std::endl;
+    DBG("toggle mute");
+    
+    if (layerMute == false)
+    {
+        layerMute = true;
+        bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::darkred);
+    }
+    else if (layerMute == true)
+    {
+        layerMute = false;
+        bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    }
 }
