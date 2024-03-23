@@ -13,9 +13,8 @@
 #include "Globals.h"
 
 //==============================================================================
-LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey,
-                                    juce::Colours::lightgrey), layerDown("Down",
-                                    juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), bToggleShowBlendPara("show parameters")
+LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
+                                    layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), bToggleShowBlendPara("show parameters")
 {
     addAndMakeVisible(LayerControl);
     addAndMakeVisible(LayerWave);
@@ -111,7 +110,7 @@ void LayerComponent::moveLayerDown()
 }
 void LayerComponent::bToggleShowBlendParaClicked()
 {
-    DBG("toggle Parameters");
+//    DBG("toggle Parameters");
     
     if (!LayerBlendmodeControl.isVisible())
     {
