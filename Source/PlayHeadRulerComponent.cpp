@@ -19,6 +19,10 @@ PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timelin
 {
     bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
     bSetTimeLineSize.setBounds(waveBorder, 6, layerControlW-waveBorder*2, 20);
+    bSetTimeLineSize.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    bSetTimeLineSize.setLookAndFeel(&LookAndFeel001);
+    bSetTimeLineSize.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bSetTimeLineSize.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     addAndMakeVisible(&bSetTimeLineSize);
 }
 

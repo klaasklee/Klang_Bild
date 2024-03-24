@@ -22,6 +22,11 @@ LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
     // load audio functionality
     fileLoaded = false;
     openButton.onClick = [this] { openButtonClicked(); };
+    openButton.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    openButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::black);
+    openButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    openButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    openButton.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(&openButton);
     
     formatManager.registerBasicFormats(); //now we can read wav and aiff formats

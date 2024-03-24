@@ -38,4 +38,6 @@ private:
     void b2Clicked();
     juce::TextEditor textEditor;
     
+    LookAndFeel001 LookAndFeel001;
+    
 };

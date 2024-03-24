@@ -24,10 +24,11 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     sGain.setDoubleClickReturnValue(true, 0.5);
     sGain.setNumDecimalPlacesToDisplay(2);
     sGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    sGain.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
     sGain.setTextValueSuffix(" gain");
     sGain.addListener(this);
     sGain.setLookAndFeel(&LookAndFeel001);
-    sGain.setBounds(73, 30, 60, 60);
+    sGain.setBounds(73, 28, 60, 60);
     addAndMakeVisible(sGain);
     
     //Pan Knob
@@ -37,10 +38,11 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     sPan.setDoubleClickReturnValue(true, 0.5);
     sPan.setNumDecimalPlacesToDisplay(2);
     sPan.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    sPan.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
     sPan.setTextValueSuffix(" pan");
     sPan.addListener(this);
     sPan.setLookAndFeel(&LookAndFeel001);
-    sPan.setBounds(153, 30, 60, 60);
+    sPan.setBounds(153, 28, 60, 60);
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
@@ -51,16 +53,20 @@ LayerControlComponent::LayerControlComponent() : bMute("M")
     BlendModeDropdown.addListener(this);
 
     BlendModeDropdown.setJustificationType(juce::Justification::centred);
-    BlendModeDropdown.setBounds(73, 108, 140, 30);
-    
+    BlendModeDropdown.setBounds(73, 105, 140, 30);
+    BlendModeDropdown.setColour(juce::ComboBox::backgroundColourId, GlobalColors::black);
     addAndMakeVisible(BlendModeDropdown);
 
     BlendModeDropdown.setSelectedId(1);
     
     // muteButton
     bMute.onClick = [this] { bMuteClicked(); };
-    bMute.setBounds(waveBorder+3, 150, 30, 30);
+    bMute.setBounds(waveBorder+3, 145, 30, 30);
+    bMute.setColour(juce::TextButton::buttonOnColourId, juce::Colours::darkred);
     bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    bMute.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    bMute.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    bMute.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(bMute);
 }
 
@@ -84,12 +90,12 @@ void LayerControlComponent::bMuteClicked()
     if (layerMute == false)
     {
         layerMute = true;
-        bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::darkred);
+        bMute.setToggleState(true, juce::NotificationType::dontSendNotification);
     }
     else if (layerMute == true)
     {
         layerMute = false;
-        bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+        bMute.setToggleState(false, juce::NotificationType::dontSendNotification);
     }
 }
 

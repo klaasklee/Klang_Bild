@@ -72,5 +72,6 @@ private:
     bool blockDrag = true;
 
 
+    LookAndFeel001 LookAndFeel001;
 
 };

@@ -23,6 +23,7 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     sVolumeDial.setDoubleClickReturnValue(true, volumeOnStartUp);
     sVolumeDial.setNumDecimalPlacesToDisplay(2);
     sVolumeDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    sVolumeDial.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
 //    sVolumeDial.setTextValueSuffix(" dB");
     sVolumeDial.addListener(this);
     sVolumeDial.setLookAndFeel(&LookAndFeel001);
@@ -71,16 +72,31 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     addAndMakeVisible(Logo);
     
 //    bPlay.setLookAndFeel(&LookAndFeel001);
+    bPlay.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarPlayButtonNotActive);
+    bPlay.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarPlayButtonActive);
+    bPlay.setLookAndFeel(&LookAndFeel001);
+    bPlay.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bPlay.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     bPlay.onClick = [this] { bPlayClicked(); };
     bPlay.setEnabled(true);
     addAndMakeVisible(bPlay);
 
 //    bPause.setLookAndFeel(&LookAndFeel001);
+    bPause.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarPauseButtonNotActive);
+    bPause.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarPauseButtonActive);
+    bPause.setLookAndFeel(&LookAndFeel001);
+    bPause.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bPause.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     bPause.onClick = [this] { bPauseClicked(); };
     bPause.setEnabled(true);
     addAndMakeVisible(bPause);
 
 //    bStop.setLookAndFeel(&LookAndFeel001);
+    bStop.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarStopButtonNotActive);
+    bStop.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarStopButtonActive);
+    bStop.setLookAndFeel(&LookAndFeel001);
+    bStop.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bStop.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     bStop.onClick = [this] { bStopClicked(); };
     bStop.setEnabled(true);
     bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
@@ -94,7 +110,11 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     addAndMakeVisible(bLoop);
     
     recordButton.onClick = [this] { recordButtonClicked(); };
-    recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+    recordButton.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarRecordButtonNotActive);
+    recordButton.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarRecordButtonActive);
+    recordButton.setLookAndFeel(&LookAndFeel001);
+    recordButton.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    recordButton.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     addAndMakeVisible(&recordButton);
     
     addAndMakeVisible(AudioMeter);

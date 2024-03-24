@@ -481,7 +481,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
-                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                ControlBar.recordButton.setToggleState(false, juce::NotificationType::dontSendNotification);
                 
                 // reset AudioMeter
                 ControlBar.AudioMeter.resetAudioMeter();
@@ -492,7 +492,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                ControlBar.recordButton.setToggleState(false, juce::NotificationType::dontSendNotification);
                 
                 DBG("state = play");
                 break;
@@ -500,7 +500,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPlay.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+                ControlBar.recordButton.setToggleState(false, juce::NotificationType::dontSendNotification);
                 
                 // reset AudioMeter
                 ControlBar.AudioMeter.resetAudioMeter();
@@ -511,7 +511,7 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPlay.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bPause.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
-                ControlBar.recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::red);
+                ControlBar.recordButton.setToggleState(true, juce::NotificationType::dontSendNotification);
                 
                 DBG("state = export");
                 break;

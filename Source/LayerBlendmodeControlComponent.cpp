@@ -39,12 +39,12 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
     switch (newBlendmode) {
         case Normal:
             resetLayerBlendModeControl();
-            bPara1.setVisible(false);
-            bPara2.setVisible(false);
-            lPara1.setVisible(false);
-            sPara1.setVisible(false);
-            lPara2.setVisible(false);
-            sPara2.setVisible(false);
+//            bPara1.setVisible(false);
+//            bPara2.setVisible(false);
+//            lPara1.setVisible(false);
+//            sPara1.setVisible(false);
+//            lPara2.setVisible(false);
+//            sPara2.setVisible(false);
             break;
         case Multiply:
             resetLayerBlendModeControl();
@@ -93,7 +93,8 @@ void LayerBlendmodeControlComponent::resetLayerBlendModeControl()
     bPara1.setButtonText("toggle 1");
     bPara1.onClick = [this] { bPara1Clicked(); };
     bPara1.setToggleState(false, juce::NotificationType::dontSendNotification);
-    bPara1.setBounds(10, 10, layerControlW-36-waveBorder*2-20, 20);
+    bPara1.setBounds(10, 8, layerControlW-36-waveBorder*2-20, 20);
+    bPara1.setColour(juce::ToggleButton::textColourId, GlobalColors::black);
     bPara1.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(bPara1);
     
@@ -101,10 +102,16 @@ void LayerBlendmodeControlComponent::resetLayerBlendModeControl()
     bPara2.setButtonText("toggle 2");
     bPara2.onClick = [this] { bPara2Clicked(); };
     bPara2.setToggleState(false, juce::NotificationType::dontSendNotification);
-    bPara2.setBounds(10, 35, layerControlW-36-waveBorder*2-20, 20);
+    bPara2.setBounds(10, 33, layerControlW-36-waveBorder*2-20, 20);
+    bPara2.setColour(juce::ToggleButton::textColourId, GlobalColors::black);
     bPara2.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(bPara2);
     
+    // label for Parameter 1
+    lPara1.setText("float parameter 1", juce::NotificationType::dontSendNotification);
+    lPara1.setBounds(10, 55, layerControlW-36-waveBorder*2-20, 20);
+    lPara1.setColour(juce::Label::textColourId, GlobalColors::black);
+    addAndMakeVisible(lPara1);
     // float Parameter 1 as slider
     sPara1.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     sPara1.setRange(0.0, 1.0);
@@ -112,14 +119,19 @@ void LayerBlendmodeControlComponent::resetLayerBlendModeControl()
     sPara1.setDoubleClickReturnValue(true, 0.001);
     sPara1.setNumDecimalPlacesToDisplay(2);
     sPara1.setTextBoxStyle(juce::Slider::TextBoxRight, false, 50, 15);
+    sPara1.setColour(juce::Slider::textBoxTextColourId, GlobalColors::white);
+    sPara1.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
+    sPara1.setColour(juce::Slider::textBoxOutlineColourId, GlobalColors::black);
+    sPara1.setLookAndFeel(&LookAndFeel001);
     sPara1.addListener(this);
-    sPara1.setBounds(10, 70, layerControlW-36-waveBorder*2-20, 30);
+    sPara1.setBounds(10, 65, layerControlW-36-waveBorder*2-20, 30);
     addAndMakeVisible(sPara1);
-    // label for Parameter 1
-    lPara1.setText("float parameter 1", juce::NotificationType::dontSendNotification);
-    lPara1.setBounds(10, 60, layerControlW-36-waveBorder*2-20, 20);
-    addAndMakeVisible(lPara1);
     
+    // label for Parameter 2
+    lPara2.setText("float parameter 2", juce::NotificationType::dontSendNotification);
+    lPara2.setBounds(10, 90, layerControlW-36-waveBorder*2-20, 20);
+    lPara2.setColour(juce::Label::textColourId, GlobalColors::black);
+    addAndMakeVisible(lPara2);
     // float Parameter 2 as slider
     sPara2.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     sPara2.setRange(0.0, 1.0);
@@ -127,13 +139,13 @@ void LayerBlendmodeControlComponent::resetLayerBlendModeControl()
     sPara2.setDoubleClickReturnValue(true, 0.001);
     sPara2.setNumDecimalPlacesToDisplay(2);
     sPara2.setTextBoxStyle(juce::Slider::TextBoxRight, false, 50, 15);
+    sPara2.setColour(juce::Slider::textBoxTextColourId, GlobalColors::white);
+    sPara2.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
+    sPara2.setColour(juce::Slider::textBoxOutlineColourId, GlobalColors::black);
+    sPara2.setLookAndFeel(&LookAndFeel001);
     sPara2.addListener(this);
-    sPara2.setBounds(10, 105, layerControlW-36-waveBorder*2-20, 30);
+    sPara2.setBounds(10, 100, layerControlW-36-waveBorder*2-20, 30);
     addAndMakeVisible(sPara2);
-    // label for Parameter 2
-    lPara2.setText("float parameter 2", juce::NotificationType::dontSendNotification);
-    lPara2.setBounds(10, 95, layerControlW-36-waveBorder*2-20, 20);
-    addAndMakeVisible(lPara2);
 }
 
 

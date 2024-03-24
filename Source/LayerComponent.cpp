@@ -41,7 +41,7 @@ LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Co
     upLine2.setEnd(20, 20);
     upArrowPath.addLineSegment(upLine1, 3);
     upArrowPath.addLineSegment(upLine2, 3);
-    layerUp.setBounds(waveBorder, waveBorder + 60, 30, 15);
+    layerUp.setBounds(waveBorder, waveBorder + 55, 30, 15);
     layerUp.setShape(upArrowPath, false, false, false);
     layerUp.setBorderSize(border);
     layerUp.onClick = [this] { moveLayerUp(); };
@@ -57,7 +57,7 @@ LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Co
     downLine2.setEnd(20, 0);
     downArrowPath.addLineSegment(downLine1, 3);
     downArrowPath.addLineSegment(downLine2, 3);
-    layerDown.setBounds(waveBorder, waveBorder + 100, 30, 15);
+    layerDown.setBounds(waveBorder, waveBorder + 95, 30, 15);
     layerDown.setShape(downArrowPath, false, false, false);
     layerDown.setBorderSize(border);
     layerDown.onClick = [this] { moveLayerDown(); };
@@ -65,8 +65,12 @@ LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Co
     
     // toggle schow parameters for BlendModes
     bToggleShowBlendPara.onClick = [this] { bToggleShowBlendParaClicked(); };
-    bToggleShowBlendPara.setBounds(73, 150, 140, 30);
+    bToggleShowBlendPara.setBounds(73, 145, 140, 30);
     bToggleShowBlendPara.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    bToggleShowBlendPara.setColour(juce::TextButton::buttonOnColourId, juce::Colours::black);
+    bToggleShowBlendPara.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    bToggleShowBlendPara.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    bToggleShowBlendPara.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(bToggleShowBlendPara);
     
     // passes on pointer for layerBlendmodeControl to LayerControl

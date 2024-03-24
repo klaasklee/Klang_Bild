@@ -52,4 +52,6 @@ private:
     
     void bToggleShowBlendParaClicked();
     
+    LookAndFeel001 LookAndFeel001;
+    
 };
