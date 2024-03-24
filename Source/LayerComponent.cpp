@@ -79,11 +79,18 @@ LayerComponent::~LayerComponent()
 
 void LayerComponent::paint (juce::Graphics& g)
 {
-    // main (middle) area
-    g.fillAll(juce::Colours::darkgrey);
+    g.setColour (GlobalColors::bG);
+    g.drawRect (juce::Rectangle<int>(0, 0, layerControlW, getHeight()), 15);   // draw an outline around the Control component
+
+    // Dropshadow on waveBorder of ControlComponent
+    juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
+    dropShadow.drawForRectangle(g, juce::Rectangle<int>(waveBorder, waveBorder, layerControlW-waveBorder*2, layerHeight-waveBorder*2));
+    
+    g.setColour(GlobalColors::layerControlBg);
+    g.fillRect(waveBorder, 0+waveBorder, layerControlW-waveBorder*2, getHeight()-waveBorder*2);
     
     // left area
-    g.setColour(juce::Colours::lightgrey);
+    g.setColour(GlobalColors::layerLabel);
     g.fillRect(waveBorder, waveBorder, 36, getHeight()-waveBorder*2);
     
     // paint LayerIndex Number

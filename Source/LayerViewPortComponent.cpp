@@ -21,6 +21,7 @@ LayerViewPortComponent::~LayerViewPortComponent()
 {
 }
 
+
 void LayerViewPortComponent::resized()
 {
     LayersContainer.setBounds(0, 0, getLocalBounds().getWidth(), LayersContainer.getLayerContainerHeight());

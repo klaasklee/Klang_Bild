@@ -60,24 +60,38 @@ namespace GlobalColors {
     const juce::Colour black = juce::Colour(0xff000000);
     const juce::Colour white = juce::Colour(0xffffffff);
 
+    const juce::Colour dropShadow = juce::Colour(0x60000000);
+
     const juce::Colour brightText = juce::Colour(0xffffffff);
     const juce::Colour darkText = juce::Colour(0xff000000);
 
-    const juce::Colour BG = juce::Colour(0xffCFCFCF);
+    const juce::Colour buttonActive = juce::Colour(0xffbd3a31);
+    const juce::Colour buttonNotActive = juce::Colour(0xff000000);
 
+    // ControlBar
     const juce::Colour controlBarBG = juce::Colour(0xff9E9E9E);
 
-    const juce::Colour toolButtonActive = juce::Colour(0xffbd3a31);
-    const juce::Colour toolButtonNotActive = juce::Colour(0xff000000);
-
-    const juce::Colour controlBarPlayButtonActive = juce::Colour(0xff47FF37);
-    //const juce::Colour controlBarPlayButtonNotActive = juce::Colour(0xff47FF37);
-    //const juce::Colour controlBarPauseButtonActive = juce::Colour(0xffA16C2E);
-    const juce::Colour controlBarPauseButtonNotActive = juce::Colour(0xffA16C2E);
-    //const juce::Colour controlBarStopButtonActive = juce::Colour(0xff824242);
-    const juce::Colour controlBarStopButtonNotActive = juce::Colour(0xff824242);
+//    const juce::Colour controlBarPlayButtonActive = juce::Colour(0xff47FF37);
+//    const juce::Colour controlBarPlayButtonNotActive = juce::Colour(0xff47FF37);
+//    const juce::Colour controlBarPauseButtonActive = juce::Colour(0xffA16C2E);
+//    const juce::Colour controlBarPauseButtonNotActive = juce::Colour(0xffA16C2E);
+//    const juce::Colour controlBarStopButtonActive = juce::Colour(0xff824242);
+//    const juce::Colour controlBarStopButtonNotActive = juce::Colour(0xff824242);
 
     const juce::Colour controlBarTimeStampBG = juce::Colour(0xff8D8D8D);
+
+    // PlayHeadRuler
+    const juce::Colour playHeadRulerBG = juce::Colour(0xff8D8D8D);
+//  const juce::Colour playHeadRulerLines = juce::Colour(0xffffffff);
+
+    // Layer
+    const juce::Colour bG = juce::Colour(0xffCFCFCF);
+    const juce::Colour layerLabel = juce::Colour(0xff9E9E9E);
+    // LayerControl
+    const juce::Colour layerControlBg = juce::Colour(0xffD9D9D9);
+    // LayerWave
+    const juce::Colour layerWaveBg = juce::Colour(0xffD9D9D9);
+
 
 }
 
@@ -142,12 +156,12 @@ public:
     {
         juce::Rectangle<float> tickBounds (x, y, w, h);
 
-        g.setColour (GlobalColors::toolButtonNotActive);
+        g.setColour (GlobalColors::buttonNotActive);
         g.fillRect (tickBounds);
 
         if (ticked)
         {
-            g.setColour (GlobalColors::toolButtonActive);
+            g.setColour (GlobalColors::buttonActive);
             g.fillRect (tickBounds);
         }
     }

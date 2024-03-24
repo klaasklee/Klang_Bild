@@ -70,9 +70,6 @@ LayerControlComponent::~LayerControlComponent()
 
 void LayerControlComponent::paint (juce::Graphics& g)
 {
-//    g.fillAll(juce::Colours::darkgrey);
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 15);   // draw an outline around the component
 }
 
 void LayerControlComponent::resized()
