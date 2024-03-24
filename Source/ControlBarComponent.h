@@ -13,7 +13,7 @@
 #include <JuceHeader.h>
 #include "AudioMeterComponent.h"
 #include "Globals.h"
-//#include "MainComponent.h"
+#include "LogoComponent.h"
 
 //==============================================================================
 
@@ -66,7 +66,7 @@ private:
     juce::ToggleButton bFünf;
     juce::ToggleButton bSechs;
     //MainControls
-    juce::Label lAppTitle;
+    LogoComponent   Logo;
     
     //styling - lookAndFeel
     LookAndFeel001 LookAndFeel001;

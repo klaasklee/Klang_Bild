@@ -68,11 +68,7 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     
     
     //MainControls
-    lAppTitle.setColour (juce::Label::textColourId, GlobalColors::brightText);
-    lAppTitle.setFont(GlobalFonts::titleFont);
-    lAppTitle.setText("AudioLayers", juce::dontSendNotification);
-    lAppTitle.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible(lAppTitle);
+    addAndMakeVisible(Logo);
     
 //    bPlay.setLookAndFeel(&LookAndFeel001);
     bPlay.onClick = [this] { bPlayClicked(); };
@@ -100,13 +96,6 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     recordButton.onClick = [this] { recordButtonClicked(); };
     recordButton.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
     addAndMakeVisible(&recordButton);
-    
-    //Info
-//    addAndMakeVisible(lMeter);
-//    lMeter.setColour (juce::Label::textColourId, GlobalColors::darkText);
-//    lMeter.setFont(GlobalFonts::titleFont);
-//    lMeter.setText("METER", juce::dontSendNotification);
-//    lMeter.setJustificationType(juce::Justification::centred);
     
     addAndMakeVisible(AudioMeter);
 
@@ -206,7 +195,7 @@ void ControlBarComponent::resized()
     mainControlsFB.flexWrap = juce::FlexBox::Wrap::wrap;
     mainControlsFB.justifyContent = juce::FlexBox::JustifyContent::center;
     
-    mainControlsFB.items.add(juce::FlexItem(lAppTitle).withMinWidth(getLocalBounds().getWidth()* 2/6).withHeight(getHeight()*3/4-30));
+    mainControlsFB.items.add(juce::FlexItem(Logo).withMinWidth(getLocalBounds().getWidth()* 2/6).withHeight(getHeight()*3/4-25));
     mainControlsFB.items.add(juce::FlexItem(bPlay).withMinWidth(60).withHeight(getHeight()/4));
     mainControlsFB.items.add(juce::FlexItem(bPause).withMinWidth(60).withHeight(getHeight()/4));
     mainControlsFB.items.add(juce::FlexItem(bStop).withMinWidth(60).withHeight(getHeight()/4));

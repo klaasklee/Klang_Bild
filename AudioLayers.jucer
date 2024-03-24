@@ -26,6 +26,9 @@
             file="Source/ControlBarComponent.h"/>
       <FILE id="t7rMzI" name="ControlBarComponent.cpp" compile="1" resource="0"
             file="Source/ControlBarComponent.cpp"/>
+      <FILE id="kphZSE" name="LogoComponent.h" compile="0" resource="0" file="Source/LogoComponent.h"/>
+      <FILE id="n9O0P3" name="LogoComponent.cpp" compile="1" resource="0"
+            file="Source/LogoComponent.cpp"/>
       <FILE id="W7wxHT" name="AudioMeterComponent.h" compile="0" resource="0"
             file="Source/AudioMeterComponent.h"/>
       <FILE id="yeKpNM" name="AudioMeterComponent.cpp" compile="1" resource="0"
@@ -59,6 +62,7 @@
       <FILE id="bkgFo3" name="LayerWaveComponent.cpp" compile="1" resource="0"
             file="Source/LayerWaveComponent.cpp"/>
     </GROUP>
+    <FILE id="Mol1cM" name="logo_1.svg" compile="0" resource="1" file="assets/logo_1.svg"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
