@@ -160,6 +160,11 @@ void ControlBarComponent::bPauseClicked()
 
 void ControlBarComponent::bLoopClicked()
 {
+    toggleLoop();
+}
+
+void ControlBarComponent::toggleLoop()
+{
     if (bLoop.getToggleState())
     {
         bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);

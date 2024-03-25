@@ -727,6 +727,14 @@ bool MainComponent::keyPressed(const juce::KeyPress& key, juce::Component* origi
         DBG("The space key was pressed");
         toggleTransportPlayPause();
     }
+    if (key.getTextCharacter() == 's') {
+        DBG("The s key was pressed");
+        transportStateChanged(Stop);
+    }
+    if (key.getTextCharacter() == 'l') {
+        DBG("The l key was pressed");
+        ControlBar.toggleLoop();
+    }
     
     return true; // Return true to indicate the event was handled
 }

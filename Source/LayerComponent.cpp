@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "LayerComponent.h"
 #include "Globals.h"
+#include "LayersContainerComponent.h"
 
 //==============================================================================
 LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
@@ -116,11 +117,13 @@ void LayerComponent::resized()
 
 void LayerComponent::moveLayerUp()
 {
-    DBG("moveLayerUp");
+//    DBG("moveLayerUp");
+    findParentComponentOfClass<LayersContainerComponent>()->changeLayerIndex(true, layerIndex);
 }
 void LayerComponent::moveLayerDown()
 {
-    DBG("moveLayerDown");
+//    DBG("moveLayerDown");
+    findParentComponentOfClass<LayersContainerComponent>()->changeLayerIndex(false, layerIndex);
 }
 void LayerComponent::bToggleShowBlendParaClicked()
 {

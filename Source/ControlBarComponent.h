@@ -37,6 +37,7 @@ public:
     juce::TextButton bStop;
 
     juce::TextButton bLoop;
+    void toggleLoop();
     
     juce::TextButton recordButton;
     
