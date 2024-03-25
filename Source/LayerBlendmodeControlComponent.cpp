@@ -78,8 +78,8 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             sPara2.setVisible(true);
             lPara1.setText("Freq Range", juce::NotificationType::dontSendNotification);
             lPara2.setText("Resonance", juce::NotificationType::dontSendNotification);
-            sPara1.setRange(0, 10000);
-            sPara2.setRange(0.1, 8);
+            sPara1.setRange(0, 15000);
+            sPara2.setRange(0.1, 10);
             sPara1.setValue(5000);
             sPara1.setDoubleClickReturnValue(true, 5000);
             sPara2.setValue(1);
