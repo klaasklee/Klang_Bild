@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 
-const float globalSampleRate = 48000.0;
+const float globalSampleRate = 44100;
 
 const float volumeOnStartUp = 0.8f;
 

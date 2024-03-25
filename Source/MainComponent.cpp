@@ -343,7 +343,7 @@ void MainComponent::blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponen
             powerBNextBlock /= numSamples;
 
             // scale the buffer A with the power of buffer B; interpolate linearly to the next block power. 
-            for (int i = 0; i < numSamples; i++) {
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
                 double x;
                 x = i * ((powerBNextBlock - powerB) / numSamples);
                 *writeOut++ = (*readA++) * (((powerB + x) + offset) * intensity * gain);
@@ -427,6 +427,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
     float freqOffset = 30;
     float resonance = layerB.LayerBlendmodeControl.fPara2; // 30;
     float filterCutoff;
+    float filterCutoffNextBlock;
 
     // set filter type according to parameters
     if (layerB.LayerBlendmodeControl.boPara1 && !layerB.LayerBlendmodeControl.boPara2) {
@@ -446,31 +447,53 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
 
     int samplesLeftToPlay = layerB.LayerWave.playBuffer.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
 
-
-    if (samplesLeftToPlay > 0 && playPosB >= 0)
+    filter.setResonance(resonance);
+    for (int ch = 0; ch < numChannelsA; ch++)
     {
-        for (int ch = 0; ch < numChannelsB; ch++)
+        float gain = layerB.LayerControl.channelGain[ch];
+        if (samplesLeftToPlay > numSamples && playPosB >= 0)
         {
-            float gain = layerB.LayerControl.channelGain[ch];
+            readA = layerA.getReadPointer(ch, playPosA);
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
-            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
+            writeOut = outLayer.getWritePointer(ch);
+
+            // calculate the mean power of this block and the next 
+            double powerB = 0;
+            double powerBNextBlock = 0;
+            for (int i = 0; i < numSamples; i++) {
                 powerB += (*readB) * ((*readB++)) * gain * gain;
             }
-            
+            for (int i = 0; i < numSamples; i++) {
+                powerBNextBlock += (*readB) * ((*readB++)) * gain * gain;
+            }
+            powerB /= numSamples;
+            powerBNextBlock /= numSamples;
+
+            filterCutoff = powerB * freqRange + freqOffset;
+            filterCutoff = (filterCutoff > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoff; // check if cutoff is below nyquist
+
+            filterCutoffNextBlock = powerBNextBlock * freqRange + freqOffset;
+            filterCutoffNextBlock = (filterCutoffNextBlock > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoffNextBlock; // check if cutoff is below nyquist
+
+            // scale the buffer A with the power of buffer B; interpolate linearly to the next block power. 
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
+                double x;
+                double y; 
+                x = i * ((filterCutoffNextBlock - filterCutoff) / numSamples);
+                y = filterCutoff + x;
+                y = (y > globalSampleRate / 2) ? (globalSampleRate / 2) : y;
+                filter.setCutoffFrequency(y);
+                *writeOut++ = filter.processSample(ch, *readA++);
+            }
         }
-        powerB /= (numChannelsB * numSamples);
-    }
+        else { // if one track is finished, just copy the other one to output
+            readA = layerA.getReadPointer(ch, playPosA);
+            writeOut = outLayer.getWritePointer(ch);
 
-    filterCutoff = powerB * freqRange + freqOffset;
-    filterCutoff = (filterCutoff > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoff; // check if cutoff is below nyquist
-
-    if (samplesLeftToPlay > numSamples) {
-        //auto inputAudioBlock = juce::dsp::AudioBlock<float>(layerA);
-        auto outputAudioBlock = juce::dsp::AudioBlock<float>(outLayer);
-        auto context = juce::dsp::ProcessContextReplacing<float>(outputAudioBlock);
-        filter.setResonance(resonance);
-        filter.setCutoffFrequency(filterCutoff);
-        filter.process(context);
+            for (int i = 0; i < numSamples; i++) {
+                *writeOut++ = *readA++;
+            }
+        }
     }
 
 }
