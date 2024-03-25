@@ -121,6 +121,7 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
 
     lTimeCode.setColour (juce::Label::textColourId, GlobalColors::white);
     lTimeCode.setColour (juce::Label::backgroundColourId, GlobalColors::black);
+    lTimeCode.setLookAndFeel(&LookAndFeel003);
     lTimeCode.setFont(GlobalFonts::titleFont);
     lTimeCode.setText("TIMECODE", juce::dontSendNotification);
     lTimeCode.setJustificationType(juce::Justification::centred);

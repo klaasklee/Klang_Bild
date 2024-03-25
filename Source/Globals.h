@@ -434,3 +434,40 @@ public:
         g.strokePath (outline, juce::PathStrokeType (2.0f));
     }
 };
+
+// LookAndFeel explicitly for Timcode Label
+class LookAndFeel003 : public juce::LookAndFeel_V4
+{
+public:
+    void drawLabel (juce::Graphics& g, juce::Label& label)
+    {
+//        g.fillAll (label.findColour (juce::Label::backgroundColourId));
+        
+        juce::Rectangle<int> bgBounds;
+        bgBounds = label.getLocalBounds().reduced(label.getLocalBounds().getWidth()*0.3, label.getLocalBounds().getHeight()*0.1);
+        g.fillRect(bgBounds);
+    
+        if (! label.isBeingEdited())
+        {
+            auto alpha = label.isEnabled() ? 1.0f : 0.5f;
+            const juce::Font font (getLabelFont (label));
+    
+            g.setColour (label.findColour (juce::Label::textColourId).withMultipliedAlpha (alpha));
+            g.setFont (font);
+    
+            auto textArea = getLabelBorderSize (label).subtractedFrom (label.getLocalBounds());
+    
+            g.drawFittedText (label.getText(), textArea, label.getJustificationType(),
+                              juce::jmax (1, (int) ((float) textArea.getHeight() / font.getHeight())),
+                              label.getMinimumHorizontalScale());
+    
+            g.setColour (label.findColour (juce::Label::outlineColourId).withMultipliedAlpha (alpha));
+        }
+        else if (label.isEnabled())
+        {
+            g.setColour (label.findColour (juce::Label::outlineColourId));
+        }
+    
+        g.drawRect (label.getLocalBounds());
+    }
+};
