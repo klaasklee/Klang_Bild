@@ -145,6 +145,16 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
     }
     
 }
+void AudioMeterComponent::resetAudioMeter()
+{
+    rmsNumOfCurrentValues = 0;
+    rmsSumOfSquaresL = 0;
+    rmsSumOfSquaresR = 0;
+    rmsCurrentValueL = 0;
+    rmsCurrentValueR = 0;
+    rmsTargetValueL = 0;
+    rmsTargetValueR = 0;
+}
 
 void AudioMeterComponent::resized()
 {

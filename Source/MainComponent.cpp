@@ -200,6 +200,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
+        
+        // reset AudioMeter
+        ControlBar.AudioMeter.resetAudioMeter();
     }
 
     if (state == Pause)
@@ -216,6 +219,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
         
+        // reset AudioMeter
+        ControlBar.AudioMeter.resetAudioMeter();
     }
     
 }
