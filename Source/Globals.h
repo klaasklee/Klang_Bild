@@ -109,6 +109,7 @@ const juce::Font mainFont = juce::Font("Eastman Roman Alt", "Regular", 20.0f);
 //Styling - LOOKANDFEEL
 //==============================================================================
 
+// Main Styling LookAndFeel
 class LookAndFeel001 : public juce::LookAndFeel_V4
 {
 public:
@@ -394,5 +395,42 @@ public:
     //
     //    g.setColour (Colours::black.withAlpha (0.4f * mainAlpha));
     //    g.strokePath (outline, PathStrokeType (1.0f));
+    }
+};
+
+// LookAndFeel for Buttons with white Stroke Outline
+class LookAndFeel002 : public juce::LookAndFeel_V4
+{
+public:
+    void drawButtonBackground (juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+                                               bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        juce::Colour baseColour (backgroundColour.withMultipliedSaturation (button.hasKeyboardFocus (true) ? 1.3f : 0.9f)
+                                           .withMultipliedAlpha (button.isEnabled() ? 0.9f : 0.5f));
+
+        if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
+            baseColour = baseColour.contrasting (shouldDrawButtonAsDown ? 0.2f : 0.1f);
+
+        const float width  = (float) button.getWidth()  - 1.0f;
+        const float height = (float) button.getHeight() - 1.0f;
+
+        if (width > 0 && height > 0)
+        {
+
+            juce::Path outline;
+
+            outline.addRectangle(0.5f, 0.5f, width, height);
+
+            drawButtonShape (g, outline, baseColour, height);
+        }
+    }
+    static void drawButtonShape (juce::Graphics& g, const juce::Path& outline, juce::Colour baseColour, float height)
+    {
+        g.setGradientFill (juce::ColourGradient::vertical (baseColour, 0.0f,
+                                                     baseColour, height));
+        g.fillPath (outline);
+
+        g.setColour (GlobalColors::white);
+        g.strokePath (outline, juce::PathStrokeType (2.0f));
     }
 };

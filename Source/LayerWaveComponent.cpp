@@ -26,7 +26,7 @@ LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
     openButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::black);
     openButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
     openButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
-    openButton.setLookAndFeel(&LookAndFeel001);
+    openButton.setLookAndFeel(&LookAndFeel002);
     addAndMakeVisible(&openButton);
     
     formatManager.registerBasicFormats(); //now we can read wav and aiff formats
@@ -50,6 +50,10 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     
     g.setColour(GlobalColors::layerWaveBg);
     g.fillRect(getLocalBounds().getX()+waveBorder, getLocalBounds().getY()+waveBorder, getLocalBounds().getWidth()-waveBorder*2, getLocalBounds().getHeight()-waveBorder*2);
+    
+    juce::Rectangle<int> clipRegion = getLocalBounds().reduced(waveBorder); // Define the area to cut off shapes
+    // Reduce the clipping region to the specified rectangle
+    g.reduceClipRegion(clipRegion);
     
     if (updateWaveform && fileLoaded)
     {
@@ -78,34 +82,48 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 
         rect.setBounds(waveBorder+playOffsetInPx, waveBorder, p.getBounds().getRight()-playOffsetInPx-waveBorder, getHeight()-waveBorder*2);
 
-//        g.setColour(juce::Colours::black);
-//        g.fillRoundedRectangle(rect, 3);
-        
         g.setColour(juce::Colours::black);
+//        g.fillRoundedRectangle(rect, 3);
+        g.fillRect(rect.expanded(3));
+        
+        g.setColour(GlobalColors::layerWaveBg);
         g.strokePath(p, juce::PathStrokeType(2));
         
-        g.setColour(juce::Colours::black);
+//        g.setColour(juce::Colours::black);
 //        g.drawRoundedRectangle(rect, 7, 3);
-        g.drawRect(rect.expanded(0.5), 3);
+//        g.drawRect(rect.expanded(0.5), 3);
         
-        g.setColour(juce::Colours::darkred);
-        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
-
+        g.setColour(GlobalColors::white);
+        if (playOffsetInPx <= 0)
+        {
+            g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
+        }
+        else
+        {
+            g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+        }
     }
     else if (fileLoaded)
     {
-//        g.setColour(juce::Colours::black);
-//        g.fillRoundedRectangle(rect, 3);
-        
         g.setColour(juce::Colours::black);
+//        g.fillRoundedRectangle(rect, 3);
+        g.fillRect(rect.expanded(3));
+        
+        g.setColour(GlobalColors::layerWaveBg);
         g.strokePath(p, juce::PathStrokeType(2));
         
-        g.setColour(juce::Colours::black);
+//        g.setColour(juce::Colours::black);
 //        g.drawRoundedRectangle(rect, 7, 3);
-        g.drawRect(rect.expanded(0.5), 3);
+//        g.drawRect(rect.expanded(0.5), 3);
 
-        g.setColour(juce::Colours::darkred);
-        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+        g.setColour(GlobalColors::white);
+        if (playOffsetInPx <= 0)
+        {
+            g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
+        }else
+        {
+            g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+        }
     }
     updateWaveform = false;
 }
