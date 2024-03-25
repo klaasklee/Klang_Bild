@@ -241,9 +241,9 @@ void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, LayerComponent
             writeOut = outLayer.getWritePointer(ch);
             readA = layerA.getReadPointer(ch, playPosA);
 
-            for (int i = 0; i < numSamples; i++) {
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
                 // perform adding
-                *writeOut++ = *readA++ + ((i < samplesLeftToPlay) ? ((*readB++) * gain) : 0);
+                *writeOut++ = (*readA++) + (*readB++) * gain;
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -283,7 +283,7 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponen
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
             writeOut = outLayer.getWritePointer(ch);
 
-            for (int i = 0; i < numSamples; i++) {
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
                 *writeOut++ = (*readA++) * (*readB++) * gain;
             }
         }
@@ -387,7 +387,7 @@ void MainComponent::blendModeBinary(juce::AudioSampleBuffer& layerA, LayerCompon
             writeOut = outLayer.getWritePointer(ch);
             readA = layerA.getReadPointer(ch, playPosA);
 
-            for (int i = 0; i < numSamples; i++) {
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
                 // perform adding
                 float accuracyFactor = 1e6;
                 long a = (long) (accuracyFactor  * (*readA++));
@@ -423,8 +423,8 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
     float* writeOut;
     double powerB = 0;
 
-    float freqRange = 5000; // used to scale the affected frequency range
-    float freqOffset = 30;
+    float freqRange = layerB.LayerBlendmodeControl.fPara1;// 5000; // used to scale the affected frequency range
+    float freqOffset = layerB.LayerBlendmodeControl.fPara2; // 30;
     float filterCutoff;
 
     jassert(numChannelsA == numChannelsB);
@@ -438,7 +438,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
         {
             float gain = layerB.LayerControl.channelGain[ch];
             readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
-            for (int i = 0; i < numSamples; i++) {
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
                 powerB += (*readB) * ((*readB++)) * gain * gain;
             }
             
@@ -459,6 +459,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
     }
 
 }
+
 void MainComponent::setFilterType() 
 {
     using fType = juce::dsp::StateVariableTPTFilterType;

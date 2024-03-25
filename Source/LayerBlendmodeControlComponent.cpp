@@ -68,19 +68,25 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             resetLayerBlendModeControl();
             bPara1.setVisible(false);
             bPara2.setVisible(false);
-            lPara1.setVisible(false);
-            sPara1.setVisible(false);
-            lPara2.setVisible(false);
-            sPara2.setVisible(false);
+            lPara1.setVisible(true);
+            sPara1.setVisible(true);
+            lPara2.setVisible(true);
+            sPara2.setVisible(true);
+            lPara1.setText("Freq Range", juce::NotificationType::dontSendNotification);
+            lPara2.setText("Freq Offset", juce::NotificationType::dontSendNotification);
+            sPara1.setRange(0, 20000);
+            sPara2.setRange(0, 10000);
+            sPara1.setValue(5000);
+            sPara2.setValue(100);
             break;
         case Binary:
             resetLayerBlendModeControl();
             bPara1.setVisible(false);
             bPara2.setVisible(false);
-            lPara1.setVisible(false);
-            sPara1.setVisible(false);
-            lPara2.setVisible(false);
-            sPara2.setVisible(false);
+            lPara1.setVisible(true);
+            sPara1.setVisible(true);
+            lPara2.setVisible(true);
+            sPara2.setVisible(true);
             break;
         default:
             break;
