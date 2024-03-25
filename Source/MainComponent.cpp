@@ -220,7 +220,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
     
 }
 
-
 void MainComponent::blendModeAdd(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
 {
     int numChannelsA = layerA.getNumChannels();
@@ -518,6 +517,7 @@ void MainComponent::setFilterType()
         filter.setType(fType::lowpass);
     }
 }
+
 void MainComponent::transportStateChanged(TransportState newState)
 {
     if (newState != state)
