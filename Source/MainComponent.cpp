@@ -16,7 +16,6 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     addAndMakeVisible(PlayHeadRuler);
     addAndMakeVisible(LayersViewPort);
     
-//    PlayHead.setBounds(getWidth(), getHeight()/5, 2, getHeight() -  getHeight()/5);
     addAndMakeVisible(PlayHead);
     
     // Some platforms require permissions to open input channels so request that here
@@ -152,7 +151,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
         }
 
@@ -198,7 +197,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+waveBorder+playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
     }
 
@@ -213,7 +212,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setTimeCode
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
-                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+                PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
         
     }
@@ -699,7 +698,7 @@ void MainComponent::setPlayHeadPos(int pos)
         int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
         
-        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
     }
     else if (pos < layersWaveBorder)
     {
@@ -707,7 +706,7 @@ void MainComponent::setPlayHeadPos(int pos)
         
         playPosInSamples = 0;
         
-        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
     }
     else if (pos > layersWidth - layersWaveBorder)
     {
@@ -716,16 +715,24 @@ void MainComponent::setPlayHeadPos(int pos)
         int ratio = ((timeLineSize * globalSampleRate) / (LayersViewPort.LayersContainer.Layers[0].LayerWave.getWidth() - waveBorder * 2));
         playPosInSamples = playHeadStartPos * ratio;
         
-        PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
+        PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
     }
 }
 
 bool MainComponent::keyPressed(const juce::KeyPress& key, juce::Component* originatingComponent)
 {
-    DBG("keyPressed");
+//    DBG("keyPressed");
     if (key.getTextCharacter() == ' ') {
         DBG("The space key was pressed");
         toggleTransportPlayPause();
+    }
+    if (key.getTextCharacter() == 's') {
+        DBG("The s key was pressed");
+        transportStateChanged(Stop);
+    }
+    if (key.getTextCharacter() == 'l') {
+        DBG("The l key was pressed");
+        ControlBar.toggleLoop();
     }
     
     return true; // Return true to indicate the event was handled

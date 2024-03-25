@@ -15,7 +15,6 @@
 #include "LayerWaveComponent.h"
 #include "LayerBlendmodeControlComponent.h"
 
-
 //==============================================================================
 /*
 */
@@ -31,8 +30,7 @@ public:
     void resized() override;
 
     int layerIndex;
-    
-    
+        
     LayerControlComponent LayerControl;
     LayerWaveComponent LayerWave;
 

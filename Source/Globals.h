@@ -14,13 +14,14 @@
 
 const float globalSampleRate = 44100;
 
-const float volumeOnStartUp = 0.8f;
+const float volumeOnStartUp = 0.5f;
 
 const int numOfLayers = 5;
 
 const int layerHeight = 200;
 const int layerControlW = 250;
 const int waveBorder = 15;
+const int playHeadW = 15;
 const int globalNumChannels = 2;
 
 // timeLineSize in seconds OnStartUp
