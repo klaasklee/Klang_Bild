@@ -8,9 +8,9 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     
     timeLineSize = timeLineSizeOnStartUp;
     
-    // init KeyListener
-    addKeyListener(&globalKeyListener);
+    // set KeyBoardFocus for KeyListener
     setWantsKeyboardFocus(true); // Ensure this component can receive keyboard focus
+    addKeyListener(this);
 
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(PlayHeadRuler);
@@ -31,7 +31,6 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
         // Specify the number of input and output channels that we want to open
         setAudioChannels (0, 2);
     }
-
 }
 
 MainComponent::~MainComponent()
@@ -40,7 +39,10 @@ MainComponent::~MainComponent()
     shutdownAudio();
 }
 
-// initialize the static filter 
+// initialize the static state
+MainComponent::TransportState MainComponent::state;
+
+// initialize the static filter
 juce::dsp::StateVariableTPTFilter<float> MainComponent::filter;
 
 //==============================================================================
@@ -126,7 +128,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                     // calls transportStateChanged() asyncon bec og changing some GUI elements etc...
                     juce::MessageManager::callAsync([=]()
                     {
-                        if (state = Export)
+                        if (state == Export)
                         {
                             toggleExportState();
                         }
@@ -545,16 +547,16 @@ void MainComponent::transportStateChanged(TransportState newState)
 void MainComponent::toggleTransportPlayPause()
 {
     DBG("transportToggle");
-    
-//    transportStateChanged(Stop);
-//    if (state == TransportState::Play || state == TransportState::Export)
-//    {
-//        DBG("toggle state zu Pause");
-//    }
-//    else if (state == TransportState::Pause || state == TransportState::Stop)
-//    {
-//        DBG("toggle state zu Play");
-//    }
+    if (state == TransportState::Play || state == TransportState::Export)
+    {
+        DBG("toggle state zu Pause");
+        transportStateChanged(Pause);
+    }
+    else if (state == TransportState::Pause || state == TransportState::Stop)
+    {
+        DBG("toggle state zu Play");
+        transportStateChanged(Play);
+    }
 }
 
 void MainComponent::setVolume(float volume)
@@ -693,6 +695,17 @@ void MainComponent::setPlayHeadPos(int pos)
         
         PlayHead.setBounds(layerControlW + playHeadStartPos, getHeight()/5, 2, getHeight() -  getHeight()/5);
     }
+}
+
+bool MainComponent::keyPressed(const juce::KeyPress& key, juce::Component* originatingComponent)
+{
+    DBG("keyPressed");
+    if (key.getTextCharacter() == ' ') {
+        DBG("The space key was pressed");
+        toggleTransportPlayPause();
+    }
+    
+    return true; // Return true to indicate the event was handled
 }
 
 void MainComponent::releaseResources()

@@ -7,15 +7,14 @@
 #include "PlayHeadComponent.h"
 #include "PlayHeadRulerComponent.h"
 
-#include "KeyListenerComponent.h"
-
 
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  : public juce::AudioAppComponent
+class MainComponent  :  public juce::AudioAppComponent,
+                        public juce::KeyListener
 {
 public:
     //==============================================================================
@@ -27,6 +26,8 @@ public:
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override;
     void releaseResources() override;
 
+    bool keyPressed(const juce::KeyPress& key, juce::Component* originatingComponent) override;
+    
     //==============================================================================
     void paint (juce::Graphics& g) override;
     void resized() override;
@@ -42,8 +43,8 @@ public:
         Pause,
         Export
     };
-    TransportState state;
-    
+    static TransportState state;
+        
     void transportStateChanged(TransportState newState);
     
     void toggleTransportPlayPause();
@@ -138,9 +139,7 @@ private:
     AlertWindowComponent ExportAlertWindow;
     
     juce::AudioSampleBuffer outBuffer;
-    
-    KeyListenerComponent globalKeyListener;
-    
+        
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 
 };
