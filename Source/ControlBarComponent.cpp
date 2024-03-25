@@ -119,11 +119,12 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     
     addAndMakeVisible(AudioMeter);
 
-    addAndMakeVisible(lTimeCode);
-    lTimeCode.setColour (juce::Label::textColourId, GlobalColors::darkText);
+    lTimeCode.setColour (juce::Label::textColourId, GlobalColors::white);
+    lTimeCode.setColour (juce::Label::backgroundColourId, GlobalColors::black);
     lTimeCode.setFont(GlobalFonts::titleFont);
     lTimeCode.setText("TIMECODE", juce::dontSendNotification);
     lTimeCode.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(lTimeCode);
                                     
 }
 

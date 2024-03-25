@@ -23,32 +23,18 @@ AudioMeterComponent::~AudioMeterComponent()
 
 void AudioMeterComponent::paint (juce::Graphics& g)
 {
-    // R and L label
-    juce::Rectangle<int> labelL;
-    juce::Rectangle<int> labelR;
-    labelL.setBounds(42, 15, 17, 17);
-    labelR.setBounds(42, 33, 17, 17);
-    
-    g.setColour(GlobalColors::black);
-    g.fillRect(labelL);
-    g.fillRect(labelR);
-    g.setColour(GlobalColors::white);
-    g.drawText("L", labelL, juce::Justification::centred);
-    g.drawText("R", labelR, juce::Justification::centred);
-    
     // draw meter
     auto mainBound = getLocalBounds().reduced(60, 12);
-    auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(3.f, 3.f);
-    auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(3.f, 3.f);
-    
-    juce::ColourGradient gradient = juce::ColourGradient{ juce::Colours::green, boundsL.getTopLeft(), juce::Colours::red, boundsL.getTopRight(), false };
-    
-    gradient.addColour(0.5, juce::Colours::yellow);
+    auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(3.f);
+    auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(3.f);
     
     g.setColour(juce::Colours::black);
     g.fillRect(boundsL);
     g.fillRect(boundsR);
 
+    juce::ColourGradient gradient = juce::ColourGradient{ juce::Colours::green, boundsL.getTopLeft(), juce::Colours::red, boundsL.getTopRight(), false };
+    gradient.addColour(0.5, juce::Colours::yellow);
+    
     g.setGradientFill(gradient);
     float scaledXL = juce::jmap(static_cast<float>(rmsCurrentValueL), 0.0f, 1.f, 0.0f, static_cast<float>(getWidth()));
     float scaledXR = juce::jmap(static_cast<float>(rmsCurrentValueR), 0.0f, 1.f, 0.0f, static_cast<float>(getWidth()));
@@ -56,12 +42,28 @@ void AudioMeterComponent::paint (juce::Graphics& g)
 //    DBG(scaledXR);
     g.fillRect(boundsL.removeFromLeft(scaledXL));
     g.fillRect(boundsR.removeFromLeft(scaledXR));
+    
+    
+    // R and L label
+    auto labelBoundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(4.f);
+    auto labelBoundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(4.f);
+    juce::Rectangle<float> labelL;
+    juce::Rectangle<float> labelR;
+    labelL.setBounds(labelBoundsL.getTopLeft().getX()-(labelBoundsL.getHeight()+3)*1.4, labelBoundsL.getTopLeft().getY()-3, labelBoundsL.getHeight()+6, labelBoundsL.getHeight()+6);
+    labelR.setBounds(labelBoundsR.getTopLeft().getX()-(labelBoundsR.getHeight()+3)*1.4, labelBoundsR.getTopLeft().getY()-3, labelBoundsR.getHeight()+6, labelBoundsR.getHeight()+6);
+    
+    g.setColour(GlobalColors::black);
+    g.fillRect(labelL);
+    g.fillRect(labelR);
+    g.setColour(GlobalColors::white);
+    g.drawText("L", labelL, juce::Justification::centred);
+    g.drawText("R", labelR, juce::Justification::centred);
 }
 void AudioMeterComponent::paintOverChildren(::juce::Graphics& g)
 {
-    auto mainBound = getLocalBounds().reduced(60, 15);
-    auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2);
-    auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2);
+    auto mainBound = getLocalBounds().reduced(60, 12);
+    auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(1.f);
+    auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(1.f);
     
     grill->drawWithin(g, boundsL, juce::RectanglePlacement::stretchToFit, 1.0f);
     grill->drawWithin(g, boundsR, juce::RectanglePlacement::stretchToFit, 1.0f);
