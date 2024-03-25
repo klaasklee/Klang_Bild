@@ -14,7 +14,7 @@
 //==============================================================================
 LogoComponent::LogoComponent()
 {
-    auto svgData = juce::MemoryInputStream(BinaryData::logo_1_svg, BinaryData::logo_1_svgSize, false);
+    auto svgData = juce::MemoryInputStream(BinaryData::logo_2_svg, BinaryData::logo_2_svgSize, false);
     svgLogo = juce::Drawable::createFromImageDataStream(svgData);
     
 //    if (svgLogo != nullptr)

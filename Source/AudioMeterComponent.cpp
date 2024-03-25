@@ -114,7 +114,8 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
         double newRmsL = std::sqrt(meanOfSquaresL);
         double newRmsR = std::sqrt(meanOfSquaresR);
         
-        // for smoothing out the decline but not the transients
+        // update GUI
+        // smoothing out the decline but not the transients
         if (newRmsL < rmsCurrentValueL)
         {
             rmsTargetValueL = newRmsL;
@@ -134,11 +135,6 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
             rmsTargetValueR = newRmsR;
         }
         
-        // update GUI
-        DBG("L");
-        DBG(meanOfSquaresL);
-        DBG("R");
-        DBG(meanOfSquaresR);
         
         // reset rms Values
         rmsNumOfCurrentValues = 0;

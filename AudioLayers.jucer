@@ -61,6 +61,7 @@
     <FILE id="KUUNBg" name="LevelMeterGrill.svg" compile="0" resource="1"
           file="assets/LevelMeterGrill.svg"/>
     <FILE id="Mol1cM" name="logo_1.svg" compile="0" resource="1" file="assets/logo_1.svg"/>
+    <FILE id="sIauL3" name="logo_2.svg" compile="0" resource="1" file="assets/logo_2.svg"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
