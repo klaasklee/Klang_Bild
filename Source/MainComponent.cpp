@@ -284,7 +284,7 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponen
             writeOut = outLayer.getWritePointer(ch);
 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
-                *writeOut++ = (*readA++) * (*readB++) * gain;
+                *writeOut++ = (*readA++) * (*readB++) * gain * 2; // magic 2 to add more volume ;) 
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -424,8 +424,23 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
     double powerB = 0;
 
     float freqRange = layerB.LayerBlendmodeControl.fPara1;// 5000; // used to scale the affected frequency range
-    float freqOffset = layerB.LayerBlendmodeControl.fPara2; // 30;
+    float freqOffset = 30;
+    float resonance = layerB.LayerBlendmodeControl.fPara2; // 30;
     float filterCutoff;
+
+    // set filter type according to parameters
+    if (layerB.LayerBlendmodeControl.boPara1 && !layerB.LayerBlendmodeControl.boPara2) {
+        filter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
+    }
+    else if (!layerB.LayerBlendmodeControl.boPara1 && layerB.LayerBlendmodeControl.boPara2) {
+        filter.setType(juce::dsp::StateVariableTPTFilterType::highpass);
+    }
+    else if (layerB.LayerBlendmodeControl.boPara1 && layerB.LayerBlendmodeControl.boPara2) {
+        filter.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
+    }
+    else {
+        filter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
+    }
 
     jassert(numChannelsA == numChannelsB);
 
@@ -453,7 +468,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
         //auto inputAudioBlock = juce::dsp::AudioBlock<float>(layerA);
         auto outputAudioBlock = juce::dsp::AudioBlock<float>(outLayer);
         auto context = juce::dsp::ProcessContextReplacing<float>(outputAudioBlock);
-        filter.setResonance(0.95);
+        filter.setResonance(resonance);
         filter.setCutoffFrequency(filterCutoff);
         filter.process(context);
     }

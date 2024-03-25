@@ -66,18 +66,22 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             break;
         case VariableFilter:
             resetLayerBlendModeControl();
-            bPara1.setVisible(false);
-            bPara2.setVisible(false);
+            bPara1.setVisible(true);
+            bPara2.setVisible(true);
+            bPara1.setButtonText("LPF");
+            bPara2.setButtonText("HPF");
+            bPara1.setToggleState(true, juce::NotificationType::dontSendNotification);
+            bPara2.setToggleState(false, juce::NotificationType::dontSendNotification);
             lPara1.setVisible(true);
             sPara1.setVisible(true);
             lPara2.setVisible(true);
             sPara2.setVisible(true);
             lPara1.setText("Freq Range", juce::NotificationType::dontSendNotification);
-            lPara2.setText("Freq Offset", juce::NotificationType::dontSendNotification);
-            sPara1.setRange(0, 20000);
-            sPara2.setRange(0, 10000);
+            lPara2.setText("Resonance", juce::NotificationType::dontSendNotification);
+            sPara1.setRange(0, 10000);
+            sPara2.setRange(0.1, 8);
             sPara1.setValue(5000);
-            sPara2.setValue(100);
+            sPara2.setValue(1);
             break;
         case Binary:
             resetLayerBlendModeControl();
