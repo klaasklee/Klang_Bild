@@ -39,12 +39,12 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
     switch (newBlendmode) {
         case Normal:
             resetLayerBlendModeControl();
-//            bPara1.setVisible(false);
-//            bPara2.setVisible(false);
-//            lPara1.setVisible(false);
-//            sPara1.setVisible(false);
-//            lPara2.setVisible(false);
-//            sPara2.setVisible(false);
+            bPara1.setVisible(false);
+            bPara2.setVisible(false);
+            lPara1.setVisible(false);
+            sPara1.setVisible(false);
+            lPara2.setVisible(false);
+            sPara2.setVisible(false);
             break;
         case Multiply:
             resetLayerBlendModeControl();
@@ -81,7 +81,9 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             sPara1.setRange(0, 10000);
             sPara2.setRange(0.1, 8);
             sPara1.setValue(5000);
+            sPara1.setDoubleClickReturnValue(true, 5000);
             sPara2.setValue(1);
+            sPara2.setDoubleClickReturnValue(true, 1);
             break;
         case Binary:
             resetLayerBlendModeControl();
