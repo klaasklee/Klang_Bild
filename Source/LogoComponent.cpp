@@ -45,7 +45,7 @@ void LogoComponent::paint (juce::Graphics& g)
     int x = (getWidth() - scaledWidth) / 2;
     int y = ((getHeight()-vertMargin) - scaledHeight) / 2;
     
-    svgLogo->drawWithin(g, juce::Rectangle<float>(x, y+vertMargin, (float) scaledWidth, (float) scaledHeight), juce::RectanglePlacement::centred, scale);
+    svgLogo->drawWithin(g, juce::Rectangle<float>(x, y+vertMargin, (float) scaledWidth, (float) scaledHeight), juce::RectanglePlacement::centred, 1.0f);
 }
 
 void LogoComponent::resized()

@@ -58,6 +58,8 @@
       <FILE id="bkgFo3" name="LayerWaveComponent.cpp" compile="1" resource="0"
             file="Source/LayerWaveComponent.cpp"/>
     </GROUP>
+    <FILE id="KUUNBg" name="LevelMeterGrill.svg" compile="0" resource="1"
+          file="assets/LevelMeterGrill.svg"/>
     <FILE id="Mol1cM" name="logo_1.svg" compile="0" resource="1" file="assets/logo_1.svg"/>
   </MAINGROUP>
   <MODULES>
