@@ -36,7 +36,7 @@ public:
     juce::TextButton bPause;
     juce::TextButton bStop;
 
-    juce::ToggleButton bLoop;
+    juce::TextButton bLoop;
     
     juce::TextButton recordButton;
     

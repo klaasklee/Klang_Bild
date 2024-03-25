@@ -85,7 +85,8 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         g.strokePath(p, juce::PathStrokeType(2));
         
         g.setColour(juce::Colours::black);
-        g.drawRoundedRectangle(rect, 7, 3);
+//        g.drawRoundedRectangle(rect, 7, 3);
+        g.drawRect(rect.expanded(0.5), 3);
         
         g.setColour(juce::Colours::darkred);
         g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
@@ -100,8 +101,9 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         g.strokePath(p, juce::PathStrokeType(2));
         
         g.setColour(juce::Colours::black);
-        g.drawRoundedRectangle(rect, 7, 3);
-        
+//        g.drawRoundedRectangle(rect, 7, 3);
+        g.drawRect(rect.expanded(0.5), 3);
+
         g.setColour(juce::Colours::darkred);
         g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
     }

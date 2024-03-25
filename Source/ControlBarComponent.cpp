@@ -14,7 +14,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), recordButton("record")
+ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), bLoop("loop"), recordButton("record")
 {
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -71,7 +71,6 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     //MainControls
     addAndMakeVisible(Logo);
     
-//    bPlay.setLookAndFeel(&LookAndFeel001);
     bPlay.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarPlayButtonNotActive);
     bPlay.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarPlayButtonActive);
     bPlay.setLookAndFeel(&LookAndFeel001);
@@ -81,7 +80,6 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     bPlay.setEnabled(true);
     addAndMakeVisible(bPlay);
 
-//    bPause.setLookAndFeel(&LookAndFeel001);
     bPause.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarPauseButtonNotActive);
     bPause.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarPauseButtonActive);
     bPause.setLookAndFeel(&LookAndFeel001);
@@ -91,7 +89,6 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     bPause.setEnabled(true);
     addAndMakeVisible(bPause);
 
-//    bStop.setLookAndFeel(&LookAndFeel001);
     bStop.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarStopButtonNotActive);
     bStop.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarStopButtonActive);
     bStop.setLookAndFeel(&LookAndFeel001);
@@ -102,8 +99,11 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bStop);
 
-    bLoop.setButtonText("loop");
+    bLoop.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarLoopButtonNotActive);
+    bLoop.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarLoopButtonActive);
     bLoop.setLookAndFeel(&LookAndFeel001);
+    bLoop.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bLoop.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     bLoop.onClick = [this] { bLoopClicked(); };
     bLoop.setEnabled(true);
     bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
@@ -160,6 +160,13 @@ void ControlBarComponent::bPauseClicked()
 
 void ControlBarComponent::bLoopClicked()
 {
+    if (bLoop.getToggleState())
+    {
+        bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
+    }else
+    {
+        bLoop.setToggleState(true, juce::NotificationType::dontSendNotification);
+    }
     std::cout << "loop toggled: " << bLoop.getToggleState() << std::endl;
     findParentComponentOfClass<MainComponent>()->setTransportLoop(bLoop.getToggleState());
 }

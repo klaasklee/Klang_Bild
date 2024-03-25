@@ -77,6 +77,8 @@ namespace GlobalColors {
     const juce::Colour controlBarPauseButtonNotActive = juce::Colour(0xff000000);
     const juce::Colour controlBarStopButtonActive = juce::Colour(0xff824242);
     const juce::Colour controlBarStopButtonNotActive = juce::Colour(0xff000000);
+    const juce::Colour controlBarLoopButtonActive = juce::Colour(0xff2e516e);
+    const juce::Colour controlBarLoopButtonNotActive = juce::Colour(0xff000000);
     const juce::Colour controlBarRecordButtonActive = juce::Colour(0xff824242);
     const juce::Colour controlBarRecordButtonNotActive = juce::Colour(0xff000000);
 
