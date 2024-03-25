@@ -21,12 +21,23 @@ AlertWindowComponent::AlertWindowComponent(juce::String b1Txt, juce::String b2Tx
     
     b1.onClick = [this] { b1Clicked(); };
     b1.setBounds(40, 200, 100, 50);
+    b1.setColour(juce::TextButton::buttonColourId, GlobalColors::black);
+    b1.setColour(juce::TextButton::buttonOnColourId, GlobalColors::black);
+    b1.setLookAndFeel(&LookAndFeel001);
+    b1.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    b1.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     addAndMakeVisible(b1);
     b2.onClick = [this] { b2Clicked(); };
     b2.setBounds(160, 200, 100, 50);
+    b2.setColour(juce::TextButton::buttonColourId, GlobalColors::black);
+    b2.setColour(juce::TextButton::buttonOnColourId, GlobalColors::black);
+    b2.setLookAndFeel(&LookAndFeel001);
+    b2.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    b2.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     addAndMakeVisible(b2);
     
     textEditor.setBounds(50, 120, 200, 30);
+    textEditor.setColour(juce::TextEditor::backgroundColourId, GlobalColors::black);
     if (windowType == SetTimeLineSizeWindow)
     {
         textEditor.setInputRestrictions(3, "0123456789");

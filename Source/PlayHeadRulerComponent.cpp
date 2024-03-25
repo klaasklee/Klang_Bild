@@ -18,7 +18,11 @@ PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timelin
 
 {
     bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
-    bSetTimeLineSize.setBounds(waveBorder, 5, layerControlW-waveBorder*2, 20);
+    bSetTimeLineSize.setBounds(waveBorder, 6, layerControlW-waveBorder*2, 20);
+    bSetTimeLineSize.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    bSetTimeLineSize.setLookAndFeel(&LookAndFeel001);
+    bSetTimeLineSize.setColour(juce::TextButton::textColourOnId, GlobalColors::white);
+    bSetTimeLineSize.setColour(juce::TextButton::textColourOffId, GlobalColors::white);
     addAndMakeVisible(&bSetTimeLineSize);
 }
 
@@ -29,7 +33,7 @@ PlayHeadRulerComponent::~PlayHeadRulerComponent()
 
 void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::lightgrey);
+    g.fillAll (GlobalColors::playHeadRulerBG);
     g.setColour(juce::Colours::black);
     
     int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
@@ -54,6 +58,10 @@ void PlayHeadRulerComponent::paint (juce::Graphics& g)
         big ++;
         
     }
+    
+    // Dropshadow on Ruler
+    juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
+    dropShadow.drawForRectangle(g, juce::Rectangle<int>(-10, -7, getWidth()+20, 0));
 
 }
 

@@ -14,7 +14,7 @@
 #include "LayerComponent.h"
 
 //==============================================================================
-LayerControlComponent::LayerControlComponent()
+LayerControlComponent::LayerControlComponent() : bMute("M")
 {
     
     //Gain Knob
@@ -24,10 +24,11 @@ LayerControlComponent::LayerControlComponent()
     sGain.setDoubleClickReturnValue(true, 0.5);
     sGain.setNumDecimalPlacesToDisplay(2);
     sGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    sGain.setTextValueSuffix(" dB gain");
+    sGain.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
+    sGain.setTextValueSuffix(" gain");
     sGain.addListener(this);
     sGain.setLookAndFeel(&LookAndFeel001);
-    sGain.setBounds(30, 55, 100, 60);
+    sGain.setBounds(73, 28, 60, 60);
     addAndMakeVisible(sGain);
     
     //Pan Knob
@@ -37,10 +38,11 @@ LayerControlComponent::LayerControlComponent()
     sPan.setDoubleClickReturnValue(true, 0.5);
     sPan.setNumDecimalPlacesToDisplay(2);
     sPan.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    sPan.setColour(juce::Slider::textBoxBackgroundColourId, GlobalColors::black);
     sPan.setTextValueSuffix(" pan");
     sPan.addListener(this);
     sPan.setLookAndFeel(&LookAndFeel001);
-    sPan.setBounds(120, 55, 100, 60);
+    sPan.setBounds(153, 28, 60, 60);
     addAndMakeVisible(sPan);
     
     // change the last BlendMode here
@@ -51,18 +53,20 @@ LayerControlComponent::LayerControlComponent()
     BlendModeDropdown.addListener(this);
 
     BlendModeDropdown.setJustificationType(juce::Justification::centred);
-    BlendModeDropdown.setBounds(55, 130, 140, 30);
-    
+    BlendModeDropdown.setBounds(73, 105, 140, 30);
+    BlendModeDropdown.setColour(juce::ComboBox::backgroundColourId, GlobalColors::black);
     addAndMakeVisible(BlendModeDropdown);
 
     BlendModeDropdown.setSelectedId(1);
     
     // muteButton
-    bMute.setButtonText("Mute");
-    bMute.setLookAndFeel(&LookAndFeel001);
     bMute.onClick = [this] { bMuteClicked(); };
-    bMute.setEnabled(true);
-    bMute.setBounds(50, 15, 70, 30);
+    bMute.setBounds(waveBorder+3, 145, 30, 30);
+    bMute.setColour(juce::TextButton::buttonOnColourId, juce::Colours::darkred);
+    bMute.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    bMute.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    bMute.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    bMute.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(bMute);
 }
 
@@ -72,9 +76,6 @@ LayerControlComponent::~LayerControlComponent()
 
 void LayerControlComponent::paint (juce::Graphics& g)
 {
-//    g.fillAll(juce::Colours::darkgrey);
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 15);   // draw an outline around the component
 }
 
 void LayerControlComponent::resized()
@@ -84,6 +85,17 @@ void LayerControlComponent::resized()
 
 void LayerControlComponent::bMuteClicked()
 {
-    layerMute = bMute.getToggleState();
-    std::cout << "layerMute: " << bMute.getToggleState() << std::endl;
+    DBG("toggle mute");
+    
+    if (layerMute == false)
+    {
+        layerMute = true;
+        bMute.setToggleState(true, juce::NotificationType::dontSendNotification);
+    }
+    else if (layerMute == true)
+    {
+        layerMute = false;
+        bMute.setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
 }
+

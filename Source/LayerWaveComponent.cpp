@@ -22,6 +22,11 @@ LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
     // load audio functionality
     fileLoaded = false;
     openButton.onClick = [this] { openButtonClicked(); };
+    openButton.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
+    openButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::black);
+    openButton.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
+    openButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    openButton.setLookAndFeel(&LookAndFeel001);
     addAndMakeVisible(&openButton);
     
     formatManager.registerBasicFormats(); //now we can read wav and aiff formats
@@ -34,8 +39,18 @@ LayerWaveComponent::~LayerWaveComponent()
 //draws Waveform
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::darkgrey);   // clear the background
-
+    g.fillAll (GlobalColors::layerWaveBg);   // clear the background
+    
+    g.setColour (GlobalColors::bG);
+    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
+    
+    // Dropshadow on waveBorder
+    juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
+    dropShadow.drawForRectangle(g, juce::Rectangle<int>(waveBorder, waveBorder, getWidth()-waveBorder*2, layerHeight-waveBorder*2));
+    
+    g.setColour(GlobalColors::layerWaveBg);
+    g.fillRect(getLocalBounds().getX()+waveBorder, getLocalBounds().getY()+waveBorder, getLocalBounds().getWidth()-waveBorder*2, getLocalBounds().getHeight()-waveBorder*2);
+    
     if (updateWaveform && fileLoaded)
     {
         p.clear();
@@ -43,11 +58,8 @@ void LayerWaveComponent::paint (juce::Graphics& g)
         int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
         int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
         auto buffer = playBuffer.getReadPointer(0);
-
+        
         DBG("update waveform");
-        //DBG(playBuffer.getNumSamples());
-        //DBG(ratio);
-
 
         // scale audio on x axis
         for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
@@ -66,37 +78,33 @@ void LayerWaveComponent::paint (juce::Graphics& g)
 
         rect.setBounds(waveBorder+playOffsetInPx, waveBorder, p.getBounds().getRight()-playOffsetInPx-waveBorder, getHeight()-waveBorder*2);
 
-        g.setColour(juce::Colours::black);
-        g.fillRoundedRectangle(rect, 3);
+//        g.setColour(juce::Colours::black);
+//        g.fillRoundedRectangle(rect, 3);
         
-        g.setColour(juce::Colours::white);
+        g.setColour(juce::Colours::black);
         g.strokePath(p, juce::PathStrokeType(2));
         
-        g.setColour(juce::Colours::white);
+        g.setColour(juce::Colours::black);
         g.drawRoundedRectangle(rect, 7, 3);
         
         g.setColour(juce::Colours::darkred);
-        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-5, 20, juce::Justification::left);
+        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
 
     }
     else if (fileLoaded)
     {
-        g.setColour(juce::Colours::black);
-        g.fillRoundedRectangle(rect, 3);
+//        g.setColour(juce::Colours::black);
+//        g.fillRoundedRectangle(rect, 3);
         
-        g.setColour(juce::Colours::white);
+        g.setColour(juce::Colours::black);
         g.strokePath(p, juce::PathStrokeType(2));
         
-        g.setColour(juce::Colours::white);
+        g.setColour(juce::Colours::black);
         g.drawRoundedRectangle(rect, 7, 3);
         
         g.setColour(juce::Colours::darkred);
-        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-5, 20, juce::Justification::left);
+        g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
     }
-    
-    
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
     updateWaveform = false;
 }
 

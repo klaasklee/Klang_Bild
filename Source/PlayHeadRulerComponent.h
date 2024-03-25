@@ -32,6 +32,7 @@ private:
 
     juce::TextButton bSetTimeLineSize;
     
+    LookAndFeel001 LookAndFeel001;
 
     void showSetTimeLineSizeAlertWindow();
 };
