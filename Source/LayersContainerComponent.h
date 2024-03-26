@@ -43,7 +43,5 @@ private:
     int getLayerByIndex(int index);
     
     void setBaseLayerControls();
-    
-    // BG
-    juce::Image imgBG;
+  
 };

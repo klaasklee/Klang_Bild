@@ -22,6 +22,8 @@ public:
     LayerViewPortComponent();
     ~LayerViewPortComponent() override;
 
+    void paint(juce::Graphics&) override;
+
     void resized() override;
 
     LayersContainerComponent LayersContainer;
@@ -31,4 +33,6 @@ private:
     
     juce::Viewport LayerViewport;
     
+    // BG
+    juce::Image imgBG;
 };

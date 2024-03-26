@@ -14,6 +14,9 @@
 //==============================================================================
 LayerViewPortComponent::LayerViewPortComponent()
 {
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayersContainer_2_jpg, BinaryData::bgLayersContainer_2_jpgSize);
+
     addAndMakeVisible(LayerViewport);
 }
 
@@ -21,6 +24,12 @@ LayerViewPortComponent::~LayerViewPortComponent()
 {
 }
 
+void LayerViewPortComponent::paint(juce::Graphics& g)
+{
+    g.fillAll(GlobalColors::bG);
+    // Draw BG
+    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
+}
 
 void LayerViewPortComponent::resized()
 {

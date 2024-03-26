@@ -201,10 +201,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
             });
-        
-        // reset AudioMeter
-        ControlBar.AudioMeter.resetAudioMeter();
     }
 
     if (state == Pause)
@@ -219,10 +218,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
             });
-        
-        // reset AudioMeter
-        ControlBar.AudioMeter.resetAudioMeter();
     }
     
 }

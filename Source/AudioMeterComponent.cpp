@@ -154,6 +154,7 @@ void AudioMeterComponent::resetAudioMeter()
     rmsCurrentValueR = 0;
     rmsTargetValueL = 0;
     rmsTargetValueR = 0;
+    repaint();
 }
 
 void AudioMeterComponent::resized()
