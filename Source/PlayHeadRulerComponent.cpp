@@ -38,7 +38,8 @@ void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
     g.fillAll (GlobalColors::playHeadRulerBG);
     // Draw BG
-//    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
+    g.reduceClipRegion(getLocalBounds());
+    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
     
     g.setColour(juce::Colours::black);
     

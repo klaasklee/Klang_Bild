@@ -56,8 +56,8 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     g.setColour(GlobalColors::layerWaveBg);
     g.fillRect(waveBG);
     // Draw BG
-//    g.reduceClipRegion(waveBG);
-//    g.drawImage(imgBG, waveBG.toFloat(), juce::RectanglePlacement::fillDestination, false);
+    g.reduceClipRegion(waveBG);
+    g.drawImage(imgBG, waveBG.toFloat(), juce::RectanglePlacement::fillDestination, false);
     
     juce::Rectangle<int> clipRegion = getLocalBounds().reduced(waveBorder); // Define the area to cut off shapes
     // Reduce the clipping region to the specified rectangle

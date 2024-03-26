@@ -192,7 +192,8 @@ void ControlBarComponent::paint (juce::Graphics& g)
 {
     g.fillAll(GlobalColors::controlBarBG);
     // Draw BG
-//    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
+    g.reduceClipRegion(getLocalBounds());
+    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 
 void ControlBarComponent::resized()

@@ -102,7 +102,7 @@ void LayerComponent::paint (juce::Graphics& g)
     g.setColour(GlobalColors::layerControlBg);
     g.fillRect(bgBounds);
     // Draw BG
-//    g.drawImage(imgBG, bgBounds.toFloat(), juce::RectanglePlacement::fillDestination, false);
+    g.drawImage(imgBG, bgBounds.toFloat(), juce::RectanglePlacement::fillDestination, false);
     
 //    // left area
 //    g.setColour(GlobalColors::layerLabel);

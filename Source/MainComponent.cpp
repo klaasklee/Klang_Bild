@@ -15,8 +15,9 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(PlayHeadRuler);
     addAndMakeVisible(LayersViewPort);
-    
+
     addAndMakeVisible(PlayHead);
+
     
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
