@@ -155,6 +155,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
+                // repaint AudioMeter
+                ControlBar.AudioMeter.repaint();
             });
         }
 
@@ -670,6 +672,7 @@ void MainComponent::setTimeLineSize(int i)
     }
 
     killExportAlertWindow();
+    repaint();
 }
 
 void MainComponent::killSetTimeLineSizeAlertWindow()
