@@ -17,7 +17,7 @@
 LayerControlComponent::LayerControlComponent() : bMute("M")
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_jpg, BinaryData::bgLayerControlAndWave_2_jpgSize);
     
     
     //Gain Knob

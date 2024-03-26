@@ -17,7 +17,7 @@
 LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_jpg, BinaryData::bgLayerControlAndWave_2_jpgSize);
     
     // movePlayhead
     addMouseListener(this, true);

@@ -8,26 +8,26 @@
 
 namespace BinaryData
 {
-    extern const char*   bgControlBar_2_png;
-    const int            bgControlBar_2_pngSize = 6933409;
+    extern const char*   bgControlBar_2_jpg;
+    const int            bgControlBar_2_jpgSize = 502911;
 
-    extern const char*   bgLayerControlAndWave_2_png;
-    const int            bgLayerControlAndWave_2_pngSize = 2760223;
+    extern const char*   bgLayerControlAndWave_2_jpg;
+    const int            bgLayerControlAndWave_2_jpgSize = 128389;
 
-    extern const char*   bgLayerLabel_png;
-    const int            bgLayerLabel_pngSize = 562141;
+    extern const char*   bgLayerLabel_jpg;
+    const int            bgLayerLabel_jpgSize = 28458;
 
-    extern const char*   bgLayersContainer_2_png;
-    const int            bgLayersContainer_2_pngSize = 20687992;
+    extern const char*   bgLayersContainer_2_jpg;
+    const int            bgLayersContainer_2_jpgSize = 940123;
 
-    extern const char*   bgPlayHeadRuler_2_png;
-    const int            bgPlayHeadRuler_2_pngSize = 2235493;
+    extern const char*   bgPlayHeadRuler_2_jpg;
+    const int            bgPlayHeadRuler_2_jpgSize = 237858;
 
     extern const char*   LevelMeterGrill_svg;
-    const int            LevelMeterGrill_svgSize = 16264;
+    const int            LevelMeterGrill_svgSize = 15965;
 
     extern const char*   logo_2_svg;
-    const int            logo_2_svgSize = 25751;
+    const int            logo_2_svgSize = 25673;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
     const int namedResourceListSize = 7;

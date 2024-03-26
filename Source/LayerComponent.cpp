@@ -20,7 +20,7 @@ LayerComponent::LayerComponent() :  bToggleShowBlendPara("show parameters"),
 {
     
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerLabel_png, BinaryData::bgLayerLabel_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerLabel_jpg, BinaryData::bgLayerLabel_jpgSize);
     
     addAndMakeVisible(LayerControl);
     addAndMakeVisible(LayerWave);

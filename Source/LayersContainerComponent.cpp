@@ -17,7 +17,7 @@
 LayersContainerComponent::LayersContainerComponent()
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayersContainer_2_png, BinaryData::bgLayersContainer_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayersContainer_2_jpg, BinaryData::bgLayersContainer_2_jpgSize);
     
     int index = numOfLayers-1;
     for (int i = 0; i < numOfLayers; i++) {

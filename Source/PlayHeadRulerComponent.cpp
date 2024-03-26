@@ -18,7 +18,7 @@ PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timelin
 
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgPlayHeadRuler_2_png, BinaryData::bgPlayHeadRuler_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgPlayHeadRuler_2_jpg, BinaryData::bgPlayHeadRuler_2_jpgSize);
     
     bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
     bSetTimeLineSize.setBounds(waveBorder, 6, layerControlW-waveBorder*2, 20);
