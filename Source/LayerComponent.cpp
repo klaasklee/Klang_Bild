@@ -96,6 +96,8 @@ void LayerComponent::paint (juce::Graphics& g)
     juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
     dropShadow.drawForRectangle(g, juce::Rectangle<int>(waveBorder, waveBorder, layerControlW-waveBorder*2, layerHeight-waveBorder*2));
     
+    // left area
+    g.reduceClipRegion(getLocalBounds().removeFromLeft(labelW+waveBorder*2).reduced(waveBorder));
     juce::Rectangle<int> bgBounds;
     bgBounds.setBounds(waveBorder, waveBorder, layerControlW-waveBorder*2, getHeight()-waveBorder*2);
     g.reduceClipRegion(bgBounds);
@@ -104,7 +106,6 @@ void LayerComponent::paint (juce::Graphics& g)
     // Draw BG
     g.drawImage(imgBG, bgBounds.toFloat(), juce::RectanglePlacement::fillDestination, false);
     
-//    // left area
 //    g.setColour(GlobalColors::layerLabel);
 //    g.fillRect(waveBorder, waveBorder, labelW, getHeight()-waveBorder*2);
     

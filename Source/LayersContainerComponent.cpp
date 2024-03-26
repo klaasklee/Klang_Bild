@@ -34,11 +34,6 @@ void LayersContainerComponent::resized()
     resortGuiLayers();
 }
 
-void LayersContainerComponent::paint (juce::Graphics& g)
-{
-    
-}
-
 void LayersContainerComponent::resortGuiLayers()
 {
     juce::FlexBox layersFB;

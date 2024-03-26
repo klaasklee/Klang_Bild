@@ -27,8 +27,6 @@ public:
         return numOfLayers*layerHeight;
     }
     
-    void paint (juce::Graphics&) override;
-    
     void resized() override;
 
     LayerComponent Layers[numOfLayers];
