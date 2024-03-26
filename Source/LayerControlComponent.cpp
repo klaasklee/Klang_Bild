@@ -80,8 +80,8 @@ LayerControlComponent::~LayerControlComponent()
 void LayerControlComponent::paint (juce::Graphics& g)
 {
     // Draw BG
-    g.reduceClipRegion(getLocalBounds().removeFromRight(getWidth()-labelW).reduced(waveBorder));
-    g.drawImage(imgBG, getLocalBounds().reduced(waveBorder).toFloat(), juce::RectanglePlacement::fillDestination, false);
+//    g.reduceClipRegion(getLocalBounds().removeFromRight(getWidth()-labelW).reduced(waveBorder));
+//    g.drawImage(imgBG, getLocalBounds().reduced(waveBorder).toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 
 void LayerControlComponent::resized()

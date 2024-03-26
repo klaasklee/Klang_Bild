@@ -28,7 +28,7 @@ void LayerViewPortComponent::paint(juce::Graphics& g)
 {
     g.fillAll(GlobalColors::bG);
     // Draw BG
-    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
+//    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 
 void LayerViewPortComponent::resized()
