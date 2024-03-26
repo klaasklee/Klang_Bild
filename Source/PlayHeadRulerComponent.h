@@ -35,4 +35,7 @@ private:
     LookAndFeel001 LookAndFeel001;
 
     void showSetTimeLineSizeAlertWindow();
+    
+    // BG
+    juce::Image imgBG;
 };

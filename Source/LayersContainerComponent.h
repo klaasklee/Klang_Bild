@@ -27,6 +27,8 @@ public:
         return numOfLayers*layerHeight;
     }
     
+    void paint (juce::Graphics&) override;
+    
     void resized() override;
 
     LayerComponent Layers[numOfLayers];
@@ -41,4 +43,7 @@ private:
     int getLayerByIndex(int index);
     
     void setBaseLayerControls();
+    
+    // BG
+    juce::Image imgBG;
 };

@@ -17,7 +17,7 @@
 ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), bLoop("loop"), recordButton("record")
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::textureControlBar_2_png, BinaryData::textureControlBar_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgControlBar_2_png, BinaryData::bgControlBar_2_pngSize);
 //
     
     //Volume

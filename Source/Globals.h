@@ -21,6 +21,7 @@ const int numOfLayers = 5;
 const int layerHeight = 200;
 const int layerControlW = 250;
 const int waveBorder = 15;
+const int labelW = 36;
 const int playHeadW = 15;
 const int globalNumChannels = 2;
 

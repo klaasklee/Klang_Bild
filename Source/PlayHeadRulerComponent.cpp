@@ -17,6 +17,9 @@
 PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timeline length")
 
 {
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgPlayHeadRuler_2_png, BinaryData::bgPlayHeadRuler_2_pngSize);
+    
     bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
     bSetTimeLineSize.setBounds(waveBorder, 6, layerControlW-waveBorder*2, 20);
     bSetTimeLineSize.setColour(juce::TextButton::buttonColourId, juce::Colours::black);
@@ -34,6 +37,9 @@ PlayHeadRulerComponent::~PlayHeadRulerComponent()
 void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
     g.fillAll (GlobalColors::playHeadRulerBG);
+    // Draw BG
+    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
+    
     g.setColour(juce::Colours::black);
     
     int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;

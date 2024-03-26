@@ -73,5 +73,8 @@ private:
 
 
     LookAndFeel002 LookAndFeel002;
+    
+    // BG
+    juce::Image imgBG;
 
 };

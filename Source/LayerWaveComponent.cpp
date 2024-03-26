@@ -16,6 +16,9 @@
 //==============================================================================
 LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
 {
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    
     // movePlayhead
     addMouseListener(this, true);
     
@@ -39,17 +42,22 @@ LayerWaveComponent::~LayerWaveComponent()
 //draws Waveform
 void LayerWaveComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (GlobalColors::layerWaveBg);   // clear the background
+//    g.fillAll (GlobalColors::layerWaveBg);   // clear the background
     
-    g.setColour (GlobalColors::bG);
-    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
+//    g.setColour (GlobalColors::bG);
+//    g.drawRect (getLocalBounds(), waveBorder);   // draw an outline around the component
     
     // Dropshadow on waveBorder
     juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
     dropShadow.drawForRectangle(g, juce::Rectangle<int>(waveBorder, waveBorder, getWidth()-waveBorder*2, layerHeight-waveBorder*2));
     
+    juce::Rectangle<int> waveBG;
+    waveBG.setBounds(getLocalBounds().getX()+waveBorder, getLocalBounds().getY()+waveBorder, getLocalBounds().getWidth()-waveBorder*2, getLocalBounds().getHeight()-waveBorder*2);
     g.setColour(GlobalColors::layerWaveBg);
-    g.fillRect(getLocalBounds().getX()+waveBorder, getLocalBounds().getY()+waveBorder, getLocalBounds().getWidth()-waveBorder*2, getLocalBounds().getHeight()-waveBorder*2);
+    g.fillRect(waveBG);
+    // Draw BG
+    g.reduceClipRegion(waveBG);
+    g.drawImage(imgBG, waveBG.toFloat(), juce::RectanglePlacement::fillDestination, false);
     
     juce::Rectangle<int> clipRegion = getLocalBounds().reduced(waveBorder); // Define the area to cut off shapes
     // Reduce the clipping region to the specified rectangle

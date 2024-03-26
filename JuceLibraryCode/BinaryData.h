@@ -8,17 +8,29 @@
 
 namespace BinaryData
 {
+    extern const char*   bgControlBar_2_png;
+    const int            bgControlBar_2_pngSize = 6933409;
+
+    extern const char*   bgLayerControlAndWave_2_png;
+    const int            bgLayerControlAndWave_2_pngSize = 2760223;
+
+    extern const char*   bgLayerLabel_png;
+    const int            bgLayerLabel_pngSize = 562141;
+
+    extern const char*   bgLayersContainer_2_png;
+    const int            bgLayersContainer_2_pngSize = 20687992;
+
+    extern const char*   bgPlayHeadRuler_2_png;
+    const int            bgPlayHeadRuler_2_pngSize = 2235493;
+
     extern const char*   LevelMeterGrill_svg;
     const int            LevelMeterGrill_svgSize = 15965;
 
     extern const char*   logo_2_svg;
     const int            logo_2_svgSize = 25673;
 
-    extern const char*   textureControlBar_2_png;
-    const int            textureControlBar_2_pngSize = 6933409;
-
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 7;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

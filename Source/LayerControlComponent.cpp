@@ -16,6 +16,9 @@
 //==============================================================================
 LayerControlComponent::LayerControlComponent() : bMute("M")
 {
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    
     
     //Gain Knob
     sGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -76,6 +79,9 @@ LayerControlComponent::~LayerControlComponent()
 
 void LayerControlComponent::paint (juce::Graphics& g)
 {
+    // Draw BG
+    g.reduceClipRegion(getLocalBounds().removeFromRight(getWidth()-labelW).reduced(waveBorder));
+    g.drawImage(imgBG, getLocalBounds().reduced(waveBorder).toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 
 void LayerControlComponent::resized()
