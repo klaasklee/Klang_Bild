@@ -99,11 +99,11 @@ void AudioMeterComponent::updateAudioMeter(const juce::AudioSourceChannelInfo& b
     // do some calculations goint from rmsCurrentValue to rmsTargetValue
     if (rmsCurrentValueL > rmsTargetValueL)
     {
-        rmsCurrentValueL = rmsTargetValueL - rmsTargetValueL * 0.2;
+        rmsCurrentValueL = rmsTargetValueL - rmsTargetValueL * 0.02;
     }
     if (rmsCurrentValueR > rmsTargetValueR)
     {
-        rmsCurrentValueR = rmsTargetValueR - rmsTargetValueR * 0.2;
+        rmsCurrentValueR = rmsTargetValueR - rmsTargetValueR * 0.02;
     }
     
     if (rmsNumOfCurrentValues >= rmsMaxNumOfValues)

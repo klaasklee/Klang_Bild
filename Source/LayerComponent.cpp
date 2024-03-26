@@ -14,8 +14,9 @@
 #include "LayersContainerComponent.h"
 
 //==============================================================================
-LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
-                                    layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), bToggleShowBlendPara("show parameters")
+LayerComponent::LayerComponent() :  bToggleShowBlendPara("show parameters"),
+                                    layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
+                                    layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey)
 {
     
     // BG
