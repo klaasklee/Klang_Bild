@@ -143,6 +143,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 playPosInSamples += lengthInSamples;
             }
 
+            // update AudioMeter
+            ControlBar.AudioMeter.updateAudioMeter(bufferToFill);
+            
             // update Timecode + PlayHead
             juce::MessageManager::callAsync([=]()
             {
@@ -176,8 +179,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             }
         }
         
-        // update AudioMeter
-        ControlBar.AudioMeter.updateAudioMeter(bufferToFill);
     }
 
 
@@ -200,6 +201,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
+        
+        // reset AudioMeter
+        ControlBar.AudioMeter.resetAudioMeter();
     }
 
     if (state == Pause)
@@ -216,6 +220,8 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
             });
         
+        // reset AudioMeter
+        ControlBar.AudioMeter.resetAudioMeter();
     }
     
 }
@@ -531,9 +537,6 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bStop.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setToggleState(false, juce::NotificationType::dontSendNotification);
                 
-                // reset AudioMeter
-                ControlBar.AudioMeter.resetAudioMeter();
-                
                 DBG("state = stop");
                 break;
             case Play:
@@ -549,9 +552,6 @@ void MainComponent::transportStateChanged(TransportState newState)
                 ControlBar.bPause.setToggleState(true, juce::NotificationType::dontSendNotification);
                 ControlBar.bStop.setToggleState(false, juce::NotificationType::dontSendNotification);
                 ControlBar.recordButton.setToggleState(false, juce::NotificationType::dontSendNotification);
-                
-                // reset AudioMeter
-                ControlBar.AudioMeter.resetAudioMeter();
                 
                 DBG("state = pause");
                 break;
@@ -724,15 +724,15 @@ bool MainComponent::keyPressed(const juce::KeyPress& key, juce::Component* origi
 {
 //    DBG("keyPressed");
     if (key.getTextCharacter() == ' ') {
-        DBG("The space key was pressed");
+//        DBG("The space key was pressed");
         toggleTransportPlayPause();
     }
     if (key.getTextCharacter() == 's') {
-        DBG("The s key was pressed");
+//        DBG("The s key was pressed");
         transportStateChanged(Stop);
     }
     if (key.getTextCharacter() == 'l') {
-        DBG("The l key was pressed");
+//        DBG("The l key was pressed");
         ControlBar.toggleLoop();
     }
     

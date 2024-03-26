@@ -58,7 +58,19 @@
       <FILE id="bkgFo3" name="LayerWaveComponent.cpp" compile="1" resource="0"
             file="Source/LayerWaveComponent.cpp"/>
     </GROUP>
-    <FILE id="Mol1cM" name="logo_1.svg" compile="0" resource="1" file="assets/logo_1.svg"/>
+    <FILE id="VF9RdL" name="bgControlBar_2.png" compile="0" resource="1"
+          file="assets/bgControlBar_2.png"/>
+    <FILE id="bwesKb" name="bgLayerControlAndWave_2.png" compile="0" resource="1"
+          file="assets/bgLayerControlAndWave_2.png"/>
+    <FILE id="CwM4sO" name="bgLayerLabel.png" compile="0" resource="1"
+          file="assets/bgLayerLabel.png"/>
+    <FILE id="KZYaLk" name="bgLayersContainer_2.png" compile="0" resource="1"
+          file="assets/bgLayersContainer_2.png"/>
+    <FILE id="kYDc2d" name="bgPlayHeadRuler_2.png" compile="0" resource="1"
+          file="assets/bgPlayHeadRuler_2.png"/>
+    <FILE id="KUUNBg" name="LevelMeterGrill.svg" compile="0" resource="1"
+          file="assets/LevelMeterGrill.svg"/>
+    <FILE id="evvFk8" name="logo_2.svg" compile="0" resource="1" file="assets/logo_2.svg"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

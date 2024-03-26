@@ -102,4 +102,7 @@ private:
                 return "Unknown";
         }
     };
+    
+    // BG
+    juce::Image imgBG;
 };

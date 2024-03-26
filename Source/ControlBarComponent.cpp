@@ -16,6 +16,10 @@
 //==============================================================================
 ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), bLoop("loop"), recordButton("record")
 {
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgControlBar_2_png, BinaryData::bgControlBar_2_pngSize);
+//
+    
     //Volume
     sVolumeDial.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     sVolumeDial.setRange(0.0, 1.0);
@@ -119,11 +123,13 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     
     addAndMakeVisible(AudioMeter);
 
-    addAndMakeVisible(lTimeCode);
-    lTimeCode.setColour (juce::Label::textColourId, GlobalColors::darkText);
+    lTimeCode.setColour (juce::Label::textColourId, GlobalColors::white);
+    lTimeCode.setColour (juce::Label::backgroundColourId, GlobalColors::black);
+    lTimeCode.setLookAndFeel(&LookAndFeel003);
     lTimeCode.setFont(GlobalFonts::titleFont);
     lTimeCode.setText("TIMECODE", juce::dontSendNotification);
     lTimeCode.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(lTimeCode);
                                     
 }
 
@@ -185,6 +191,8 @@ void ControlBarComponent::recordButtonClicked()
 void ControlBarComponent::paint (juce::Graphics& g)
 {
     g.fillAll(GlobalColors::controlBarBG);
+    // Draw BG
+    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 
 void ControlBarComponent::resized()

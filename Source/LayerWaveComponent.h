@@ -72,6 +72,9 @@ private:
     bool blockDrag = true;
 
 
-    LookAndFeel001 LookAndFeel001;
+    LookAndFeel002 LookAndFeel002;
+    
+    // BG
+    juce::Image imgBG;
 
 };

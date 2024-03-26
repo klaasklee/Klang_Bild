@@ -14,14 +14,19 @@
 #include "LayersContainerComponent.h"
 
 //==============================================================================
-LayerComponent::LayerComponent() :  layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
-                                    layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey), bToggleShowBlendPara("show parameters")
+LayerComponent::LayerComponent() :  bToggleShowBlendPara("show parameters"),
+                                    layerUp("Up", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey),
+                                    layerDown("Down", juce::Colours::black, juce::Colours::grey, juce::Colours::lightgrey)
 {
+    
+    // BG
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerLabel_png, BinaryData::bgLayerLabel_pngSize);
+    
     addAndMakeVisible(LayerControl);
     addAndMakeVisible(LayerWave);
     
     // LayerBlendmodeControl
-    LayerBlendmodeControl.setBounds(waveBorder+36, waveBorder, layerControlW-36-waveBorder*2, layerHeight -waveBorder*2);
+    LayerBlendmodeControl.setBounds(waveBorder+labelW, waveBorder, layerControlW-36-waveBorder*2, layerHeight -waveBorder*2);
     addAndMakeVisible(LayerBlendmodeControl);
     LayerBlendmodeControl.setVisible(false);
     
@@ -84,24 +89,29 @@ LayerComponent::~LayerComponent()
 
 void LayerComponent::paint (juce::Graphics& g)
 {
-    g.setColour (GlobalColors::bG);
-    g.drawRect (juce::Rectangle<int>(0, 0, layerControlW, getHeight()), 15);   // draw an outline around the Control component
+//    g.setColour (GlobalColors::bG);
+//    g.drawRect (juce::Rectangle<int>(0, 0, layerControlW, getHeight()), 15);   // draw an outline around the Control component
 
     // Dropshadow on waveBorder of ControlComponent
     juce::DropShadow dropShadow(GlobalColors::dropShadow, 10, juce::Point<int>(0, 5));
     dropShadow.drawForRectangle(g, juce::Rectangle<int>(waveBorder, waveBorder, layerControlW-waveBorder*2, layerHeight-waveBorder*2));
     
+    juce::Rectangle<int> bgBounds;
+    bgBounds.setBounds(waveBorder, waveBorder, layerControlW-waveBorder*2, getHeight()-waveBorder*2);
+    g.reduceClipRegion(bgBounds);
     g.setColour(GlobalColors::layerControlBg);
-    g.fillRect(waveBorder, 0+waveBorder, layerControlW-waveBorder*2, getHeight()-waveBorder*2);
+    g.fillRect(bgBounds);
+    // Draw BG
+    g.drawImage(imgBG, bgBounds.toFloat(), juce::RectanglePlacement::fillDestination, false);
     
-    // left area
-    g.setColour(GlobalColors::layerLabel);
-    g.fillRect(waveBorder, waveBorder, 36, getHeight()-waveBorder*2);
+//    // left area
+//    g.setColour(GlobalColors::layerLabel);
+//    g.fillRect(waveBorder, waveBorder, labelW, getHeight()-waveBorder*2);
     
     // paint LayerIndex Number
     g.setColour(juce::Colours::black);
     g.setFont(25);
-    g.drawText(juce::String(layerIndex), waveBorder, waveBorder+5, 36, waveBorder+30, juce::Justification::centred);
+    g.drawText(juce::String(layerIndex), waveBorder, waveBorder+5, labelW, waveBorder+30, juce::Justification::centred);
 }
 void LayerComponent::resized()
 {
