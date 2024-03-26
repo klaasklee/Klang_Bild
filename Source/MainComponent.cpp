@@ -83,6 +83,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
                 activeLayerIndexes[numActiveLayers] = layerCounter;
                 numActiveLayers += 1;
+                int layerIndex = LayersViewPort.LayersContainer.Layers[layerCounter].layerIndex;
             }
         }
 
