@@ -24,7 +24,7 @@ AudioMeterComponent::~AudioMeterComponent()
 void AudioMeterComponent::paint (juce::Graphics& g)
 {
     // draw meter
-    auto mainBound = getLocalBounds().reduced(60, 12);
+    auto mainBound = getLocalBounds().reduced(60, 0).removeFromBottom(getHeight()-15);
     auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(3.f);
     auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(3.f);
     
@@ -61,7 +61,7 @@ void AudioMeterComponent::paint (juce::Graphics& g)
 }
 void AudioMeterComponent::paintOverChildren(::juce::Graphics& g)
 {
-    auto mainBound = getLocalBounds().reduced(60, 12);
+    auto mainBound = getLocalBounds().reduced(60, 0).removeFromBottom(getHeight()-15);
     auto boundsL = mainBound.toFloat().removeFromTop(mainBound.getHeight()/2).reduced(1.f);
     auto boundsR = mainBound.toFloat().removeFromBottom(mainBound.getHeight()/2).reduced(1.f);
     

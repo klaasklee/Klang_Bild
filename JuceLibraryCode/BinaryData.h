@@ -11,11 +11,11 @@ namespace BinaryData
     extern const char*   LevelMeterGrill_svg;
     const int            LevelMeterGrill_svgSize = 15965;
 
-    extern const char*   logo_1_svg;
-    const int            logo_1_svgSize = 15071;
-
     extern const char*   logo_2_svg;
-    const int            logo_2_svgSize = 23151;
+    const int            logo_2_svgSize = 25673;
+
+    extern const char*   textureControlBar_2_png;
+    const int            textureControlBar_2_pngSize = 6933409;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
     const int namedResourceListSize = 3;
