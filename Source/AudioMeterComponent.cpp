@@ -36,8 +36,8 @@ void AudioMeterComponent::paint (juce::Graphics& g)
     gradient.addColour(0.5, juce::Colours::yellow);
     
     g.setGradientFill(gradient);
-    float scaledXL = juce::jmap(static_cast<float>(rmsCurrentValueL), 0.0f, 1.f, 0.0f, static_cast<float>(getWidth()));
-    float scaledXR = juce::jmap(static_cast<float>(rmsCurrentValueR), 0.0f, 1.f, 0.0f, static_cast<float>(getWidth()));
+    float scaledXL = juce::jmap(static_cast<float>(rmsCurrentValueL), 0.0f, 0.6f, 0.0f, static_cast<float>(getWidth()));
+    float scaledXR = juce::jmap(static_cast<float>(rmsCurrentValueR), 0.0f, 0.6f, 0.0f, static_cast<float>(getWidth()));
 //    DBG(scaledXL);
 //    DBG(scaledXR);
     g.fillRect(boundsL.removeFromLeft(scaledXL));
