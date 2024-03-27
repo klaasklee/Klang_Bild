@@ -71,6 +71,9 @@
     <FILE id="KUUNBg" name="LevelMeterGrill.svg" compile="0" resource="1"
           file="assets/LevelMeterGrill.svg"/>
     <FILE id="evvFk8" name="logo_2.svg" compile="0" resource="1" file="assets/logo_2.svg"/>
+    <FILE id="myEzoy" name="svgTrash.svg" compile="0" resource="1" file="assets/svgTrash.svg"/>
+    <FILE id="M9qJJW" name="svgTrashOver.svg" compile="0" resource="1"
+          file="assets/svgTrashOver.svg"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

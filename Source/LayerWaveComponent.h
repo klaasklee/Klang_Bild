@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Globals.h"
+#include "LayerControlComponent.h"
 
 //==============================================================================
 /*
@@ -44,6 +45,9 @@ public:
 
     //drawing waveforms
     bool updateWaveform = false;
+    
+    // pointer of LayerBlendmodeControlComponent of current Layer
+    LayerControlComponent* layerControlComponentPointer;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)
@@ -51,6 +55,11 @@ private:
     juce::TextButton openButton;
     void openButtonClicked();
     void importAudio();
+    
+    juce::DrawableButton bDeleteLayer;
+    std::unique_ptr<juce::Drawable> svgTrash;
+    std::unique_ptr<juce::Drawable> svgTrashOver;
+    void bDeleteLayerClicked();
     
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> playSource;

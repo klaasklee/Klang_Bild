@@ -69,16 +69,20 @@ public:
 
     juce::ComboBox BlendModeDropdown;
 
-    // MUTE
-    bool layerMute = false;
+    // MUTE and "Delete"
+    bool layerActive = false;
+    
+    // for "delete"
+    void deactivateLayer();
     
     // pointer of LayerBlendmodeControlComponent of current Layer
     LayerBlendmodeControlComponent* layerBlendmodeControlComponentPointer;
     
+    juce::TextButton bMute;
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerControlComponent)
     
-    juce::TextButton bMute;
     void bMuteClicked();
     
     //styling - lookAndFeel

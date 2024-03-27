@@ -81,6 +81,8 @@ LayerComponent::LayerComponent() :  bToggleShowBlendPara("show parameters"),
     
     // passes on pointer for layerBlendmodeControl to LayerControl
     LayerControl.layerBlendmodeControlComponentPointer = &LayerBlendmodeControl;
+    // passes on pointer for layerBlendmodeControl to LayerWave
+    LayerWave.layerControlComponentPointer = &LayerControl;
 }
 
 LayerComponent::~LayerComponent()
