@@ -14,14 +14,26 @@
 #include "Globals.h"
 
 //==============================================================================
-LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)")
+LayerWaveComponent::LayerWaveComponent() : openButton("import audio (WAV, MP3)"), bDeleteLayer("LayerDelete", juce::DrawableButton::ButtonStyle::ImageFitted)
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_jpg, BinaryData::bgLayerControlAndWave_2_jpgSize);
     
     // movePlayhead
     addMouseListener(this, true);
     
+    //deleteLayerWaveForm Button
+    auto svgData = juce::MemoryInputStream(BinaryData::svgTrash_svg, BinaryData::svgTrash_svgSize, false);
+    svgTrash = juce::Drawable::createFromImageDataStream(svgData);
+    auto svgData2 = juce::MemoryInputStream(BinaryData::svgTrashOver_svg, BinaryData::svgTrashOver_svgSize, false);
+    svgTrashOver = juce::Drawable::createFromImageDataStream(svgData2);
+    
+    bDeleteLayer.setImages(svgTrash.get(), svgTrashOver.get());
+    bDeleteLayer.setLookAndFeel(&LookAndFeel002);
+    bDeleteLayer.onClick = [this] { bDeleteLayerClicked(); };
+    addAndMakeVisible(&bDeleteLayer);
+    
+    //openButton
     // load audio functionality
     fileLoaded = false;
     openButton.onClick = [this] { openButtonClicked(); };
@@ -63,74 +75,77 @@ void LayerWaveComponent::paint (juce::Graphics& g)
     // Reduce the clipping region to the specified rectangle
     g.reduceClipRegion(clipRegion);
     
-    if (updateWaveform && fileLoaded)
+    if (layerControlComponentPointer->layerActive == true || layerControlComponentPointer->bMute.getToggleState() == true)
     {
-        p.clear();
-        audioPoints.clear();
-        int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
-        int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
-        auto buffer = playBuffer.getReadPointer(0);
-        
-        DBG("update waveform");
-
-        // scale audio on x axis
-        for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
+        if (updateWaveform && fileLoaded)
         {
-            audioPoints.push_back(buffer[sample]);
+            p.clear();
+            audioPoints.clear();
+            int timeLineSize = findParentComponentOfClass<MainComponent>()->timeLineSize;
+            int ratio = ((globalSampleRate*timeLineSize)/(getWidth()-waveBorder*2));
+            auto buffer = playBuffer.getReadPointer(0);
+            
+            DBG("update waveform");
+            
+            // scale audio on x axis
+            for (int sample = 0; sample < playBuffer.getNumSamples(); sample += ratio)
+            {
+                audioPoints.push_back(buffer[sample]);
+            }
+            
+            p.startNewSubPath(playOffsetInPx+waveBorder, getHeight()/2);
+            
+            // scale audio on y axis
+            for (int sample = 0; sample < audioPoints.size(); ++sample)
+            {
+                auto point = juce::jmap<float>(audioPoints[sample], -1.0f, 1.0f, getHeight()-waveBorder, 0+waveBorder);
+                p.lineTo(sample+waveBorder+playOffsetInPx, point);
+            }
+            
+            rect.setBounds(waveBorder+playOffsetInPx, waveBorder, p.getBounds().getRight()-playOffsetInPx-waveBorder, getHeight()-waveBorder*2);
+            
+            g.setColour(juce::Colours::black);
+            //        g.fillRoundedRectangle(rect, 3);
+            g.fillRect(rect.expanded(3));
+            
+            g.setColour(GlobalColors::layerWaveBg);
+            g.strokePath(p, juce::PathStrokeType(2));
+            
+            //        g.setColour(juce::Colours::black);
+            //        g.drawRoundedRectangle(rect, 7, 3);
+            //        g.drawRect(rect.expanded(0.5), 3);
+            
+            g.setColour(GlobalColors::white);
+            if (playOffsetInPx <= 0)
+            {
+                g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
+            }
+            else
+            {
+                g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+            }
         }
-        
-        p.startNewSubPath(playOffsetInPx+waveBorder, getHeight()/2);
-        
-        // scale audio on y axis
-        for (int sample = 0; sample < audioPoints.size(); ++sample)
+        else if (fileLoaded)
         {
-            auto point = juce::jmap<float>(audioPoints[sample], -1.0f, 1.0f, getHeight()-waveBorder, 0+waveBorder);
-            p.lineTo(sample+waveBorder+playOffsetInPx, point);
-        }
-
-        rect.setBounds(waveBorder+playOffsetInPx, waveBorder, p.getBounds().getRight()-playOffsetInPx-waveBorder, getHeight()-waveBorder*2);
-
-        g.setColour(juce::Colours::black);
-//        g.fillRoundedRectangle(rect, 3);
-        g.fillRect(rect.expanded(3));
-        
-        g.setColour(GlobalColors::layerWaveBg);
-        g.strokePath(p, juce::PathStrokeType(2));
-        
-//        g.setColour(juce::Colours::black);
-//        g.drawRoundedRectangle(rect, 7, 3);
-//        g.drawRect(rect.expanded(0.5), 3);
-        
-        g.setColour(GlobalColors::white);
-        if (playOffsetInPx <= 0)
-        {
-            g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
-        }
-        else
-        {
-            g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
-        }
-    }
-    else if (fileLoaded)
-    {
-        g.setColour(juce::Colours::black);
-//        g.fillRoundedRectangle(rect, 3);
-        g.fillRect(rect.expanded(3));
-        
-        g.setColour(GlobalColors::layerWaveBg);
-        g.strokePath(p, juce::PathStrokeType(2));
-        
-//        g.setColour(juce::Colours::black);
-//        g.drawRoundedRectangle(rect, 7, 3);
-//        g.drawRect(rect.expanded(0.5), 3);
-
-        g.setColour(GlobalColors::white);
-        if (playOffsetInPx <= 0)
-        {
-            g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
-        }else
-        {
-            g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+            g.setColour(juce::Colours::black);
+            //        g.fillRoundedRectangle(rect, 3);
+            g.fillRect(rect.expanded(3));
+            
+            g.setColour(GlobalColors::layerWaveBg);
+            g.strokePath(p, juce::PathStrokeType(2));
+            
+            //        g.setColour(juce::Colours::black);
+            //        g.drawRoundedRectangle(rect, 7, 3);
+            //        g.drawRect(rect.expanded(0.5), 3);
+            
+            g.setColour(GlobalColors::white);
+            if (playOffsetInPx <= 0)
+            {
+                g.drawText(fileName, waveBorder+5, 15, p.getBounds().getRight()-waveBorder-7, 20, juce::Justification::left);
+            }else
+            {
+                g.drawText(fileName, waveBorder+playOffsetInPx+5, 15, p.getBounds().getRight()-playOffsetInPx-waveBorder-7, 20, juce::Justification::left);
+            }
         }
     }
     updateWaveform = false;
@@ -209,12 +224,18 @@ void LayerWaveComponent::importAudio()
             DBG(file.getFileName());
 
             blockDrag = false;
-
+            layerControlComponentPointer->layerActive = true;
             updateWaveform = true;
 
             repaint();
         }
     }
+}
+
+void LayerWaveComponent::bDeleteLayerClicked()
+{
+//    DBG("delete button");
+    layerControlComponentPointer->deactivateLayer();
 }
 
 void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
@@ -291,5 +312,6 @@ void LayerWaveComponent::mouseUp(const juce::MouseEvent& event)
 void LayerWaveComponent::resized()
 {
     updateWaveform = true;
+    bDeleteLayer.setBounds(getWidth()-120-waveBorder, 4+waveBorder, 32, 32);
     openButton.setBounds(getWidth()-85-waveBorder, 5+waveBorder, 80, 30);
 }

@@ -434,6 +434,36 @@ public:
         g.setColour (GlobalColors::white);
         g.strokePath (outline, juce::PathStrokeType (2.0f));
     }
+    void drawDrawableButton (juce::Graphics& g, juce::DrawableButton& button,
+                                             bool /*shouldDrawButtonAsHighlighted*/, bool /*shouldDrawButtonAsDown*/)
+    {
+        bool toggleState = button.getToggleState();
+
+        g.fillAll (button.findColour (toggleState ? juce::DrawableButton::backgroundOnColourId
+                                                  : juce::DrawableButton::backgroundColourId));
+
+        const int textH = (button.getStyle() == juce::DrawableButton::ImageAboveTextLabel)
+                            ? juce::jmin (16, button.proportionOfHeight (0.25f))
+                            : 0;
+
+        if (textH > 0)
+        {
+            g.setFont ((float) textH);
+
+            g.setColour (button.findColour (toggleState ? juce::DrawableButton::textColourOnId
+                                                        : juce::DrawableButton::textColourId)
+                            .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.4f));
+
+            g.drawFittedText (button.getButtonText(),
+                              2, button.getHeight() - textH - 1,
+                              button.getWidth() - 4, textH,
+                              juce::Justification::centred, 1);
+        }
+        g.setColour(GlobalColors::white);
+        juce::Rectangle<int> bounds;
+        bounds.setBounds(button.getLocalBounds().getX(), button.getLocalBounds().getY(), button.getLocalBounds().getWidth(), button.getLocalBounds().getHeight());
+        g.fillRect(bounds.reduced(1.5));
+    }
 };
 
 // LookAndFeel explicitly for Timcode Label

@@ -17,7 +17,7 @@
 LayerControlComponent::LayerControlComponent() : bMute("M")
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_png, BinaryData::bgLayerControlAndWave_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayerControlAndWave_2_jpg, BinaryData::bgLayerControlAndWave_2_jpgSize);
     
     
     //Gain Knob
@@ -93,15 +93,20 @@ void LayerControlComponent::bMuteClicked()
 {
     DBG("toggle mute");
     
-    if (layerMute == false)
+    if (layerActive == true)
     {
-        layerMute = true;
+        layerActive = false;
         bMute.setToggleState(true, juce::NotificationType::dontSendNotification);
     }
-    else if (layerMute == true)
+    else if (layerActive == false)
     {
-        layerMute = false;
+        layerActive = true;
         bMute.setToggleState(false, juce::NotificationType::dontSendNotification);
     }
 }
 
+void LayerControlComponent::deactivateLayer()
+{
+    DBG("deactivateLayer");
+        layerActive = false;
+}

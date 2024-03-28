@@ -15,10 +15,7 @@
 
 //==============================================================================
 LayersContainerComponent::LayersContainerComponent()
-{
-    // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgLayersContainer_2_png, BinaryData::bgLayersContainer_2_pngSize);
-    
+{   
     int index = numOfLayers-1;
     for (int i = 0; i < numOfLayers; i++) {
         addAndMakeVisible(Layers[i]);
@@ -35,14 +32,6 @@ LayersContainerComponent::~LayersContainerComponent()
 void LayersContainerComponent::resized()
 {
     resortGuiLayers();
-}
-
-void LayersContainerComponent::paint (juce::Graphics& g)
-{
-    g.fillAll(GlobalColors::bG);
-    // Draw BG
-    g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
-    
 }
 
 void LayersContainerComponent::resortGuiLayers()

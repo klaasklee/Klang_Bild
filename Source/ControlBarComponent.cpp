@@ -17,7 +17,7 @@
 ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bStop("stop"), bLoop("loop"), recordButton("record")
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgControlBar_2_png, BinaryData::bgControlBar_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgControlBar_2_jpg, BinaryData::bgControlBar_2_jpgSize);
 //
     
     //Volume
@@ -190,8 +190,9 @@ void ControlBarComponent::recordButtonClicked()
 
 void ControlBarComponent::paint (juce::Graphics& g)
 {
-    g.fillAll(GlobalColors::controlBarBG);
+//    g.fillAll(GlobalColors::controlBarBG);
     // Draw BG
+    g.reduceClipRegion(getLocalBounds());
     g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
 }
 

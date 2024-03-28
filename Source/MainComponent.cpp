@@ -15,8 +15,9 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     addAndMakeVisible(ControlBar);
     addAndMakeVisible(PlayHeadRuler);
     addAndMakeVisible(LayersViewPort);
-    
+
     addAndMakeVisible(PlayHead);
+
     
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -96,7 +97,7 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             // calculate blend modes, if there are at least two active layers
             // for only one active layer, the loop will be skipped
             for (int i = 0; i < numActiveLayers; i++) {
-                if (!LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.layerMute) {
+                if (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.layerActive) {
                     functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
                     calcBlendMode(outBuffer,
                         LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]],
@@ -202,10 +203,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
             });
-        
-        // reset AudioMeter
-        ControlBar.AudioMeter.resetAudioMeter();
     }
 
     if (state == Pause)
@@ -220,10 +220,9 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
                 ControlBar.lTimeCode.setText(juce::String::formatted("%.3f", playPosInSamples/globalSampleRate), juce::dontSendNotification);
                 // setPlayHead
                 PlayHead.setBounds(layerControlW+waveBorder+playHeadPos-(playHeadW/2)-1, getHeight()/5-30, 2+playHeadW, getHeight() -  getHeight()/5+30);
+                // reset AudioMeter
+                ControlBar.AudioMeter.resetAudioMeter();
             });
-        
-        // reset AudioMeter
-        ControlBar.AudioMeter.resetAudioMeter();
     }
     
 }

@@ -18,7 +18,7 @@ PlayHeadRulerComponent::PlayHeadRulerComponent() : bSetTimeLineSize("set Timelin
 
 {
     // BG
-    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgPlayHeadRuler_2_png, BinaryData::bgPlayHeadRuler_2_pngSize);
+    imgBG = juce::ImageCache::getFromMemory(BinaryData::bgPlayHeadRuler_2_jpg, BinaryData::bgPlayHeadRuler_2_jpgSize);
     
     bSetTimeLineSize.onClick = [this] { showSetTimeLineSizeAlertWindow(); };
     bSetTimeLineSize.setBounds(waveBorder, 6, layerControlW-waveBorder*2, 20);
@@ -36,8 +36,9 @@ PlayHeadRulerComponent::~PlayHeadRulerComponent()
 
 void PlayHeadRulerComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (GlobalColors::playHeadRulerBG);
+//    g.fillAll (GlobalColors::playHeadRulerBG);
     // Draw BG
+    g.reduceClipRegion(getLocalBounds());
     g.drawImage(imgBG, getLocalBounds().toFloat(), juce::RectanglePlacement::fillDestination, false);
     
     g.setColour(juce::Colours::black);
