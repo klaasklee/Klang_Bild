@@ -56,8 +56,15 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     spec.maximumBlockSize = samplesPerBlockExpected;
     spec.numChannels = globalNumChannels;
     spec.sampleRate = sampleRate;
-    filter.prepare(spec);
-    filter.reset();
+
+    // initialize filters
+    for (int i = 0; i < numOfLayers; i++) {
+        juce::dsp::StateVariableTPTFilter<float> *filter;
+        filter = &LayersViewPort.LayersContainer.Layers[i].LayerWave.filter;
+        filter->prepare(spec);
+        filter->reset();
+    }
+
     
 
 }
@@ -311,7 +318,7 @@ void MainComponent::blendModeMult(juce::AudioSampleBuffer& layerA, LayerComponen
             writeOut = outLayer.getWritePointer(ch);
 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
-                *writeOut++ = (*readA++) * (*readB++) * gain * 2; // magic 2 to add more volume ;) 
+                *writeOut++ = (*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -456,25 +463,28 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
     float filterCutoff;
     float filterCutoffNextBlock;
 
+    juce::dsp::StateVariableTPTFilter<float>* filter;
+    filter = &layerB.LayerWave.filter;
+
     // set filter type according to parameters
     if (layerB.LayerBlendmodeControl.boPara1 && !layerB.LayerBlendmodeControl.boPara2) {
-        filter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
+        filter->setType(juce::dsp::StateVariableTPTFilterType::lowpass);
     }
     else if (!layerB.LayerBlendmodeControl.boPara1 && layerB.LayerBlendmodeControl.boPara2) {
-        filter.setType(juce::dsp::StateVariableTPTFilterType::highpass);
+        filter->setType(juce::dsp::StateVariableTPTFilterType::highpass);
     }
     else if (layerB.LayerBlendmodeControl.boPara1 && layerB.LayerBlendmodeControl.boPara2) {
-        filter.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
+        filter->setType(juce::dsp::StateVariableTPTFilterType::bandpass);
     }
     else {
-        filter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
+        filter->setType(juce::dsp::StateVariableTPTFilterType::lowpass);
     }
 
     jassert(numChannelsA == numChannelsB);
 
     int samplesLeftToPlay = layerB.LayerWave.playBuffer.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
 
-    filter.setResonance(resonance);
+    filter->setResonance(resonance);
     for (int ch = 0; ch < numChannelsA; ch++)
     {
         float gain = layerB.LayerControl.channelGain[ch];
@@ -509,8 +519,8 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
                 x = i * ((filterCutoffNextBlock - filterCutoff) / numSamples);
                 y = filterCutoff + x;
                 y = (y > (globalSampleRate / 2)) ? (globalSampleRate / 2) : y;
-                filter.setCutoffFrequency(y);
-                *writeOut++ = filter.processSample(ch, *readA++);
+                filter->setCutoffFrequency(y);
+                *writeOut++ = filter->processSample(ch, *readA++);
             }
         }
         else { // if one track is finished, just copy the other one to output
