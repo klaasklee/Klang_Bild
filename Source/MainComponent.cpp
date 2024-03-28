@@ -426,7 +426,20 @@ void MainComponent::blendModeBinary(juce::AudioSampleBuffer& layerA, LayerCompon
                 float accuracyFactor = 1e6;
                 long a = (long) (accuracyFactor  * (*readA++));
                 long b = (long) (accuracyFactor  * (*readB++) * gain);
-                *writeOut++ = (float)((a ^ ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+                // set filter type according to parameters
+                if (!layerB.LayerBlendmodeControl.boPara1 && !layerB.LayerBlendmodeControl.boPara2) {
+                    *writeOut++ = (float)((a ^ ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+                }
+                else if (layerB.LayerBlendmodeControl.boPara1 && !layerB.LayerBlendmodeControl.boPara2) {
+                    *writeOut++ = (float)((a & ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+                }
+                else if (layerB.LayerBlendmodeControl.boPara2) {
+                    *writeOut++ = (float)((a | ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+                }
+                else {
+                    *writeOut++ = (float)((a ^ ((i < samplesLeftToPlay) ? (b) : 0)) / accuracyFactor);
+                }
+                
             }
         }
         else { // if one track is finished, just copy the other one to output

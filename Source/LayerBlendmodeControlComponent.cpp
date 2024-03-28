@@ -87,12 +87,16 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             break;
         case Binary:
             resetLayerBlendModeControl();
-            bPara1.setVisible(false);
-            bPara2.setVisible(false);
-            lPara1.setVisible(true);
-            sPara1.setVisible(true);
-            lPara2.setVisible(true);
-            sPara2.setVisible(true);
+            bPara1.setVisible(true);
+            bPara2.setVisible(true);
+            bPara1.setButtonText("AND");
+            bPara2.setButtonText("OR");
+            bPara1.setToggleState(false, juce::NotificationType::dontSendNotification);
+            bPara2.setToggleState(false, juce::NotificationType::dontSendNotification);
+            lPara1.setVisible(false);
+            sPara1.setVisible(false);
+            lPara2.setVisible(false);
+            sPara2.setVisible(false);
             break;
         default:
             break;
