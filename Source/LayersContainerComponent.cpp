@@ -12,6 +12,7 @@
 #include "LayersContainerComponent.h"
 #include "Globals.h"
 #include "LayerViewPortComponent.h"
+#include "MainComponent.h"
 
 //==============================================================================
 LayersContainerComponent::LayersContainerComponent()
@@ -115,6 +116,7 @@ void LayersContainerComponent::changeLayerIndex(bool direction, int index)
         }
     }
     resortGuiLayers();
+    findParentComponentOfClass<MainComponent>()->calcActiveLayerIndices();
 }
 
 void LayersContainerComponent::setBaseLayerControls()

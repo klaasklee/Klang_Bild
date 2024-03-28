@@ -76,8 +76,12 @@ public:
     // in GUI and changes playHeadPos as well as playPosInSamples
     void setPlayHeadPos(int pos);
     
+    int activeLayerIndexes[numOfLayers];
+    int numActiveLayers = 0;
+    void calcActiveLayerIndices();
+    int getLayerArrayIndexFromLayerIndex(int layerIndex);
     
-private:
+private: 
     //==============================================================================
     // Your private member variables go here...
 

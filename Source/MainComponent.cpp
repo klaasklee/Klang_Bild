@@ -17,7 +17,8 @@ MainComponent::MainComponent() : SetTimeLineSizeAlertWindow("OK", "CANCEL", "Tim
     addAndMakeVisible(LayersViewPort);
 
     addAndMakeVisible(PlayHead);
-
+    numActiveLayers = 0;
+    calcActiveLayerIndices();
     
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -61,6 +62,35 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 }
 
+int MainComponent::getLayerArrayIndexFromLayerIndex(int layerIndex)
+{
+    int layerArrayIndex;
+    // input: layerIndex
+    // output: layerArrayIndex
+    for (layerArrayIndex = 0; layerArrayIndex < numOfLayers; layerArrayIndex++)
+    {
+        if (layerIndex == LayersViewPort.LayersContainer.Layers[layerArrayIndex].layerIndex)
+            return layerArrayIndex;
+    }
+    return -1;
+}
+
+void MainComponent::calcActiveLayerIndices()
+{
+    numActiveLayers = 0;
+    for (int i = 0; i < numOfLayers; i++) {
+        activeLayerIndexes[i] = -1;
+    }
+
+    // find the last active layer, and the number of active layers
+    for (int layerIndexCounter = 0; layerIndexCounter < numOfLayers; layerIndexCounter++) {
+        int layerArrayIndex = getLayerArrayIndexFromLayerIndex(layerIndexCounter);
+        if (LayersViewPort.LayersContainer.Layers[layerArrayIndex].LayerWave.fileLoaded) {
+            activeLayerIndexes[numActiveLayers] = layerArrayIndex;
+            numActiveLayers += 1;
+        }
+    }
+}
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     if (state == Play || state == Export) {
@@ -71,22 +101,6 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
         auto lengthInSamples = bufferToFill.numSamples;
 //        DBG(lengthInSamples);
         int nullInt = 0;
-        int numActiveLayers = 0;
-        int activeLayerIndexes[numOfLayers];
-        for (int i = 0; i < numOfLayers; i++)
-        {
-            activeLayerIndexes[i] = -1;
-        }
-
-
-        // find the last active layer, and the number of active layers
-        for (int layerCounter = numOfLayers - 1; layerCounter >= 0; layerCounter--) {
-            if (LayersViewPort.LayersContainer.Layers[layerCounter].LayerWave.fileLoaded) {
-                activeLayerIndexes[numActiveLayers] = layerCounter;
-                numActiveLayers += 1;
-                int layerIndex = LayersViewPort.LayersContainer.Layers[layerCounter].layerIndex;
-            }
-        }
 
         if (numActiveLayers > 0) {
 
@@ -98,7 +112,12 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
             // for only one active layer, the loop will be skipped
             for (int i = 0; i < numActiveLayers; i++) {
                 if (LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.layerActive) {
-                    functionPointerType calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
+                    functionPointerType calcBlendMode; 
+                    if (i == 0)
+                        calcBlendMode = blendModeAdd; // first Blend mode must always be "add"
+                    else
+                        calcBlendMode = getBlendModeFct(LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]].LayerControl.selectedBlendMode); // get the blend mode of the second to last layer, the blend mode of the last layer is always ignored
+
                     calcBlendMode(outBuffer,
                         LayersViewPort.LayersContainer.Layers[activeLayerIndexes[i]],
                         outBuffer,
@@ -478,10 +497,10 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
             powerBNextBlock /= numSamples;
 
             filterCutoff = powerB * freqRange + freqOffset;
-            filterCutoff = (filterCutoff > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoff; // check if cutoff is below nyquist
+            filterCutoff = (filterCutoff > (globalSampleRate / 2)) ? (globalSampleRate / 2) : filterCutoff; // check if cutoff is below nyquist
 
             filterCutoffNextBlock = powerBNextBlock * freqRange + freqOffset;
-            filterCutoffNextBlock = (filterCutoffNextBlock > globalSampleRate / 2) ? (globalSampleRate / 2) : filterCutoffNextBlock; // check if cutoff is below nyquist
+            filterCutoffNextBlock = (filterCutoffNextBlock > (globalSampleRate / 2)) ? (globalSampleRate / 2) : filterCutoffNextBlock; // check if cutoff is below nyquist
 
             // scale the buffer A with the power of buffer B; interpolate linearly to the next block power. 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
@@ -489,7 +508,7 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
                 double y; 
                 x = i * ((filterCutoffNextBlock - filterCutoff) / numSamples);
                 y = filterCutoff + x;
-                y = (y > globalSampleRate / 2) ? (globalSampleRate / 2) : y;
+                y = (y > (globalSampleRate / 2)) ? (globalSampleRate / 2) : y;
                 filter.setCutoffFrequency(y);
                 *writeOut++ = filter.processSample(ch, *readA++);
             }

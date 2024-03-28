@@ -228,6 +228,7 @@ void LayerWaveComponent::importAudio()
             updateWaveform = true;
 
             repaint();
+            findParentComponentOfClass<MainComponent>()->calcActiveLayerIndices();
         }
     }
 }
@@ -236,6 +237,7 @@ void LayerWaveComponent::bDeleteLayerClicked()
 {
 //    DBG("delete button");
     layerControlComponentPointer->deactivateLayer();
+    repaint();
 }
 
 void LayerWaveComponent::resampleAudioBuffer(juce::AudioBuffer<float>& srcBuffer, juce::AudioBuffer<float>& destBuffer, float srcSampleRate, float destSampleRate)
