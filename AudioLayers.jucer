@@ -5,6 +5,10 @@
               defines="JUCE_MODAL_LOOPS_PERMITTED = 1">
   <MAINGROUP id="GiE37m" name="AudioLayers">
     <GROUP id="{5CC477CE-9975-BE66-C1AE-3CBB979CD0E7}" name="Source">
+      <FILE id="EWWm81" name="CrosssynthProcessor.cpp" compile="1" resource="0"
+            file="Source/CrosssynthProcessor.cpp"/>
+      <FILE id="iQbs5E" name="CrosssynthProcessor.h" compile="0" resource="0"
+            file="Source/CrosssynthProcessor.h"/>
       <FILE id="pJvEq8" name="Globals.h" compile="0" resource="0" file="Source/Globals.h"/>
       <FILE id="qehqv4" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="YdujAk" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>

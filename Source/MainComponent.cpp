@@ -65,7 +65,14 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
         filter->reset();
     }
 
-    
+    // initialize crosssynth
+    for (int i = 0; i < numOfLayers; i++) {
+        for (int j = 0; j < globalNumChannels; j++) {
+            CrosssynthProcessor* crossSynth;
+            crossSynth = &LayersViewPort.LayersContainer.Layers[i].LayerWave.crossSynth[j];
+            crossSynth->reset();
+        }
+    }
 
 }
 
@@ -548,23 +555,46 @@ void MainComponent::blendModeVariableFilter(juce::AudioSampleBuffer& layerA, Lay
 
 }
 
-void MainComponent::setFilterType() 
+void MainComponent::blendModeCrossSynth(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB)
 {
-    using fType = juce::dsp::StateVariableTPTFilterType;
+    int numChannelsA = layerA.getNumChannels();
+    int numChannelsB = layerB.LayerWave.playBuffer.getNumChannels();
 
-    switch (filterType) {
-    case FilterType::Lowpass:
-        filter.setType(fType::lowpass);
-        break;
-    case FilterType::Bandpass:
-        filter.setType(fType::bandpass);
-        break;
-    case FilterType::Highpass:
-        filter.setType(fType::highpass);
-        break;
-    default: 
-        filter.setType(fType::lowpass);
+    const float* readA;
+    const float* readB;
+    float* writeOut;
+
+    jassert(numChannelsA == numChannelsB);
+
+    int samplesLeftToPlay = layerB.LayerWave.playBuffer.getNumSamples() - playPosB; // we only need to check B, because A is always the outBuffer which is exactly the size of the Block
+
+
+    for (int ch = 0; ch < numChannelsA; ch++)
+    {
+        layerB.LayerWave.crossSynth[ch].setSmoothingOrder((int)layerB.LayerBlendmodeControl.fPara1);
+        float gain = layerB.LayerControl.channelGain[ch];
+        if (samplesLeftToPlay > 0 && playPosB >= 0)
+        {
+            readA = layerA.getReadPointer(ch, playPosA);
+            readB = layerB.LayerWave.playBuffer.getReadPointer(ch, playPosB);
+            writeOut = outLayer.getWritePointer(ch);
+
+            for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
+
+                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, *readB++, false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
+            }
+        }
+        else { // if one track is finished, just copy the other one to output
+            readA = layerA.getReadPointer(ch, playPosA);
+            writeOut = outLayer.getWritePointer(ch);
+
+            for (int i = 0; i < numSamples; i++) {
+                *writeOut++ = 0;// *readA++;
+            }
+        }
     }
+    //playPosA += numSamples;
+    //playPosB += numSamples;
 }
 
 void MainComponent::transportStateChanged(TransportState newState)

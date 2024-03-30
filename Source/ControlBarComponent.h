@@ -46,6 +46,8 @@ public:
     juce::Label lTimeCode;
     AudioMeterComponent AudioMeter;
 
+
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlBarComponent)
     
@@ -75,6 +77,6 @@ private:
     
     // BG
     juce::Image imgBG;
-    
+
 };
 

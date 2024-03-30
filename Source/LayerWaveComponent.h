@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "Globals.h"
 #include "LayerControlComponent.h"
+#include "CrosssynthProcessor.h"
 
 //==============================================================================
 /*
@@ -51,6 +52,9 @@ public:
 
     //filter
     juce::dsp::StateVariableTPTFilter<float> filter;
+
+    //crosssynth
+    CrosssynthProcessor crossSynth[2];
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LayerWaveComponent)

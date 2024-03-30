@@ -6,7 +6,7 @@
 #include "AlertWindowComponent.h"
 #include "PlayHeadComponent.h"
 #include "PlayHeadRulerComponent.h"
-
+#include "CrosssynthProcessor.h"
 
 //==============================================================================
 /*
@@ -100,6 +100,7 @@ private:
     static void blendModeDuck(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeBinary(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeVariableFilter(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
+    static void blendModeCrossSynth(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
@@ -115,6 +116,8 @@ private:
             return &blendModeBinary;
         case BlendModes::VariableFilter:
             return &blendModeVariableFilter;
+        case BlendModes::CrossSynth:
+            return &blendModeCrossSynth;
         default:
             return NULL;
         }
@@ -127,11 +130,8 @@ private:
         Highpass,
     };
 
-    void setFilterType();
     FilterType filterType{ FilterType::Lowpass };
-
     static juce::dsp::StateVariableTPTFilter<float> filter;
-
 
     //Components
     ControlBarComponent ControlBar;

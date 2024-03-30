@@ -99,6 +99,8 @@ private:
                 return "DUCK";
             case BlendModes::VariableFilter:
                 return "FILTER";
+            case BlendModes::CrossSynth:
+                return "CROSSSYNTHESIS";
             case BlendModes::Binary:
                 return "BINARY XOR";
                 

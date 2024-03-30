@@ -43,6 +43,7 @@ enum BlendModes
     Multiply,
     Duck,
     VariableFilter,
+    CrossSynth,
     Binary
 };
 
