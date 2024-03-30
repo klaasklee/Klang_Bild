@@ -101,7 +101,10 @@ private:
     static void blendModeBinary(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeVariableFilter(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
     static void blendModeCrossSynth(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
+    static void blendModeFreqFill(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
+    static void blendModePitchShift(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
+    
     typedef void (*functionPointerType)(juce::AudioSampleBuffer& layerA, LayerComponent& layerB, juce::AudioSampleBuffer& outLayer, int numSamples, int playPosA, int playPosB);
 
     static functionPointerType getBlendModeFct(BlendModes blendMode) {
@@ -118,6 +121,10 @@ private:
             return &blendModeVariableFilter;
         case BlendModes::CrossSynth:
             return &blendModeCrossSynth;
+        case BlendModes::FreqFill:
+            return &blendModeFreqFill;
+        case BlendModes::PitchShift:
+            return &blendModePitchShift;
         default:
             return NULL;
         }

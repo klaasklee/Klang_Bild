@@ -81,6 +81,36 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             sPara2.setDoubleClickReturnValue(true, 0);
             sPara2.setValue(0);
             break;
+        case FreqFill:
+            resetLayerBlendModeControl();
+            bPara1.setVisible(false);
+            bPara2.setVisible(false);
+            lPara1.setVisible(true);
+            sPara1.setVisible(true);
+            lPara1.setText("smoothing order", juce::NotificationType::dontSendNotification);
+            sPara1.setRange(1, 10);
+            sPara1.setDoubleClickReturnValue(true, 2);
+            sPara1.setValue(2);
+            lPara2.setVisible(true);
+            sPara2.setVisible(true);
+            lPara2.setText("treble boost", juce::NotificationType::dontSendNotification);
+            sPara2.setRange(0, 20);
+            sPara2.setDoubleClickReturnValue(true, 0);
+            sPara2.setValue(0);
+            break;
+        case PitchShift:
+            resetLayerBlendModeControl();
+            bPara1.setVisible(false);
+            bPara2.setVisible(false);
+            lPara1.setVisible(true);
+            sPara1.setVisible(true);
+            lPara1.setText("shift intensity", juce::NotificationType::dontSendNotification);
+            sPara1.setRange(-20, 20);
+            sPara1.setDoubleClickReturnValue(true, 2);
+            sPara1.setValue(2);
+            lPara2.setVisible(false);
+            sPara2.setVisible(false);
+            break;
         case VariableFilter:
             resetLayerBlendModeControl();
             bPara1.setVisible(true);

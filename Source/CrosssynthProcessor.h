@@ -35,6 +35,12 @@ public:
         trebleBoost = boost;
     }
 
+    void setProcessMode(int mode) {
+        // 0 = CrossSynth
+        // 1 = FrequencyMask
+        processMode = mode;
+    }
+
 private:
     void processFrame(bool bypassed);
     void processSpectrum(float* dataA, float* dataB, int numBins);
@@ -72,4 +78,5 @@ private:
 
     int smoothingOrder = 4;
     float trebleBoost = 0;
+    int processMode = 0;
 };

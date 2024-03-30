@@ -44,6 +44,8 @@ enum BlendModes
     Duck,
     VariableFilter,
     CrossSynth,
+    FreqFill,
+    PitchShift,
     Binary
 };
 

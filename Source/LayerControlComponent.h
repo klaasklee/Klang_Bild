@@ -101,6 +101,10 @@ private:
                 return "FILTER";
             case BlendModes::CrossSynth:
                 return "CROSSSYNTHESIS";
+            case BlendModes::FreqFill:
+                return "FREQUENCY FILL";
+            case BlendModes::PitchShift:
+                return "PITCH SHIFT";
             case BlendModes::Binary:
                 return "BINARY XOR";
                 

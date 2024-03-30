@@ -133,26 +133,92 @@ void CrosssynthProcessor::processSpectrum(float* dataA, float* dataB, int numBin
     auto* cdataA = reinterpret_cast<std::complex<float>*>(dataA);
     auto* cdataB = reinterpret_cast<std::complex<float>*>(dataB);
 
-    
-    float smoothMagnitudeB = 0;
-    
+    if (processMode == 0) {
+        float smoothMagnitudeB = 0;
 
-    for (int i = 0; i < numBins; ++i) {
-        // Usually we want to work with the magnitude and phase rather
-        // than the real and imaginary parts directly.
-        float magnitudeA = std::abs(cdataA[i]);
-        float phaseA = std::arg(cdataA[i]);
-        float boost = 1 + (i * trebleBoost / numBins);
+        for (int i = 0; i < numBins; ++i) {
+            // Usually we want to work with the magnitude and phase rather
+            // than the real and imaginary parts directly.
+            float magnitudeA = std::abs(cdataA[i]);
+            float phaseA = std::arg(cdataA[i]);
+            float boost = 1 + (i * trebleBoost / numBins);
 
-        if (i < numBins - smoothingOrder) {
-            smoothMagnitudeB = 0;
-            for (int n = 0; n < smoothingOrder; n++) {
-                smoothMagnitudeB += std::abs(cdataB[i + n]);
+            if (i < numBins - smoothingOrder) {
+                smoothMagnitudeB = 0;
+                for (int n = 0; n < smoothingOrder; n++) {
+                    smoothMagnitudeB += std::abs(cdataB[i + n]);
+                }
+                smoothMagnitudeB /= smoothingOrder;
             }
-            smoothMagnitudeB /= smoothingOrder;
+            // Convert magnitude and phase back into a complex number.
+            cdataA[i] = std::polar(boost * magnitudeA * smoothMagnitudeB / 2, phaseA);
         }
-        // Convert magnitude and phase back into a complex number.
-        cdataA[i] = std::polar(boost * magnitudeA * smoothMagnitudeB / 2, phaseA);
+    }
+    else if (processMode == 1) {
 
+        float smoothMagnitudeA = 0;
+        float smoothMagnitudeB = 0;
+
+        // find the maximum Magnitude of A
+        float maxMagnitudeA = 1e-6;
+        float maxMagnitudeB = 1e-6;
+        for (int i = 0; i < numBins; ++i) {
+            float magnitudeA = std::abs(cdataA[i]);
+            if (magnitudeA > maxMagnitudeA) {
+                maxMagnitudeA = magnitudeA;
+            }
+            float magnitudeB = std::abs(cdataB[i]);
+            if (magnitudeB > maxMagnitudeB) {
+                maxMagnitudeB = magnitudeB;
+            }
+        }
+        for (int i = 0; i < numBins; ++i) {
+            // Usually we want to work with the magnitude and phase rather
+            // than the real and imaginary parts directly.
+            float magnitudeA = std::abs(cdataA[i]);
+            float phaseA = std::arg(cdataA[i]);
+            float boost = 1 + (i * trebleBoost / numBins);
+
+            if (i < numBins - smoothingOrder) {
+                smoothMagnitudeA = 0;
+                smoothMagnitudeB = 0;
+                for (int n = 0; n < smoothingOrder; n++) {
+                    smoothMagnitudeA += std::abs(cdataA[i + n]);
+                    smoothMagnitudeB += std::abs(cdataB[i + n]);
+                }
+                smoothMagnitudeA /= smoothingOrder;
+                smoothMagnitudeB /= smoothingOrder;
+            }
+            cdataA[i] = cdataA[i] + (cdataB[i] * (1 - (smoothMagnitudeA / maxMagnitudeA)) * boost);
+        }
+    }
+    else if (processMode == 2) {
+
+        std::complex<float> cdataACopy[fftSize*2];
+        //std::copy(std::begin(cdataA), std::end(cdataA), std::begin(cdataACopy));
+        memcpy(cdataACopy, cdataA, fftSize * 2);
+
+        float shiftIntensity = smoothingOrder*2;
+        int freqShift = 0;
+        // find the maximum Magnitude of A
+        float avgMagnitudeB = 1e-6;
+        for (int i = 0; i < numBins; ++i) {
+            avgMagnitudeB += std::abs(cdataB[i]);
+        }
+        avgMagnitudeB /= numBins;
+
+        freqShift = (int) (avgMagnitudeB * shiftIntensity);
+
+        for (int i = 0; i < numBins; ++i) {
+            // Usually we want to work with the magnitude and phase rather
+            // than the real and imaginary parts directly.
+            float magnitudeA = std::abs(cdataA[i]);
+            float phaseA = std::arg(cdataA[i]);
+            float boost = 1 + (i * trebleBoost / numBins);
+
+            if (((freqShift > 0) && (i > freqShift)) || ((freqShift < 0) && (i < numBins - freqShift))) {
+                cdataA[i] = cdataACopy[i - freqShift];
+            }
+        }
     }
 }
