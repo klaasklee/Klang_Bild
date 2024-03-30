@@ -572,6 +572,7 @@ void MainComponent::blendModeCrossSynth(juce::AudioSampleBuffer& layerA, LayerCo
     for (int ch = 0; ch < numChannelsA; ch++)
     {
         layerB.LayerWave.crossSynth[ch].setSmoothingOrder((int)layerB.LayerBlendmodeControl.fPara1);
+        layerB.LayerWave.crossSynth[ch].setTrebleBoost((int)layerB.LayerBlendmodeControl.fPara2);
         float gain = layerB.LayerControl.channelGain[ch];
         if (samplesLeftToPlay > 0 && playPosB >= 0)
         {

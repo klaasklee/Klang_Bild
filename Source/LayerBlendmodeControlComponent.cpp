@@ -74,8 +74,12 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             sPara1.setRange(1, 10);
             sPara1.setDoubleClickReturnValue(true, 2);
             sPara1.setValue(2);
-            lPara2.setVisible(false);
-            sPara2.setVisible(false);
+            lPara2.setVisible(true);
+            sPara2.setVisible(true);
+            lPara2.setText("treble boost", juce::NotificationType::dontSendNotification);
+            sPara2.setRange(0, 20);
+            sPara2.setDoubleClickReturnValue(true, 0);
+            sPara2.setValue(0);
             break;
         case VariableFilter:
             resetLayerBlendModeControl();

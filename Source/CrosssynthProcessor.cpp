@@ -135,13 +135,14 @@ void CrosssynthProcessor::processSpectrum(float* dataA, float* dataB, int numBin
 
     
     float smoothMagnitudeB = 0;
+    
 
     for (int i = 0; i < numBins; ++i) {
         // Usually we want to work with the magnitude and phase rather
         // than the real and imaginary parts directly.
         float magnitudeA = std::abs(cdataA[i]);
         float phaseA = std::arg(cdataA[i]);
-
+        float boost = 1 + (i * trebleBoost / numBins);
 
         if (i < numBins - smoothingOrder) {
             smoothMagnitudeB = 0;
@@ -151,7 +152,7 @@ void CrosssynthProcessor::processSpectrum(float* dataA, float* dataB, int numBin
             smoothMagnitudeB /= smoothingOrder;
         }
         // Convert magnitude and phase back into a complex number.
-        cdataA[i] = std::polar(magnitudeA * smoothMagnitudeB / 2, phaseA);
+        cdataA[i] = std::polar(boost * magnitudeA * smoothMagnitudeB / 2, phaseA);
 
     }
 }

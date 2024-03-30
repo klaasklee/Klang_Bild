@@ -30,6 +30,10 @@ public:
     void setSmoothingOrder(int smoOrder) {
         smoothingOrder = smoOrder;
     }
+    
+    void setTrebleBoost(float boost) {
+        trebleBoost = boost;
+    }
 
 private:
     void processFrame(bool bypassed);
@@ -67,4 +71,5 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CrosssynthProcessor)
 
     int smoothingOrder = 4;
+    float trebleBoost = 0;
 };
