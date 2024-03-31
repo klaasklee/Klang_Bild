@@ -113,6 +113,7 @@ ControlBarComponent::ControlBarComponent() : bPlay("play"), bPause("pause"), bSt
     bLoop.setToggleState(false, juce::NotificationType::dontSendNotification);
     addAndMakeVisible(bLoop);
     
+    recordButton.setEnabled(false);
     recordButton.onClick = [this] { recordButtonClicked(); };
     recordButton.setColour(juce::TextButton::buttonColourId, GlobalColors::controlBarRecordButtonNotActive);
     recordButton.setColour(juce::TextButton::buttonOnColourId, GlobalColors::controlBarRecordButtonActive);
