@@ -1,4 +1,4 @@
-# Audio-Blend-Modes
+# Klang_Bild
 
 Klang_Bild is a stand-alone software that allows the user to layer and edit audio, similar to a Digital Audio Workstation (DAW).
 A special feature is that layers can be combined with each other using different blend modes.
