@@ -96,17 +96,23 @@ private:
             case BlendModes::Multiply:
                 return "MULTIPLY";
             case BlendModes::Duck:
-                return "DUCK";
+//                return "DUCK";
+                return "MASK";
             case BlendModes::VariableFilter:
-                return "FILTER";
+//                return "FILTER";
+                return "BLUR";
             case BlendModes::CrossSynth:
-                return "CROSSSYNTHESIS";
+//                return "CROSSSYNTHESIS";
+                return "STYLIZE";
             case BlendModes::FreqFill:
-                return "FREQUENCY FILL";
+//                return "FREQUENCY FILL";
+                return "CONTENT AWARE FILL";
             case BlendModes::PitchShift:
-                return "PITCH SHIFT";
+//                return "PITCH SHIFT";
+                return "TWIRL";
             case BlendModes::Binary:
-                return "BINARY XOR";
+//                return "BINARY XOR";
+                return "PIXELATE";
                 
             default:
                 return "Unknown";
