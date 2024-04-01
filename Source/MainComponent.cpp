@@ -583,7 +583,7 @@ void MainComponent::blendModeCrossSynth(juce::AudioSampleBuffer& layerA, LayerCo
 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
 
-                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, *readB++, false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
+                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++,(gain * (*readB++)), false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -627,7 +627,7 @@ void MainComponent::blendModeFreqFill(juce::AudioSampleBuffer& layerA, LayerComp
 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
 
-                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, *readB++, false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
+                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, (gain * (*readB++)), false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
             }
         }
         else { // if one track is finished, just copy the other one to output
@@ -671,7 +671,7 @@ void MainComponent::blendModePitchShift(juce::AudioSampleBuffer& layerA, LayerCo
 
             for (int i = 0; i < std::min(numSamples, samplesLeftToPlay); i++) {
 
-                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, *readB++, false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
+                *writeOut++ = layerB.LayerWave.crossSynth[ch].processSample(*readA++, (gain * (*readB++)), false); //(*readA++) * (*readB++) * gain * 4; // magic 4 to add more volume ;) 
             }
         }
         else { // if one track is finished, just copy the other one to output

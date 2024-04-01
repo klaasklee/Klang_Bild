@@ -108,6 +108,7 @@ void LayerBlendmodeControlComponent::updateLayerBlendModeControl(BlendModes newB
             sPara1.setRange(-20, 20);
             sPara1.setDoubleClickReturnValue(true, 2);
             sPara1.setValue(2);
+            sPara1.setNumDecimalPlacesToDisplay(0);
             lPara2.setVisible(false);
             sPara2.setVisible(false);
             break;
