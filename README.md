@@ -11,6 +11,8 @@ A new, different approach to being creative in audio.
 What does multiply or a dropshadow sound like?
 Find out for yourself!
 
+for detailed information:
+[MANUAL](https://github.com/klaasklee/Klang_Bild/blob/main/documentation/Klang_Bild_MANUAL_11.pdf)
 ---
 
 This application is written in the JUCE framework.
