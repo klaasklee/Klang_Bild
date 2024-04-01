@@ -13,6 +13,7 @@ Find out for yourself!
 
 for detailed information:
 [MANUAL](https://github.com/klaasklee/Klang_Bild/blob/main/documentation/Klang_Bild_MANUAL_11.pdf)
+
 ---
 
 This application is written in the JUCE framework.
