@@ -24,16 +24,16 @@ namespace BinaryData
     const int            bgPlayHeadRuler_2_jpgSize = 237858;
 
     extern const char*   LevelMeterGrill_svg;
-    const int            LevelMeterGrill_svgSize = 15965;
+    const int            LevelMeterGrill_svgSize = 16264;
 
     extern const char*   logo_2_svg;
-    const int            logo_2_svgSize = 25673;
+    const int            logo_2_svgSize = 25751;
 
     extern const char*   svgTrash_svg;
-    const int            svgTrash_svgSize = 16464;
+    const int            svgTrash_svgSize = 16487;
 
     extern const char*   svgTrashOver_svg;
-    const int            svgTrashOver_svgSize = 16464;
+    const int            svgTrashOver_svgSize = 16487;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
     const int namedResourceListSize = 9;
