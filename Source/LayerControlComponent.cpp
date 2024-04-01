@@ -108,5 +108,6 @@ void LayerControlComponent::bMuteClicked()
 void LayerControlComponent::deactivateLayer()
 {
     DBG("deactivateLayer");
+        bMute.setToggleState(false, juce::NotificationType::dontSendNotification);
         layerActive = false;
 }

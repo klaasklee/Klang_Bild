@@ -225,6 +225,7 @@ void LayerWaveComponent::importAudio()
 
             blockDrag = false;
             layerControlComponentPointer->layerActive = true;
+            layerControlComponentPointer->bMute.setToggleState(false, juce::NotificationType::dontSendNotification);
             updateWaveform = true;
 
             repaint();
