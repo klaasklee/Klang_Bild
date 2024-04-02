@@ -72,6 +72,7 @@
           file="assets/bgLayersContainer_2.jpg"/>
     <FILE id="abCBjC" name="bgPlayHeadRuler_2.jpg" compile="0" resource="1"
           file="assets/bgPlayHeadRuler_2.jpg"/>
+    <FILE id="feuHsh" name="icon_02.png" compile="0" resource="1" file="assets/icon_02.png"/>
     <FILE id="KUUNBg" name="LevelMeterGrill.svg" compile="0" resource="1"
           file="assets/LevelMeterGrill.svg"/>
     <FILE id="evvFk8" name="logo_2.svg" compile="0" resource="1" file="assets/logo_2.svg"/>
@@ -95,7 +96,7 @@
   </MODULES>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX">
+    <XCODE_MAC targetFolder="Builds/MacOSX" smallIcon="feuHsh" bigIcon="feuHsh">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="AudioLayers_v0.1"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="AudioLayers_v0.1"/>
