@@ -13,6 +13,8 @@ Find out for yourself!
 
 for detailed information:
 [MANUAL](https://github.com/klaasklee/Klang_Bild/blob/main/documentation/Klang_Bild_MANUAL_11.pdf)
+visit the project on my website:
+[klaasklee.de](https://klaasklee.de/work/klang_bild/)
 
 ---
 
