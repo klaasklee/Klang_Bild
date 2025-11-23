@@ -1,3 +1,5 @@
+⚠️ THE PROJECT HAS MOVED TO CODEBERG.ORG https://codeberg.org/klaasklee/Klang_Bild ⚠️
+
 # Klang_Bild
 
 Klang_Bild is a stand-alone software that allows the user to layer and edit audio, similar to a Digital Audio Workstation (DAW).
